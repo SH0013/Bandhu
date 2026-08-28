@@ -1,0 +1,48 @@
+# Environment & secrets
+.env
+.env.local
+.env.production
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Local data (keep structure, ignore runtime data)
+data/bandhu_store.db
+data/output_audio/*.wav
+data/output_audio/*.mp3
+data/grandma_voice.index
+data/grandma_voice_profile.json
+data/dataset_index.json
+data/metadata.csv
+data/training_dataset/
+data/reference_audio/*.wav
+data/test_audio/
+
+# Claude/Anthropic local config
+.claude/
+
+# Byte-compiled
+*.pyc

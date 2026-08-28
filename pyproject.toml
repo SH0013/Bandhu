@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bandhu-agentic-cloud"
+version = "0.1.0"
+description = "Bandhu: Universal Voice Persona & Autonomous Proactive Agent Platform for Loved Ones"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Bandhu Team" }]
+dependencies = [
+    "google-genai>=0.1.1",
+    "google-cloud-firestore>=2.16.0",
+    "google-cloud-storage>=2.14.0",
+    "google-cloud-texttospeech>=2.16.0",
+    "google-cloud-tasks>=2.16.0",
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.28.0",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.2.0",
+    "httpx>=0.27.0",
+    "python-multipart>=0.0.9",
+    "jinja2>=3.1.3",
+    "soundfile>=0.12.1",
+    "numpy>=1.26.0",
+    "scipy>=1.12.0",
+    "edge-tts>=6.1.12",
+    "pydub>=0.25.1",
+    "faiss-cpu>=1.8.0",
+    "transformers>=4.40.0",
+    "safetensors>=0.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "mypy>=1.9.0",
+    "ruff>=0.3.0",
+]
+gpu = [
+    "torch>=2.2.0",
+    "torchaudio>=2.2.0",
+]
+whatsapp = [
+    "twilio>=9.0.0",
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --asyncio-mode=auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true

@@ -1,0 +1,902 @@
+[
+  {
+    "segment_id": "grandma_clip_0000",
+    "relative_path": "data\\training_dataset\\grandma_clip_0000.wav",
+    "duration_sec": 4.59,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0001",
+    "relative_path": "data\\training_dataset\\grandma_clip_0001.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0002",
+    "relative_path": "data\\training_dataset\\grandma_clip_0002.wav",
+    "duration_sec": 5.61,
+    "snr_db": 43.14,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0003",
+    "relative_path": "data\\training_dataset\\grandma_clip_0003.wav",
+    "duration_sec": 4.05,
+    "snr_db": 42.51,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0004",
+    "relative_path": "data\\training_dataset\\grandma_clip_0004.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0005",
+    "relative_path": "data\\training_dataset\\grandma_clip_0005.wav",
+    "duration_sec": 4.44,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0006",
+    "relative_path": "data\\training_dataset\\grandma_clip_0006.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0007",
+    "relative_path": "data\\training_dataset\\grandma_clip_0007.wav",
+    "duration_sec": 4.47,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0008",
+    "relative_path": "data\\training_dataset\\grandma_clip_0008.wav",
+    "duration_sec": 7.41,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0009",
+    "relative_path": "data\\training_dataset\\grandma_clip_0009.wav",
+    "duration_sec": 5.37,
+    "snr_db": 43.71,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0010",
+    "relative_path": "data\\training_dataset\\grandma_clip_0010.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0011",
+    "relative_path": "data\\training_dataset\\grandma_clip_0011.wav",
+    "duration_sec": 4.5,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0012",
+    "relative_path": "data\\training_dataset\\grandma_clip_0012.wav",
+    "duration_sec": 5.01,
+    "snr_db": 52.15,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0013",
+    "relative_path": "data\\training_dataset\\grandma_clip_0013.wav",
+    "duration_sec": 4.05,
+    "snr_db": 58.32,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0014",
+    "relative_path": "data\\training_dataset\\grandma_clip_0014.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0015",
+    "relative_path": "data\\training_dataset\\grandma_clip_0015.wav",
+    "duration_sec": 4.92,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0016",
+    "relative_path": "data\\training_dataset\\grandma_clip_0016.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0017",
+    "relative_path": "data\\training_dataset\\grandma_clip_0017.wav",
+    "duration_sec": 6.81,
+    "snr_db": 45.23,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0018",
+    "relative_path": "data\\training_dataset\\grandma_clip_0018.wav",
+    "duration_sec": 6.21,
+    "snr_db": 45.28,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0019",
+    "relative_path": "data\\training_dataset\\grandma_clip_0019.wav",
+    "duration_sec": 5.4,
+    "snr_db": 49.19,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0020",
+    "relative_path": "data\\training_dataset\\grandma_clip_0020.wav",
+    "duration_sec": 7.5,
+    "snr_db": 47.02,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0021",
+    "relative_path": "data\\training_dataset\\grandma_clip_0021.wav",
+    "duration_sec": 6.12,
+    "snr_db": 55.41,
+    "sample_rate": 24000,
+    "transcript_te": "ఆ పేరుతో ఇల్లు గడ్డి చేసుకున్నారంటే ఇంకా అంగడంతా యూరిని తినోడేది",
+    "is_reference_candidate": true
+  },
+  {
+    "segment_id": "grandma_clip_0022",
+    "relative_path": "data\\training_dataset\\grandma_clip_0022.wav",
+    "duration_sec": 5.4,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0023",
+    "relative_path": "data\\training_dataset\\grandma_clip_0023.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0024",
+    "relative_path": "data\\training_dataset\\grandma_clip_0024.wav",
+    "duration_sec": 6.21,
+    "snr_db": 100.98,
+    "sample_rate": 24000,
+    "transcript_te": "నేనేం చెయ్యాలనుకోలేదు నేను ఇంట్లో ఇంట్లోనే దిగాల అనుకున్నా",
+    "is_reference_candidate": true
+  },
+  {
+    "segment_id": "grandma_clip_0025",
+    "relative_path": "data\\training_dataset\\grandma_clip_0025.wav",
+    "duration_sec": 6.09,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0026",
+    "relative_path": "data\\training_dataset\\grandma_clip_0026.wav",
+    "duration_sec": 4.92,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0027",
+    "relative_path": "data\\training_dataset\\grandma_clip_0027.wav",
+    "duration_sec": 4.77,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0028",
+    "relative_path": "data\\training_dataset\\grandma_clip_0028.wav",
+    "duration_sec": 4.47,
+    "snr_db": 81.61,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0029",
+    "relative_path": "data\\training_dataset\\grandma_clip_0029.wav",
+    "duration_sec": 5.64,
+    "snr_db": 59.35,
+    "sample_rate": 24000,
+    "transcript_te": "అటనే అనుకుంటాను నాకెందుకు మడితే",
+    "is_reference_candidate": true
+  },
+  {
+    "segment_id": "grandma_clip_0030",
+    "relative_path": "data\\training_dataset\\grandma_clip_0030.wav",
+    "duration_sec": 5.04,
+    "snr_db": 44.37,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0031",
+    "relative_path": "data\\training_dataset\\grandma_clip_0031.wav",
+    "duration_sec": 6.09,
+    "snr_db": 50.97,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0032",
+    "relative_path": "data\\training_dataset\\grandma_clip_0032.wav",
+    "duration_sec": 6.03,
+    "snr_db": 49.01,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0033",
+    "relative_path": "data\\training_dataset\\grandma_clip_0033.wav",
+    "duration_sec": 4.71,
+    "snr_db": 51.91,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0034",
+    "relative_path": "data\\training_dataset\\grandma_clip_0034.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0035",
+    "relative_path": "data\\training_dataset\\grandma_clip_0035.wav",
+    "duration_sec": 6.87,
+    "snr_db": 45.64,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0036",
+    "relative_path": "data\\training_dataset\\grandma_clip_0036.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0037",
+    "relative_path": "data\\training_dataset\\grandma_clip_0037.wav",
+    "duration_sec": 4.05,
+    "snr_db": 59.32,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0038",
+    "relative_path": "data\\training_dataset\\grandma_clip_0038.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0039",
+    "relative_path": "data\\training_dataset\\grandma_clip_0039.wav",
+    "duration_sec": 5.07,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0040",
+    "relative_path": "data\\training_dataset\\grandma_clip_0040.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0041",
+    "relative_path": "data\\training_dataset\\grandma_clip_0041.wav",
+    "duration_sec": 4.83,
+    "snr_db": 50.51,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0042",
+    "relative_path": "data\\training_dataset\\grandma_clip_0042.wav",
+    "duration_sec": 6.81,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0043",
+    "relative_path": "data\\training_dataset\\grandma_clip_0043.wav",
+    "duration_sec": 4.92,
+    "snr_db": 58.54,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0044",
+    "relative_path": "data\\training_dataset\\grandma_clip_0044.wav",
+    "duration_sec": 4.59,
+    "snr_db": 48.93,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0045",
+    "relative_path": "data\\training_dataset\\grandma_clip_0045.wav",
+    "duration_sec": 5.22,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0046",
+    "relative_path": "data\\training_dataset\\grandma_clip_0046.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0047",
+    "relative_path": "data\\training_dataset\\grandma_clip_0047.wav",
+    "duration_sec": 4.08,
+    "snr_db": 50.99,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0048",
+    "relative_path": "data\\training_dataset\\grandma_clip_0048.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0049",
+    "relative_path": "data\\training_dataset\\grandma_clip_0049.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0050",
+    "relative_path": "data\\training_dataset\\grandma_clip_0050.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0051",
+    "relative_path": "data\\training_dataset\\grandma_clip_0051.wav",
+    "duration_sec": 4.14,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0052",
+    "relative_path": "data\\training_dataset\\grandma_clip_0052.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0053",
+    "relative_path": "data\\training_dataset\\grandma_clip_0053.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0054",
+    "relative_path": "data\\training_dataset\\grandma_clip_0054.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0055",
+    "relative_path": "data\\training_dataset\\grandma_clip_0055.wav",
+    "duration_sec": 5.52,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0056",
+    "relative_path": "data\\training_dataset\\grandma_clip_0056.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0057",
+    "relative_path": "data\\training_dataset\\grandma_clip_0057.wav",
+    "duration_sec": 4.65,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0058",
+    "relative_path": "data\\training_dataset\\grandma_clip_0058.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0059",
+    "relative_path": "data\\training_dataset\\grandma_clip_0059.wav",
+    "duration_sec": 6.42,
+    "snr_db": 49.62,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0060",
+    "relative_path": "data\\training_dataset\\grandma_clip_0060.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0061",
+    "relative_path": "data\\training_dataset\\grandma_clip_0061.wav",
+    "duration_sec": 4.95,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0062",
+    "relative_path": "data\\training_dataset\\grandma_clip_0062.wav",
+    "duration_sec": 4.71,
+    "snr_db": 42.97,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0063",
+    "relative_path": "data\\training_dataset\\grandma_clip_0063.wav",
+    "duration_sec": 4.38,
+    "snr_db": 45.8,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0064",
+    "relative_path": "data\\training_dataset\\grandma_clip_0064.wav",
+    "duration_sec": 6.24,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0065",
+    "relative_path": "data\\training_dataset\\grandma_clip_0065.wav",
+    "duration_sec": 5.01,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0066",
+    "relative_path": "data\\training_dataset\\grandma_clip_0066.wav",
+    "duration_sec": 5.79,
+    "snr_db": 53.97,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0067",
+    "relative_path": "data\\training_dataset\\grandma_clip_0067.wav",
+    "duration_sec": 4.2,
+    "snr_db": 39.77,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0068",
+    "relative_path": "data\\training_dataset\\grandma_clip_0068.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0069",
+    "relative_path": "data\\training_dataset\\grandma_clip_0069.wav",
+    "duration_sec": 4.05,
+    "snr_db": 111.5,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0070",
+    "relative_path": "data\\training_dataset\\grandma_clip_0070.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0071",
+    "relative_path": "data\\training_dataset\\grandma_clip_0071.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0072",
+    "relative_path": "data\\training_dataset\\grandma_clip_0072.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0073",
+    "relative_path": "data\\training_dataset\\grandma_clip_0073.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0074",
+    "relative_path": "data\\training_dataset\\grandma_clip_0074.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0075",
+    "relative_path": "data\\training_dataset\\grandma_clip_0075.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0076",
+    "relative_path": "data\\training_dataset\\grandma_clip_0076.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0077",
+    "relative_path": "data\\training_dataset\\grandma_clip_0077.wav",
+    "duration_sec": 9.06,
+    "snr_db": 49.83,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0078",
+    "relative_path": "data\\training_dataset\\grandma_clip_0078.wav",
+    "duration_sec": 4.05,
+    "snr_db": 59.05,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0079",
+    "relative_path": "data\\training_dataset\\grandma_clip_0079.wav",
+    "duration_sec": 5.31,
+    "snr_db": 57.99,
+    "sample_rate": 24000,
+    "transcript_te": "గేమ్ ఉండ విశేష అవు ఉంటాయికి ఇవే విశేష అవు",
+    "is_reference_candidate": true
+  },
+  {
+    "segment_id": "grandma_clip_0080",
+    "relative_path": "data\\training_dataset\\grandma_clip_0080.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0081",
+    "relative_path": "data\\training_dataset\\grandma_clip_0081.wav",
+    "duration_sec": 4.59,
+    "snr_db": 47.91,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0082",
+    "relative_path": "data\\training_dataset\\grandma_clip_0082.wav",
+    "duration_sec": 5.1,
+    "snr_db": 54.29,
+    "sample_rate": 24000,
+    "transcript_te": "గీతకు మర్ది కొడుకు",
+    "is_reference_candidate": true
+  },
+  {
+    "segment_id": "grandma_clip_0083",
+    "relative_path": "data\\training_dataset\\grandma_clip_0083.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0084",
+    "relative_path": "data\\training_dataset\\grandma_clip_0084.wav",
+    "duration_sec": 6.12,
+    "snr_db": 49.3,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0085",
+    "relative_path": "data\\training_dataset\\grandma_clip_0085.wav",
+    "duration_sec": 7.68,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0086",
+    "relative_path": "data\\training_dataset\\grandma_clip_0086.wav",
+    "duration_sec": 4.05,
+    "snr_db": 75.9,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0087",
+    "relative_path": "data\\training_dataset\\grandma_clip_0087.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0088",
+    "relative_path": "data\\training_dataset\\grandma_clip_0088.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0089",
+    "relative_path": "data\\training_dataset\\grandma_clip_0089.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0090",
+    "relative_path": "data\\training_dataset\\grandma_clip_0090.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0091",
+    "relative_path": "data\\training_dataset\\grandma_clip_0091.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0092",
+    "relative_path": "data\\training_dataset\\grandma_clip_0092.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0093",
+    "relative_path": "data\\training_dataset\\grandma_clip_0093.wav",
+    "duration_sec": 6.69,
+    "snr_db": 49.29,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0094",
+    "relative_path": "data\\training_dataset\\grandma_clip_0094.wav",
+    "duration_sec": 7.83,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0095",
+    "relative_path": "data\\training_dataset\\grandma_clip_0095.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0096",
+    "relative_path": "data\\training_dataset\\grandma_clip_0096.wav",
+    "duration_sec": 4.2,
+    "snr_db": 45.36,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0097",
+    "relative_path": "data\\training_dataset\\grandma_clip_0097.wav",
+    "duration_sec": 4.92,
+    "snr_db": 43.88,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0098",
+    "relative_path": "data\\training_dataset\\grandma_clip_0098.wav",
+    "duration_sec": 4.92,
+    "snr_db": 43.86,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  },
+  {
+    "segment_id": "grandma_clip_0099",
+    "relative_path": "data\\training_dataset\\grandma_clip_0099.wav",
+    "duration_sec": 4.05,
+    "snr_db": 40.0,
+    "sample_rate": 24000,
+    "transcript_te": "",
+    "is_reference_candidate": false
+  }
+]
