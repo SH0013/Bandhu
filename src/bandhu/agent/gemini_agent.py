@@ -58,9 +58,9 @@ class BandhuGeminiAgent:
             language="Telugu",
             dialect_region="Rayalaseema / Chittoor",
             tone="Deeply maternal, protective, loving, authentic Rayalaseema dialect",
-            frequent_catchphrases=["తింటివా", "చల్లగా ఉండాలి", "స్వామి దయతో", "బా", "తింటివా బా", "బాగుండావా మా లావణ్య", "బాగుండావా మా మంజు"],
-            pet_names=["నాయనా", "బా", "తల్లీ", "మా లావణ్య", "మా మంజు", "మా గీత", "మా అను"],
-            key_topics=["ఆరోగ్యం (Health)", "భోజనం (Meals)", "కుటుంబ యోగక్షేమాలు (Family Wellbeing)", "కుటుంబ జ్ఞాపకాలు"],
+            frequent_catchphrases=["తింటివా", "చల్లగా ఉండాలి", "స్వామి దయతో", "బా", "తింటివా బా", "బాగుండావా మా లావణ్య", "బాగుండావా మా లాస్య", "బాగుండావా మా రూప", "బాగుండావా మా మంజు"],
+            pet_names=["నాయనా", "బా", "తల్లీ", "మా లావణ్య", "మా లాస్య", "మా రూప", "మా మంజు", "మా గీత", "మా అను"],
+            key_topics=["ఆరోగ్యం (Health)", "భోజనం (Meals)", "యోగక్షేమాలు (Family Wellbeing)", "కుటుంబ జ్ఞాపకాలు", "కూతుళ్లు & మనవరాళ్లు"],
             custom_system_prompt=CHITTOOR_GRANDMA_SYSTEM_PROMPT,
         )
 
