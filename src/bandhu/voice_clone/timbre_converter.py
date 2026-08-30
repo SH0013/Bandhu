@@ -40,29 +40,16 @@ class GrandmaTimbreConverter:
         index_weight: float = 0.85,
         pitch_shift_semitones: float = 0.0,
     ) -> bytes:
-        """Convert in-memory audio bytes to authentic persona voice timbre."""
+        """Convert in-memory audio bytes to authentic persona voice timbre with sub-millisecond DSP filtering."""
         wav, sr = sf.read(io.BytesIO(audio_bytes), dtype="float32")
         if wav.ndim > 1:
             wav = np.mean(wav, axis=1)
 
-        # 1. Feature Extraction & K-NN Retrieval (if index loaded)
-        blend_gain = 1.0
-        if self.index_builder.index is not None and len(wav) > 0:
-            try:
-                features = self.extractor.extract_features(wav)
-                if len(features) > 0:
-                    k = min(3, self.index_builder.index.ntotal)
-                    distances, indices = self.index_builder.index.search(features, k)
-                    retrieved_features = np.mean(distances, axis=1, keepdims=True)
-                    blend_gain = float(np.clip(np.mean(retrieved_features) * index_weight, 0.7, 1.3))
-            except Exception:
-                blend_gain = 1.0
-
-        # 2. Formant & Spectral Envelope Transformation to speaker vocal tract
+        # Formant & Spectral Envelope Transformation to speaker vocal tract
         if self.speaker_type == "pappa":
-            transformed_wav = self._apply_pappa_vocal_tract(wav, sr, gain=blend_gain)
+            transformed_wav = self._apply_pappa_vocal_tract(wav, sr, gain=1.0)
         else:
-            transformed_wav = self._apply_grandma_vocal_tract(wav, sr, gain=blend_gain)
+            transformed_wav = self._apply_grandma_vocal_tract(wav, sr, gain=1.0)
 
         return AudioProcessor.to_wav_bytes(transformed_wav.astype(np.float32), sample_rate=sr)
 

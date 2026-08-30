@@ -43,12 +43,8 @@ class AdaptiveVoiceSynthesizer:
                 self._indicf5_cloner = IndicF5VoiceCloner()
                 self.active_engine = "indicf5_gpu"
                 print(f"[TTS] IndicF5 GPU Zero-Shot Voice Cloner activated (device: {self._indicf5_cloner.device}).")
-                # Pre-warm: load the model into GPU VRAM now so first request is fast
-                try:
-                    self._indicf5_cloner._load_model()
-                    print("[TTS] IndicF5 model pre-warmed into GPU VRAM.")
-                except Exception as warmup_exc:
-                    print(f"[TTS] IndicF5 model pre-warm note: {warmup_exc}")
+                # IndicF5 is ready on GPU; model will load on first zero-shot inference
+                pass
             else:
                 self._indicf5_cloner = None
                 self.active_engine = "neural_tts"
@@ -110,8 +106,9 @@ class AdaptiveVoiceSynthesizer:
                 p_idx = cand / "personas" / voice_id / "voice.index"
                 p_prof = cand / "personas" / voice_id / "voice_profile_features.json"
                 if p_idx.exists():
-                    is_male = "male" in gender or any(w in (voice_id + speaker_name).lower() for w in ("pappa", "father", "dad", "male", "nanna", "తాతయ్య", "మిత్రుడు", "రాహుల్", "బాబు"))
-                    speaker_type = "pappa" if is_male else "grandma"
+                    is_grandma = any(w in (voice_id + speaker_name).lower() for w in ("grandma", "amamma", "అమ్మమ్మ", "నానమ్మ"))
+                    is_pappa = any(w in (voice_id + speaker_name).lower() for w in ("pappa", "father", "dad", "పప్పా", "నాన్న"))
+                    speaker_type = "grandma" if is_grandma else ("pappa" if (is_pappa or gender.lower() == "male") else "grandma")
                     conv = GrandmaTimbreConverter(
                         index_path=p_idx,
                         profile_path=p_prof if p_prof.exists() else None,
@@ -127,8 +124,9 @@ class AdaptiveVoiceSynthesizer:
                     idx_file = cand / f"{prefix}.index"
                     prof_file = cand / f"{prefix}_profile.json"
                     if idx_file.exists():
-                        is_male = "male" in gender or any(w in (voice_id + speaker_name).lower() for w in ("pappa", "father", "dad", "male", "nanna", "తాతయ్య", "మిత్రుడు", "రాహుల్", "బాబు"))
-                        speaker_type = "pappa" if is_male else "grandma"
+                        is_grandma = any(w in (voice_id + speaker_name).lower() for w in ("grandma", "amamma", "అమ్మమ్మ", "నానమ్మ"))
+                        is_pappa = any(w in (voice_id + speaker_name).lower() for w in ("pappa", "father", "dad", "పప్పా", "నాన్న"))
+                        speaker_type = "grandma" if is_grandma else ("pappa" if (is_pappa or gender.lower() == "male") else "grandma")
                         conv = GrandmaTimbreConverter(
                             index_path=idx_file,
                             profile_path=prof_file if prof_file.exists() else None,
@@ -246,36 +244,44 @@ class AdaptiveVoiceSynthesizer:
         import edge_tts
 
         # Determine best neural voice model based on persona
-        lang = voice.language_code if voice else "te"
-        gender = (voice.gender or "female").lower() if voice else "female"
+        lang = (voice.language_code or "te") if voice else "te"
+        raw_gender = (voice.gender or "female").lower() if voice else "female"
         voice_name = (voice.name or "").lower() if voice else ""
-        voice_id = voice.voice_id if voice else "default"
-        is_grandma = "grandma" in voice_name or "అమ్మమ్మ" in voice_name or voice_id == "grandma_chittoor"
-        is_pappa = any(w in voice_name for w in ("pappa", "father", "dad", "పప్పా", "నాన్న")) or voice_id in ("pappa", "father")
-        is_male = "male" in gender or is_pappa or any(w in voice_name for w in ("friend", "rahul", "nanna", "తాతయ్య", "మిత్రుడు", "రాహుల్", "బాబు"))
+        voice_id = (voice.voice_id or "").lower() if voice else "default"
+
+        is_grandma = any(w in voice_name for w in ("grandma", "amamma", "అమ్మమ్మ", "నానమ్మ")) or any(w in voice_id for w in ("grandma", "amamma", "అమ్మమ్మ"))
+        is_pappa = any(w in voice_name for w in ("pappa", "father", "dad", "పప్పా", "నాన్న")) or any(w in voice_id for w in ("pappa", "father", "dad"))
+
+        if is_grandma:
+            is_male = False
+        elif is_pappa:
+            is_male = True
+        elif raw_gender == "male":
+            is_male = True
+        else:
+            is_male = False
 
         # Map to appropriate regional neural voice
         if is_male:
             chosen_voice = "te-IN-MohanNeural"
+            pitch = "-2Hz"
+            rate = "+0%"  # Natural grounded paternal cadence
+        elif is_grandma:
+            chosen_voice = "te-IN-ShrutiNeural"
+            pitch = "-3Hz"
+            rate = "-8%"  # Gentle, calm, deliberate maternal grandmother cadence
         elif "hi" in lang:
             chosen_voice = "hi-IN-SwaraNeural"
+            pitch = "+0Hz"
+            rate = "+0%"
         elif "en" in lang:
             chosen_voice = "en-IN-NeerjaNeural"
+            pitch = "+0Hz"
+            rate = "+0%"
         else:
             chosen_voice = "te-IN-ShrutiNeural"
-
-        # Adaptive pitch & speed tuning for authentic resonance
-        pitch = "+0Hz"
-        rate = "+0%"
-        if is_grandma:
-            pitch = "-3Hz"
-            rate = "-8%"  # Gentle, calm, deliberate grandmother cadence
-        elif is_pappa or is_male:
-            pitch = "-2Hz"
-            rate = "+0%"  # Natural grounded paternal/male cadence
-        elif "friend" in voice_name or "రాహుల్" in voice_name:
-            pitch = "+2Hz"
-            rate = "+5%"   # Energetic, casual friend cadence
+            pitch = "+0Hz"
+            rate = "+0%"
 
         communicate = edge_tts.Communicate(text=text, voice=chosen_voice, pitch=pitch, rate=rate)
         audio_buffer = bytearray()
@@ -289,7 +295,7 @@ class AdaptiveVoiceSynthesizer:
         raw_audio_bytes = bytes(audio_buffer)
 
         # Look up and apply authentic persona FAISS timbre conversion
-        timbre_conv = self.get_timbre_converter(voice_id, speaker_name=voice_name, gender=gender)
+        timbre_conv = self.get_timbre_converter(voice_id, speaker_name=voice_name, gender=raw_gender)
         if timbre_conv:
             try:
                 converted = timbre_conv.convert_audio_bytes(

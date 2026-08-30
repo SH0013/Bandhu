@@ -872,9 +872,9 @@
             </a>
 
             <div class="header-meta">
-                <div class="status-badge">
+                <div class="status-badge" id="statusBadge">
                     <div class="status-dot"></div>
-                    <span>IndicF5 GPU · Ready</span>
+                    <span id="statusBadgeText">Neural Indic TTS · Live</span>
                 </div>
 
                 <button class="btn-minimal" onclick="triggerProactiveCheckin()" title="Trigger Background Health Check-in">
@@ -1067,7 +1067,23 @@
             initTheme();
             setupSpeechRecognition();
             selectPersonaDirect('pappa');
+            checkHealth();
         });
+
+        async function checkHealth() {
+            try {
+                const res = await fetch('/healthz');
+                const data = await res.json();
+                const badge = document.getElementById('statusBadgeText');
+                if (badge && data) {
+                    if (data.tts_engine === 'indicf5_gpu') {
+                        badge.innerText = 'IndicF5 GPU · Ready';
+                    } else {
+                        badge.innerText = 'Neural Indic TTS · Live';
+                    }
+                }
+            } catch (e) {}
+        }
 
         // Theme Toggle
         function initTheme() {

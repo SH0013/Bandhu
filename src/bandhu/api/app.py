@@ -380,7 +380,11 @@ async def upload_persona_audio(
     # 1. Determine speaker gender from persona or name
     existing = memory_store.get_persona(voice_id)
     combined_info = f"{name} {voice_id} {existing.relationship if existing else ''}".lower()
-    is_male = any(w in combined_info for w in ("father", "pappa", "dad", "male", "brother", "grandpa", "thatha", "nanna", "మిత్రుడు", "రాహుల్", "బాబు", "తాతయ్య"))
+    is_grandma = any(w in combined_info for w in ("grandma", "amamma", "అమ్మమ్మ", "నానమ్మ", "mother", "amma", "తల్లి", "sister"))
+    is_male = not is_grandma and (
+        any(w in combined_info.split() for w in ("male", "man", "boy")) or
+        any(w in combined_info for w in ("father", "pappa", "dad", "brother", "grandpa", "thatha", "nanna", "మిత్రుడు", "రాహుల్", "బాబు", "తాతయ్య"))
+    )
     gender = "male" if is_male else "female"
 
     vprofile = voice_manager.register_voice(
