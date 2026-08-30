@@ -1,0 +1,12 @@
+{
+  "speaker_name": "\u0c2a\u0c2a\u0c4d\u0c2a\u0c3e (Pappa)",
+  "num_clips": 1,
+  "total_duration_sec": 34.85,
+  "feature_dim": 768,
+  "num_vectors": 1742,
+  "median_f0_hz": 175.82,
+  "min_f0_hz": 101.62,
+  "max_f0_hz": 278.04,
+  "spectral_centroid_hz": 1800.0,
+  "index_file_name": "pappa_voice.index"
+}

@@ -254,6 +254,37 @@ class IndicF5VoiceCloner:
         text = ref_text if ref_text is not None else self.ref_text
         text = text.strip() if text else ""
 
+        if audio is not None and text:
+            audio_path = Path(audio)
+            if not audio_path.exists():
+                # Try relative to project root
+                cand = settings.project_root / audio
+                if cand.exists():
+                    audio_path = cand
+            if audio_path.exists():
+                return audio_path, text
+
+        # Check persona folders first before any legacy fallback
+        personas_dir = settings.data_dir / "personas"
+        if personas_dir.exists():
+            for pdir in personas_dir.iterdir():
+                if pdir.is_dir():
+                    vprof_file = pdir / "voice_profile.json"
+                    if vprof_file.exists():
+                        try:
+                            import json
+                            vdata = json.loads(vprof_file.read_text(encoding="utf-8"))
+                            t = (vdata.get("reference_transcript") or "").strip()
+                            p = Path(vdata.get("reference_audio_path", ""))
+                            if not p.is_absolute():
+                                p = settings.project_root / p
+                            if p.exists() and t:
+                                audio = p
+                                text = t
+                                return audio, text
+                        except Exception:
+                            pass
+
         if audio is None or not text:
             from_metadata = self._reference_from_metadata()
             if from_metadata is not None:
@@ -261,36 +292,9 @@ class IndicF5VoiceCloner:
                 audio = audio if audio is not None else meta_audio
                 text = text or meta_text
 
-        # Last resort: try reference_audio directory for any clip with transcript in voice profiles
-        if audio is None or not text:
-            ref_dir = settings.data_dir / "reference_audio"
-            if ref_dir.exists():
-                import json
-                index_file = ref_dir / "voice_profiles_index.json"
-                if index_file.exists():
-                    try:
-                        profiles = json.loads(index_file.read_text(encoding="utf-8"))
-                        for _vid, vdata in profiles.items():
-                            t = (vdata.get("reference_transcript") or "").strip()
-                            if not t:
-                                continue
-                            p = Path(vdata.get("reference_audio_path", ""))
-                            # Try relative path if absolute doesn't exist
-                            if not p.exists():
-                                p = ref_dir / p.name
-                            if p.exists():
-                                audio = p
-                                text = t
-                                break
-                    except Exception:
-                        pass
-
         if audio is None or not text:
             raise MissingReferenceTranscriptError(
-                "IndicF5 needs a reference clip AND its exact transcript, but none was "
-                f"found.\nLooked in: {self.metadata_csv}\n"
-                "Fix: fill 'transcript_te' column in metadata.csv for a reference clip,\n"
-                "or pass ref_audio=... and ref_text=... explicitly."
+                "IndicF5 needs a reference clip AND its exact transcript, but none was found."
             )
 
         audio = Path(audio)
@@ -328,14 +332,59 @@ class IndicF5VoiceCloner:
 
         return audio.astype(np.float32)
 
+    @staticmethod
+    def _enhance_clarity(audio: np.ndarray, sr: int) -> np.ndarray:
+        """Restore pristine acoustic clarity and presence to IndicF5 output.
+
+        Compensates for phone mic proximity effect, low-end boominess, and codec
+        high-frequency attenuation through:
+          1. 95 Hz Butterworth high-pass (removes sub-bass mud & rumble)
+          2. 300 Hz boxiness cut (cleans chest resonance)
+          3. 1.4 kHz - 4.8 kHz presence boost (enhances Telugu consonant clarity)
+          4. Subtle upper-harmonic excitation (> 2.2 kHz)
+          5. Transparent peak limiting with -1.0 dBFS headroom
+        """
+        from scipy import signal
+
+        nyq = sr / 2.0
+
+        # 1. 95 Hz high-pass filter to strip low-end mud / rumble
+        sos_hp = signal.butter(2, min(95.0, nyq * 0.1) / nyq, btype='high', output='sos')
+        wav_clean = signal.sosfilt(sos_hp, audio)
+
+        # 2. Gentle dip at 300 Hz (boxiness / mud removal)
+        b_mud, a_mud = signal.iirpeak(min(300.0, nyq * 0.3) / nyq, 1.2)
+        mud_comp = signal.lfilter(b_mud, a_mud, wav_clean)
+        wav_clean = wav_clean - 0.30 * mud_comp
+
+        # 3. Speech presence band (1.4 kHz - 4.8 kHz) for consonant crispness
+        sos_presence = signal.butter(2, [min(1400.0, nyq * 0.5) / nyq, min(4800.0, nyq * 0.85) / nyq], btype='band', output='sos')
+        pres_comp = signal.sosfilt(sos_presence, wav_clean)
+
+        # 4. Harmonic exciter for upper frequencies (> 2.2 kHz)
+        sos_highs = signal.butter(2, min(2200.0, nyq * 0.6) / nyq, btype='high', output='sos')
+        high_comp = signal.sosfilt(sos_highs, wav_clean)
+        excited_highs = np.tanh(high_comp * 2.2) * 0.35
+
+        # Combine: clean audio + presence boost + excited crispness
+        audio_boosted = wav_clean + 0.65 * pres_comp + 0.75 * excited_highs
+
+        # 5. Transparent peak normalization
+        peak = float(np.max(np.abs(audio_boosted)))
+        if peak > 1e-4:
+            audio_boosted = audio_boosted / peak * 0.90
+
+        return audio_boosted.astype(np.float32)
+
     def synthesize_sync(
         self,
         text: str,
         output_path: Path,
         ref_audio: Path | None = None,
         ref_text: str | None = None,
+        speed: float | None = 0.80,
     ) -> Path:
-        """Blocking IndicF5 synthesis."""
+        """Blocking IndicF5 synthesis with adjustable pacing."""
         if not text or not text.strip():
             raise ValueError("Cannot synthesize empty text.")
 
@@ -343,6 +392,8 @@ class IndicF5VoiceCloner:
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         model = self._load_model()
+        if speed is not None and hasattr(model, "config"):
+            model.config.speed = float(speed)
 
         try:
             import torch
@@ -360,6 +411,7 @@ class IndicF5VoiceCloner:
             )
 
         waveform = self._to_mono_float32(raw_audio)
+        waveform = self._enhance_clarity(waveform, self.SAMPLE_RATE)
         AudioProcessor.save_wav(waveform, output_path, self.SAMPLE_RATE)
         return output_path
 
@@ -369,6 +421,7 @@ class IndicF5VoiceCloner:
         output_path: Path,
         ref_audio: Path | None = None,
         ref_text: str | None = None,
+        speed: float | None = 0.80,
     ) -> Path:
         """Synthesize Telugu speech in the target speaker's voice with IndicF5.
 
@@ -377,5 +430,5 @@ class IndicF5VoiceCloner:
         loop = asyncio.get_running_loop()
         return await loop.run_in_executor(
             None,
-            lambda: self.synthesize_sync(text, output_path, ref_audio, ref_text),
+            lambda: self.synthesize_sync(text, output_path, ref_audio, ref_text, speed=speed),
         )

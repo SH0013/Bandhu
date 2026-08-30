@@ -1,0 +1,12 @@
+{
+  "voice_id": "grandma_chittoor",
+  "persona_id": "grandma_chittoor",
+  "name": "అమ్మమ్మ (Grandma)",
+  "gender": "female",
+  "dialect_region": "Rayalaseema / Chittoor",
+  "reference_audio_path": "data\\personas\\grandma\\reference_audio\\primary_ref_24k.wav",
+  "reference_transcript": "నేనేం చెయ్యాలనుకోలేదు నేను ఇంట్లో ఇంట్లోనే దిగాల అనుకున్నా",
+  "language_code": "te",
+  "speaking_rate": 0.85,
+  "sample_rate": 24000
+}

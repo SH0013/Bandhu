@@ -46,7 +46,46 @@ memory_store = MemoryStore()
 voice_manager = VoiceProfileManager()
 voice_synthesizer = AdaptiveVoiceSynthesizer(voice_manager=voice_manager)
 speech_recognizer = SpeechRecognizer()
-gemini_agent = BandhuGeminiAgent(memory_store=memory_store)
+
+# Seed default personas (Pappa & Grandma) into MemoryStore
+def _seed_personas() -> None:
+    from bandhu.agent.prompts import CHITTOOR_GRANDMA_SYSTEM_PROMPT, HANUMAKONDA_PAPPA_SYSTEM_PROMPT
+
+    pappa = PersonaProfile(
+        persona_id="pappa",
+        name="పప్పా (Pappa)",
+        relationship="Father",
+        language="Telugu",
+        dialect_region="Telangana / Hanumakonda",
+        tone="Deeply loving, caring father, playful & teasing, authentic WhatsApp conversational style",
+        frequent_catchphrases=["లేచినవా నానమ్మ", "Don't worry బేటా", "అంతా మన మంచికే", "అన్నం తిన్నావా"],
+        pet_names=["నానమ్మ", "డాడీ", "బేటా", "దెయ్యం"],
+        key_topics=["ఆరోగ్యం & భోజనం", "కెరీర్ & ఉద్యోగం", "యోగక్షేమాలు"],
+        voice_profile_id="pappa",
+        custom_system_prompt=HANUMAKONDA_PAPPA_SYSTEM_PROMPT,
+    )
+    memory_store.save_persona(pappa)
+
+    grandma = PersonaProfile(
+        persona_id="grandma_chittoor",
+        name="అమ్మమ్మ (Grandma)",
+        relationship="Grandmother",
+        language="Telugu",
+        dialect_region="Rayalaseema / Chittoor",
+        tone="Loving, traditional, maternal Rayalaseema dialect",
+        frequent_catchphrases=["నాయనా", "తింటివా", "స్వామి దయతో చల్లగా ఉండాలి", "బా"],
+        pet_names=["కన్నా", "తల్లీ", "నాయనా", "బంగారుతల్లీ"],
+        key_topics=["ఆరోగ్యం (Health)", "భోజనం (Meals)", "యోగక్షేమాలు (Wellbeing)"],
+        voice_profile_id="grandma_chittoor",
+        custom_system_prompt=CHITTOOR_GRANDMA_SYSTEM_PROMPT,
+    )
+    memory_store.save_persona(grandma)
+
+_seed_personas()
+
+# Initialize agent with Pappa persona as default
+default_pappa = memory_store.get_persona("pappa")
+gemini_agent = BandhuGeminiAgent(persona_profile=default_pappa, memory_store=memory_store)
 
 # Ensure static directories
 static_dir = Path(__file__).resolve().parent / "static"
@@ -63,7 +102,7 @@ app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 class ChatRequest(BaseModel):
     message: str = Field(..., description="User message text")
     speaker_name: str = Field(default="Grandchild", description="Name of the user speaking")
-    persona_id: str = Field(default="grandma_chittoor", description="Target persona profile ID")
+    persona_id: str = Field(default="pappa", description="Target persona profile ID")
     generate_audio: bool = Field(default=True, description="Whether to synthesize voice audio")
 
 
@@ -94,7 +133,7 @@ class SavePersonaRequest(BaseModel):
 
 @app.get("/healthz")
 async def health_check() -> dict[str, Any]:
-    """Liveness probe for Cloud Run."""
+    """Health status check."""
     return {
         "status": "healthy",
         "service": "bandhu-agentic-cloud",
@@ -108,16 +147,31 @@ async def health_check() -> dict[str, Any]:
 async def chat_endpoint(request: ChatRequest) -> dict[str, Any]:
     """Execute conversational turn with Gemini Agent, proactive tools, and speech synthesis."""
     try:
-        # Switch persona if specified
-        if request.persona_id != gemini_agent.persona.persona_id:
-            profile = memory_store.get_persona(request.persona_id)
-            if profile:
-                gemini_agent.set_persona(profile)
+        # Strictly switch to the requested persona
+        target_pid = request.persona_id or "pappa"
+        profile = memory_store.get_persona(target_pid)
+        if not profile:
+            p_file = settings.data_dir / "personas" / target_pid / "profile.json"
+            if p_file.exists():
+                try:
+                    p_data = json.loads(p_file.read_text(encoding="utf-8"))
+                    profile = PersonaProfile.from_dict(p_data)
+                    memory_store.save_persona(profile)
+                except Exception:
+                    pass
 
-        # 1. Agent Reasoning & Tool Dispatch
+        if profile and profile.persona_id != gemini_agent.persona.persona_id:
+            gemini_agent.set_persona(profile)
+        elif not profile and target_pid == "pappa":
+            _seed_personas()
+            p_obj = memory_store.get_persona("pappa")
+            if p_obj:
+                gemini_agent.set_persona(p_obj)
+
+        # 1. Agent Reasoning & Tool Dispatch (with multi-turn conversational memory)
         agent_res = await gemini_agent.reply(request.message, speaker_name=request.speaker_name)
 
-        # 2. Adaptive Voice Synthesis
+        # 2. Adaptive Voice Synthesis with STRICT persona routing
         audio_url = None
         if request.generate_audio and agent_res.reply_text:
             audio_id = f"bandhu_turn_{uuid.uuid4().hex[:8]}.wav"
@@ -127,9 +181,9 @@ async def chat_endpoint(request: ChatRequest) -> dict[str, Any]:
                     voice_synthesizer.synthesize(
                         text=agent_res.reply_text,
                         output_file=out_path,
-                        voice_id=gemini_agent.persona.persona_id,
+                        voice_id=target_pid,
                     ),
-                    timeout=5.0,
+                    timeout=60.0,
                 )
                 audio_url = f"/api/audio/{audio_id}"
             except Exception as exc:
@@ -229,21 +283,21 @@ async def list_personas_endpoint() -> dict[str, Any]:
         memory_store.save_persona(grandma)
 
     pappa = memory_store.get_persona("pappa")
-    if not pappa:
-        pappa = PersonaProfile(
-            persona_id="pappa",
-            name="పప్పా (Pappa)",
-            relationship="Father",
-            language="Telugu",
-            dialect_region="Telangana / Hanumakonda",
-            tone="Warm, supportive, grounded paternal encouragement, Hanumakonda dialect",
-            frequent_catchphrases=["మంచిగైతది", "టెన్షన్ తీస్కోకు", "మంచిగున్న", "నడుస్తంది"],
-            pet_names=["బిడ్డా", "బేటా", "నానా", "బాబు", "చిన్నా"],
-            key_topics=["కెరీర్ & ఉద్యోగం", "ఆరోగ్యం", "కుటుంబ యోగక్షేమాలు"],
-            voice_profile_id="pappa",
-            custom_system_prompt=HANUMAKONDA_PAPPA_SYSTEM_PROMPT,
-        )
-        memory_store.save_persona(pappa)
+    # Always update Pappa with the authentic chat-derived prompt & pet names
+    pappa = PersonaProfile(
+        persona_id="pappa",
+        name="పప్పా (Pappa)",
+        relationship="Father",
+        language="Telugu",
+        dialect_region="Telangana / Hanumakonda",
+        tone="Deeply loving, caring father, playful & teasing, authentic WhatsApp conversational style",
+        frequent_catchphrases=["లేచినవా నానమ్మ", "Don't worry బేటా", "అంతా మన మంచికే", "అన్నం తిన్నావా"],
+        pet_names=["నానమ్మ", "డాడీ", "బేటా", "బంగారం", "దెయ్యం"],
+        key_topics=["ఆరోగ్యం & భోజనం", "కెరీర్ & ఉద్యోగం", "యోగక్షేమాలు"],
+        voice_profile_id="pappa",
+        custom_system_prompt=HANUMAKONDA_PAPPA_SYSTEM_PROMPT,
+    )
+    memory_store.save_persona(pappa)
 
     personas = memory_store.list_personas()
     return {
@@ -323,15 +377,48 @@ async def upload_persona_audio(
 
     primary_path = saved_paths[0] if saved_paths else ""
 
+    # 1. Determine speaker gender from persona or name
+    existing = memory_store.get_persona(voice_id)
+    combined_info = f"{name} {voice_id} {existing.relationship if existing else ''}".lower()
+    is_male = any(w in combined_info for w in ("father", "pappa", "dad", "male", "brother", "grandpa", "thatha", "nanna", "మిత్రుడు", "రాహుల్", "బాబు", "తాతయ్య"))
+    gender = "male" if is_male else "female"
+
     vprofile = voice_manager.register_voice(
         voice_id=voice_id,
         name=name,
         reference_audio_path=primary_path,
         reference_transcript=transcript or "నమస్కారం",
         reference_audio_paths=saved_paths,
+        gender=gender,
     )
-    # Associate voice with persona in memory store if exists
-    existing = memory_store.get_persona(voice_id)
+
+    # 2. Automatically extract acoustic embeddings and build FAISS Timbre Index
+    index_path = None
+    try:
+        from bandhu.voice_clone.speaker_index import SpeakerIndexBuilder
+        builder = SpeakerIndexBuilder()
+        idx_file, prof_file = builder.build_from_audio_paths(
+            audio_paths=saved_paths,
+            speaker_name=name,
+            output_dir=settings.data_dir,
+            index_name=f"{voice_id}_voice",
+        )
+        index_path = str(idx_file)
+
+        # 3. Dynamically activate timbre converter in voice synthesizer
+        from bandhu.voice_clone.timbre_converter import GrandmaTimbreConverter
+        speaker_type = "pappa" if is_male else "grandma"
+        conv = GrandmaTimbreConverter(
+            index_path=idx_file,
+            profile_path=prof_file,
+            speaker_type=speaker_type,
+        )
+        voice_synthesizer.register_timbre_converter(voice_id, conv)
+        print(f"[Upload] Automated FAISS voice index built & activated for '{voice_id}' ({len(saved_paths)} clips).")
+    except Exception as exc:
+        print(f"[Upload] Automated timbre index note for '{voice_id}': {exc}")
+
+    # 4. Associate voice with persona in memory store if exists
     if existing:
         existing.voice_profile_id = voice_id
         memory_store.save_persona(existing)
@@ -343,6 +430,7 @@ async def upload_persona_audio(
         "voice_id": voice_id,
         "persona": existing.to_dict() if existing else None,
         "total_clips_uploaded": len(saved_paths),
+        "index_created": bool(index_path),
         "files": [Path(p).name for p in saved_paths],
     }
 

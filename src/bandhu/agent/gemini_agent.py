@@ -38,8 +38,16 @@ class BandhuGeminiAgent:
         self.persona = persona_profile or self._get_default_persona()
         self.tools_registry.set_active_persona(self.persona.persona_id)
 
-        self.history: list[dict[str, Any]] = []
+        self.histories: dict[str, list[dict[str, Any]]] = {}
         self.last_error: str | None = None
+
+    @property
+    def history(self) -> list[dict[str, Any]]:
+        """Active persona's conversation history."""
+        pid = self.persona.persona_id if self.persona else "default"
+        if pid not in self.histories:
+            self.histories[pid] = []
+        return self.histories[pid]
 
     def _get_default_persona(self) -> PersonaProfile:
         """Return the flagship Telugu grandmother persona preset."""
@@ -57,14 +65,19 @@ class BandhuGeminiAgent:
         )
 
     def set_persona(self, persona: PersonaProfile) -> None:
-        """Dynamically switch active persona profile."""
+        """Dynamically switch active persona profile preserving each persona's conversation memory."""
         self.persona = persona
         self.tools_registry.set_active_persona(persona.persona_id)
-        self.reset_history()
+        if persona.persona_id not in self.histories:
+            self.histories[persona.persona_id] = []
 
-    def reset_history(self) -> None:
-        """Clear conversation turn history."""
-        self.history.clear()
+    def reset_history(self, persona_id: str | None = None) -> None:
+        """Clear conversation turn history for a specific persona or all personas."""
+        if persona_id:
+            if persona_id in self.histories:
+                self.histories[persona_id].clear()
+        else:
+            self.history.clear()
 
     async def reply(self, user_text: str, speaker_name: str = "Grandchild") -> AgentTurnResponse:
         """Process user input, execute tools via Gemini Function Calling, and return persona voice reply."""
@@ -238,6 +251,10 @@ class BandhuGeminiAgent:
         pet_name = self.persona.pet_names[0] if self.persona.pet_names else "నాయనా"
         catchphrase = self.persona.frequent_catchphrases[0] if self.persona.frequent_catchphrases else "బా"
 
+        is_pappa = "pappa" in self.persona.persona_id.lower() or "father" in self.persona.persona_id.lower()
+        if is_pappa:
+            pet_name = "నానమ్మ"
+
         # 1. Health Alert & Remedy Intent
         if any(w in user_lower for w in ("fever", "headache", "cold", "pain", "tired", "sick", "జ్వరం", "తలనొప్పి", "జలుబు", "నొప్పులు", "బాగులేదు")):
             triage_res = self.tools_registry.execute_tool(
@@ -252,26 +269,35 @@ class BandhuGeminiAgent:
             tools_executed.append({"name": "analyze_and_dispatch_health_alert", "result": triage_res})
             tools_executed.append({"name": "lookup_cultural_remedy", "result": remedy_res})
 
-            reply_text = (
-                f"అయ్యో {pet_name}, నీకు ఒంట్లో బాగులేదా! నేను ఇప్పుడే ఘాటైన మిరియాల కషాయం కాసిస్తాను, "
-                f"వేడివేడిగా తాగి కాసేపు విశ్రాంతి తీసుకో. స్వామి దయతో వెంటనే తగ్గిపోతాది."
-            )
+            if is_pappa:
+                reply_text = f"అయ్యో {pet_name}, ఏమైంది బేటా? టాబ్లెట్ వేసుకుని జాగ్రత్తగా రెస్ట్ తీసుకో. సమయానికి అన్నం తిని పడుకో."
+            else:
+                reply_text = (
+                    f"అయ్యో {pet_name}, నీకు ఒంట్లో బాగులేదా! నేను ఇప్పుడే ఘాటైన మిరియాల కషాయం కాసిస్తాను, "
+                    f"వేడివేడిగా తాగి కాసేపు విశ్రాంతి తీసుకో. స్వామి దయతో వెంటనే తగ్గిపోతాది."
+                )
 
         # 2. Recipe & Food Intent
         elif any(w in user_lower for w in ("recipe", "food", "eat", "cook", "భోజనం", "తింటివా", "తిన్నావా", "వండినావు")):
             recipe_res = self.tools_registry.execute_tool("lookup_cultural_remedy", {"query": user_text})
             tools_executed.append({"name": "lookup_cultural_remedy", "result": recipe_res})
-            reply_text = (
-                f"వేడివేడిగా కమ్మనైన భోజనం జేస్తిని {pet_name}! "
-                f"నువ్వు కడుపునిండా తింటివా? వేళకు మంచిగా తినడం మర్చిపోవద్దు సుమా."
-            )
+            if is_pappa:
+                reply_text = f"నేను ఇప్పుడే తిన్నాను {pet_name}. నువ్వు లేచినవా? ఏం తిన్నావ్ బేటా?"
+            else:
+                reply_text = (
+                    f"వేడివేడిగా కమ్మనైన భోజనం జేస్తిని {pet_name}! "
+                    f"నువ్వు కడుపునిండా తింటివా? వేళకు మంచిగా తినడం మర్చిపోవద్దు సుమా."
+                )
 
         # 3. Default affectionate conversation
         else:
-            reply_text = (
-                f"సరే {pet_name}, నీ మాటలు వింటే నాకు ఎంత సంతోషంగా ఉండాదో! "
-                f"ఎప్పుడూ ఆరోగ్యంగా, సంతోషంగా చల్లగా ఉండాలి నాయనా."
-            )
+            if is_pappa:
+                reply_text = f"సరే {pet_name}, జాగ్రత్తగా చూసుకో నిన్ను నువ్వు. Don't worry బేటా."
+            else:
+                reply_text = (
+                    f"సరే {pet_name}, నీ మాటలు వింటే నాకు ఎంత సంతోషంగా ఉండాదో! "
+                    f"ఎప్పుడూ ఆరోగ్యంగా, సంతోషంగా చల్లగా ఉండాలి నాయనా."
+                )
 
         self.history.append({"role": "user", "content": user_text})
         self.history.append({"role": "model", "content": reply_text})

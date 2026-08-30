@@ -49,7 +49,10 @@ class PersonaProfile:
     def generate_system_instruction(self) -> str:
         """Generate tailored Gemini system instruction dynamically customized for this persona."""
         if self.custom_system_prompt.strip():
-            return self.custom_system_prompt.strip()
+            custom = self.custom_system_prompt.strip()
+            if self.name and self.name not in custom:
+                return f"You are '{self.name}', the user's authentic {self.relationship}.\n\n{custom}"
+            return custom
 
         catchphrases_str = ", ".join(self.frequent_catchphrases) if self.frequent_catchphrases else "బా, నాయనా, రా, మామా"
         pet_names_str = ", ".join(self.pet_names) if self.pet_names else "కన్నా, బంగారం, మచ్చా"

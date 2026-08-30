@@ -1,0 +1,12 @@
+{
+  "voice_id": "pappa",
+  "persona_id": "pappa",
+  "name": "పప్పా (Pappa)",
+  "gender": "male",
+  "dialect_region": "Telangana / Hanumakonda",
+  "reference_audio_path": "data\\personas\\pappa\\reference_audio\\primary_ref_24k.wav",
+  "reference_transcript": "హాయ్ డాడీ హౌ ఆర్ యు విష్ యు మెనీ మోర్ హ్యాపీ రిటర్న్స్ ఆఫ్ ది డే బేటా",
+  "language_code": "te",
+  "speaking_rate": 0.8,
+  "sample_rate": 24000
+}

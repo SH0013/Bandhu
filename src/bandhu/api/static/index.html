@@ -3,153 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bandhu — Universal Voice Persona & Companion</title>
-    <meta name="description" content="State-of-the-art Voice Persona and Autonomous Companion Platform powered by Google Gemini and Neural Speech Cloning.">
-    <meta name="theme-color" content="#0a0b10">
-    <meta property="og:title" content="Bandhu — Universal Voice Persona & Companion">
-    <meta property="og:description" content="Talk to your loved ones in their authentic voice. Powered by Google Gemini and Neural Speech Cloning.">
-    <meta property="og:type" content="website">
+    <title>Bandhu — Utilitarian Voice Persona Platform</title>
+    <meta name="description" content="Minimalist, document-style voice companion platform powered by Google Gemini and IndicF5 Neural Speech Cloning.">
+    <meta name="theme-color" content="#0D0E11">
     <link rel="icon" type="image/png" href="/static/bandhu-logo.png">
 
-    <!-- Premium Google Fonts: Outfit (Display), Geist & Geist Mono (UI/Code), Noto Sans Telugu -->
+    <!-- Typographic Hierarchy: Geist, Geist Mono, Noto Sans Telugu, Newsreader (Editorial) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Skip-to-content link for keyboard users */
-        .skip-link {
-            position: absolute;
-            top: -100%;
-            left: 1rem;
-            background: var(--accent);
-            color: #fff;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            z-index: 200;
-            transition: top 0.15s ease;
-            text-decoration: none;
-        }
-        .skip-link:focus {
-            top: 0.75rem;
-        }
-
         /* ==========================================================================
-           1. CSS Custom Properties & Design Tokens
-           - Dark Mode: Off-black (#0a0b10) + Desaturated Blue (#3B82F6)
-           - Light Mode: Warm cream (#FAFAF7) + Desaturated Blue (#3B82F6)
+           1. Minimalist Utilitarian Design Tokens
            ========================================================================== */
-
         :root {
-            /* Bandhu Organic Sprout & Heart Theme Tokens */
-            --accent: #10B981;
-            --accent-hover: #059669;
-            --accent-dark: #047857;
-            --accent-subtle: rgba(16, 185, 129, 0.12);
-            --accent-glow: rgba(16, 185, 129, 0.25);
-            --accent-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            --accent-gradient-hover: linear-gradient(135deg, #34D399 0%, #047857 100%);
-
-            --heart-accent: #F43F5E;
-            --heart-subtle: rgba(244, 63, 94, 0.12);
-            --heart-glow: rgba(244, 63, 94, 0.25);
-
             /* Typography */
-            --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            --font-body: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-serif: 'Newsreader', Georgia, serif;
             --font-mono: 'Geist Mono', 'SF Mono', monospace;
-            --font-telugu: 'Noto Sans Telugu', var(--font-body);
+            --font-telugu: 'Noto Sans Telugu', var(--font-sans);
 
-            /* Spring & Micro-motion physics */
-            --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-            --transition-fast: 0.15s var(--ease-spring);
-            --transition-normal: 0.25s var(--ease-spring);
+            /* Motion */
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 0.15s var(--ease-out);
+            --transition-normal: 0.25s var(--ease-out);
 
-            /* Focus ring style */
-            --focus-ring: 0 0 0 3px rgba(16, 185, 129, 0.4);
+            /* Radii (Crisp, Utilitarian) */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-pill: 9999px;
         }
 
-        /* ---------------- DARK THEME (Deep Obsidian + Warm Emerald/Teal) ---------------- */
+        /* ---------------- DARK THEME (Monochrome Charcoal + Warm Stone) ---------------- */
         html[data-theme="dark"] {
-            --bg-base: #0B0F14;
-            --bg-elevated: #111720;
-            --bg-card: #151D28;
-            --bg-card-hover: #1C2634;
-            --bg-card-active: #222F40;
-            --bg-glass: rgba(11, 15, 20, 0.85);
-            --bg-glass-card: rgba(21, 29, 40, 0.82);
+            --bg-canvas: #0D0E11;
+            --bg-surface: #14161B;
+            --bg-surface-hover: #1A1D24;
+            --bg-surface-active: #22262F;
+            --bg-elevated: #181B22;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.14);
 
-            --border-subtle: rgba(255, 255, 255, 0.06);
-            --border-medium: rgba(255, 255, 255, 0.10);
-            --border-highlight: rgba(16, 185, 129, 0.35);
-            --border-refract: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            --text-primary: #EDEDED;
+            --text-secondary: #8A8F98;
+            --text-muted: #5A606A;
+            --text-inverse: #0D0E11;
 
-            --text-primary: #F3F6FA;
-            --text-secondary: #94A3B8;
-            --text-muted: #64748B;
-            --text-on-accent: #FFFFFF;
+            --btn-primary-bg: #EDEDED;
+            --btn-primary-text: #0D0E11;
+            --btn-primary-hover: #FFFFFF;
 
-            --bubble-user-bg: var(--accent-gradient);
-            --bubble-user-text: #FFFFFF;
-            --bubble-agent-bg: #121922;
-            --bubble-agent-border: rgba(255, 255, 255, 0.08);
-            --bubble-agent-text: #E2E8F0;
+            --bubble-user-bg: #1A1D24;
+            --bubble-user-text: #EDEDED;
+            --bubble-agent-bg: #14161B;
+            --bubble-agent-text: #EDEDED;
 
-            --dock-bg: rgba(11, 15, 20, 0.94);
+            /* Spot Pastels (Desaturated Dark) */
+            --pastel-green-bg: rgba(52, 211, 153, 0.12);
+            --pastel-green-text: #34D399;
+            --pastel-blue-bg: rgba(56, 189, 248, 0.12);
+            --pastel-blue-text: #38BDF8;
+            --pastel-yellow-bg: rgba(251, 191, 36, 0.12);
+            --pastel-yellow-text: #FBBF24;
+            --pastel-neutral-bg: rgba(255, 255, 255, 0.06);
+            --pastel-neutral-text: #CBD5E1;
+
+            --dock-bg: rgba(20, 22, 27, 0.94);
             --dock-border: rgba(255, 255, 255, 0.10);
-            --dock-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
-
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            --modal-bg: #0E131A;
-
-            --grain-opacity: 0.035;
+            --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.4);
         }
 
-        /* ---------------- LIGHT THEME (Warm Linen Cream + Organic Emerald) ---------------- */
+        /* ---------------- LIGHT THEME (Warm Bone + Off-Black) ---------------- */
         html[data-theme="light"] {
-            --bg-base: #FAF9F5;
+            --bg-canvas: #FBFBFA;
+            --bg-surface: #FFFFFF;
+            --bg-surface-hover: #F5F5F3;
+            --bg-surface-active: #EBEBE8;
             --bg-elevated: #FFFFFF;
-            --bg-card: #FFFFFF;
-            --bg-card-hover: #F2F0E8;
-            --bg-card-active: #E7E4D8;
-            --bg-glass: rgba(250, 249, 245, 0.90);
-            --bg-glass-card: rgba(255, 255, 255, 0.88);
+            --border-color: #EAEAEA;
+            --border-strong: #D4D4D4;
 
-            --border-subtle: rgba(0, 0, 0, 0.06);
-            --border-medium: rgba(0, 0, 0, 0.10);
-            --border-highlight: rgba(16, 185, 129, 0.40);
-            --border-refract: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            --text-primary: #111111;
+            --text-secondary: #787774;
+            --text-muted: #9B9A97;
+            --text-inverse: #FFFFFF;
 
-            --text-primary: #0F172A;
-            --text-secondary: #475569;
-            --text-muted: #8E9BAE;
-            --text-on-accent: #FFFFFF;
+            --btn-primary-bg: #111111;
+            --btn-primary-text: #FFFFFF;
+            --btn-primary-hover: #333333;
 
-            --bubble-user-bg: var(--accent-gradient);
-            --bubble-user-text: #FFFFFF;
+            --bubble-user-bg: #F1F1EF;
+            --bubble-user-text: #111111;
             --bubble-agent-bg: #FFFFFF;
-            --bubble-agent-border: rgba(0, 0, 0, 0.08);
-            --bubble-agent-text: #1E293B;
+            --bubble-agent-text: #111111;
 
-            --dock-bg: rgba(250, 249, 245, 0.95);
-            --dock-border: rgba(0, 0, 0, 0.08);
-            --dock-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+            /* Spot Pastels (Desaturated Light) */
+            --pastel-green-bg: #EDF3EC;
+            --pastel-green-text: #346538;
+            --pastel-blue-bg: #E1F3FE;
+            --pastel-blue-text: #1F6C9F;
+            --pastel-yellow-bg: #FBF3DB;
+            --pastel-yellow-text: #956400;
+            --pastel-neutral-bg: #F1F1EF;
+            --pastel-neutral-text: #444444;
 
-            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
-            --modal-bg: #FFFFFF;
-
-            --grain-opacity: 0.025;
+            --dock-bg: rgba(255, 255, 255, 0.96);
+            --dock-border: #EAEAEA;
+            --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
 
         /* ==========================================================================
-           2. Reset & Global Layout
+           2. Reset & Document Foundations
            ========================================================================== */
         * {
             box-sizing: border-box;
@@ -159,782 +125,531 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Global focus ring for keyboard navigation */
-        *:focus-visible {
-            outline: none;
-            box-shadow: var(--focus-ring);
-            border-radius: 4px;
-        }
-
-        body {
-            font-family: var(--font-body);
-            background-color: var(--bg-base);
+        html, body {
+            height: 100%;
+            background-color: var(--bg-canvas);
             color: var(--text-primary);
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            transition: background-color var(--transition-normal), color var(--transition-normal);
-            font-variant-numeric: tabular-nums;
+            font-family: var(--font-sans);
+            font-size: 15px;
+            line-height: 1.6;
         }
 
-        /* Subtle mesh background */
-        .ambient-mesh {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.5;
-            background-image:
-                radial-gradient(ellipse at 10% 8%, var(--accent-subtle) 0%, transparent 40%),
-                radial-gradient(ellipse at 90% 85%, var(--accent-subtle) 0%, transparent 45%);
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 1rem;
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 500;
+            z-index: 100;
+            transition: top 0.15s ease;
+            text-decoration: none;
         }
-
-        /* Grain / noise texture overlay */
-        .grain-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 1;
-            opacity: var(--grain-opacity);
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 180px 180px;
-        }
+        .skip-link:focus { top: 0.8rem; }
 
         /* ==========================================================================
-           3. Top Navigation Bar (Header)
+           3. Layout Structure & Header
            ========================================================================== */
+        .app-layout {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.25rem 7.5rem 1.25rem;
+        }
+
+        /* Sticky Top Navigation */
         header {
             position: sticky;
             top: 0;
-            z-index: 60;
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 0.75rem 1.5rem;
+            z-index: 40;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: border-color var(--transition-normal), background var(--transition-normal);
+            padding: 1rem 0;
+            background: var(--bg-canvas);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
         }
 
-        /* Body text constrained width for readability */
-        .message-bubble {
-            max-width: 65ch;
-            text-wrap: balance;
-        }
-
-        .header-left {
+        .brand-block {
             display: flex;
             align-items: center;
-            gap: 1rem;
-        }
-
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.65rem;
+            gap: 0.6rem;
             text-decoration: none;
-            cursor: pointer;
+            color: var(--text-primary);
         }
 
-        .brand-icon-box {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+        .brand-logo-mark {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-surface);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform var(--transition-fast);
-            overflow: hidden;
-        }
-
-        .brand-icon-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .brand-icon-box:hover {
-            transform: scale(1.08);
-        }
-
-        .brand-titles {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-name {
-            font-family: var(--font-display);
-            font-size: 1.15rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .brand-name-badge {
-            font-family: var(--font-telugu);
-            font-size: 0.75rem;
+            font-family: var(--font-mono);
             font-weight: 600;
-            color: var(--accent);
-            background: var(--accent-subtle);
-            padding: 0.1rem 0.45rem;
-            border-radius: 999px;
-            border: 1px solid rgba(16, 185, 129, 0.25);
+            font-size: 0.75rem;
+            color: var(--text-primary);
         }
 
-        .brand-sub {
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            font-family: var(--font-mono);
-            letter-spacing: 0.02em;
+        .brand-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
         }
 
-        .header-center {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .status-pill {
-            display: flex;
-            align-items: center;
-            gap: 0.45rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            padding: 0.35rem 0.85rem;
-            border-radius: 9999px;
-            font-size: 0.78rem;
-            font-family: var(--font-mono);
+        .brand-script-tag {
+            font-family: var(--font-telugu);
+            font-size: 0.82rem;
             color: var(--text-secondary);
-            box-shadow: var(--border-refract);
+            font-weight: 400;
+            margin-left: 0.2rem;
         }
 
-        .status-dot-active {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #10B981;
-            box-shadow: 0 0 8px #10B981;
-            animation: pulseDot 2s infinite;
-        }
-
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.85); }
-        }
-
-        .header-right {
+        .header-meta {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.75rem;
         }
 
-        /* Action Buttons */
-        .btn-nav {
+        .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.45rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-medium);
-            color: var(--text-primary);
-            padding: 0.42rem 0.85rem;
-            border-radius: 9999px;
-            font-size: 0.82rem;
-            font-weight: 500;
-            font-family: var(--font-body);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            box-shadow: var(--border-refract);
+            gap: 0.35rem;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.2rem 0.55rem;
+            border-radius: var(--radius-pill);
+            background: var(--pastel-green-bg);
+            color: var(--pastel-green-text);
+            border: 1px solid rgba(52, 211, 153, 0.2);
         }
 
-        .btn-nav:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--border-highlight);
-            transform: translateY(-1px);
-        }
-
-        .btn-nav:active {
-            transform: scale(0.97);
-        }
-
-        .btn-nav-primary {
-            background: var(--accent-gradient);
-            border: none;
-            color: #FFFFFF;
-            box-shadow: 0 2px 10px var(--accent-glow);
-        }
-
-        .btn-nav-primary:hover {
-            background: var(--accent-gradient-hover);
-            box-shadow: 0 4px 16px var(--accent-glow);
-        }
-
-        /* Theme Toggle Switch */
-        .theme-toggle-btn {
-            width: 36px;
-            height: 36px;
+        .status-dot {
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
-            background: var(--bg-card);
-            border: 1px solid var(--border-medium);
-            color: var(--text-secondary);
-            display: flex;
+            background: currentColor;
+        }
+
+        /* Minimal Utilitarian Action Buttons */
+        .btn-minimal {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 0.35rem;
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-sm);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
             cursor: pointer;
+            text-decoration: none;
             transition: all var(--transition-fast);
         }
 
-        .theme-toggle-btn:hover {
-            color: var(--text-primary);
-            background: var(--bg-card-hover);
-            transform: scale(1.06);
+        .btn-minimal:hover {
+            background: var(--bg-surface-hover);
+            border-color: var(--border-strong);
+        }
+
+        .btn-minimal:active {
+            transform: scale(0.98);
+        }
+
+        .btn-minimal-solid {
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+            border: 1px solid var(--btn-primary-bg);
+        }
+
+        .btn-minimal-solid:hover {
+            background: var(--btn-primary-hover);
+            color: var(--btn-primary-text);
         }
 
         /* ==========================================================================
-           4. Main Container & Persona Showcase Strip
+           4. Bento Header & Persona Switcher
            ========================================================================== */
-        main {
-            flex: 1;
-            width: 100%;
-            max-width: 1020px;
-            margin: 0 auto;
-            padding: 1.25rem 1.25rem 7.5rem 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Top Persona Quick Bar */
-        .persona-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 0.65rem 1rem;
-            box-shadow: var(--card-shadow), var(--border-refract);
+        .bento-section {
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 1rem;
-            flex-wrap: wrap;
+            margin-bottom: 2rem;
         }
 
-        .persona-quick-tabs {
+        /* Persona Switcher Tabs */
+        .persona-segmented-bar {
+            display: flex;
+            gap: 0.4rem;
+            background: var(--bg-surface);
+            padding: 0.3rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+        }
+
+        .persona-tab-button {
+            flex: 1;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
-            overflow-x: auto;
-            scrollbar-width: none;
-            padding: 0.1rem;
-        }
-
-        .persona-quick-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .persona-pill-tab {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            padding: 0.4rem 0.85rem;
-            border-radius: 9999px;
+            padding: 0.55rem 1rem;
+            border-radius: var(--radius-sm);
             background: transparent;
-            border: 1px solid transparent;
-            font-size: 0.82rem;
-            font-weight: 500;
+            border: none;
             color: var(--text-secondary);
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all var(--transition-fast);
-            white-space: nowrap;
         }
 
-        .persona-pill-tab:hover {
-            background: var(--bg-card-hover);
+        .persona-tab-button:hover {
             color: var(--text-primary);
+            background: var(--bg-surface-hover);
         }
 
-        .persona-pill-tab.active {
-            background: var(--accent-subtle);
-            border-color: rgba(59, 130, 246, 0.28);
-            color: var(--accent);
+        .persona-tab-button.active {
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
             font-weight: 600;
         }
 
-        .persona-pill-avatar {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--bg-card-active);
-            display: flex;
+        .persona-initial-badge {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--text-primary);
+            width: 20px;
+            height: 20px;
+            border-radius: var(--radius-sm);
+            background: rgba(0, 0, 0, 0.08);
+            font-family: var(--font-telugu);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .persona-tab-button.active .persona-initial-badge {
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        .persona-pill-tab.active .persona-pill-avatar {
-            background: var(--accent-gradient);
-            color: #FFFFFF;
-        }
-
-        .persona-bar-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Active Persona Details Card */
-        .active-persona-banner {
-            background: var(--bg-glass-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 18px;
-            padding: 1.15rem 1.4rem;
+        /* Active Persona Spotlight Card */
+        .persona-spotlight-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 1.25rem;
-            backdrop-filter: blur(16px);
-            box-shadow: var(--card-shadow), var(--border-refract);
-            transition: border-color var(--transition-normal);
+            gap: 1.5rem;
+            box-shadow: var(--shadow-subtle);
         }
 
-        .active-persona-banner:hover {
-            border-color: var(--border-medium);
-        }
-
-        .active-persona-left {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .active-persona-avatar-frame {
-            position: relative;
-            width: 54px;
-            height: 54px;
-            flex-shrink: 0;
-        }
-
-        .active-persona-avatar-circle {
-            width: 100%;
-            height: 100%;
-            border-radius: 16px;
-            background: var(--bg-card);
-            border: 2px solid var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-telugu);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            box-shadow: 0 4px 18px var(--accent-glow);
-            overflow: hidden;
-            padding: 3px;
-        }
-
-        .active-persona-avatar-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 12px;
-        }
-
-        .active-persona-badge-online {
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            width: 13px;
-            height: 13px;
-            border-radius: 50%;
-            background: #10B981;
-            border: 2px solid var(--bg-card);
-            box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
-        }
-
-        .active-persona-meta {
+        .persona-info-group {
             display: flex;
             flex-direction: column;
-            gap: 0.2rem;
+            gap: 0.4rem;
         }
 
-        .active-persona-title-row {
+        .persona-title-row {
             display: flex;
-            align-items: center;
+            align-items: baseline;
             gap: 0.6rem;
-            flex-wrap: wrap;
         }
 
-        .active-persona-name {
-            font-family: var(--font-display);
+        .persona-name-display {
+            font-family: var(--font-telugu);
             font-size: 1.25rem;
             font-weight: 700;
             color: var(--text-primary);
             letter-spacing: -0.01em;
         }
 
-        .active-persona-rel-tag {
-            font-size: 0.72rem;
-            font-weight: 600;
+        .persona-rel-badge {
             font-family: var(--font-mono);
-            color: var(--accent);
-            background: var(--accent-subtle);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            padding: 0.15rem 0.5rem;
-            border-radius: 9999px;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
             letter-spacing: 0.04em;
         }
 
-        .active-persona-tags-row {
+        .persona-tags-row {
             display: flex;
             align-items: center;
             gap: 0.4rem;
             flex-wrap: wrap;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
         }
 
-        .persona-tag-pill {
+        .editorial-tag {
             display: inline-flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.3rem;
+            font-family: var(--font-sans);
             font-size: 0.75rem;
-            color: var(--text-muted);
-            background: var(--bg-card-hover);
+            font-weight: 500;
             padding: 0.15rem 0.5rem;
-            border-radius: 6px;
-            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            border: 1px solid transparent;
         }
 
-        .active-persona-right {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            flex-wrap: wrap;
+        .editorial-tag.tag-dialect {
+            background: var(--pastel-blue-bg);
+            color: var(--pastel-blue-text);
+            border-color: rgba(56, 189, 248, 0.2);
         }
 
-        /* Voice Live Visualizer */
-        .voice-visualizer-box {
+        .editorial-tag.tag-tone {
+            background: var(--pastel-yellow-bg);
+            color: var(--pastel-yellow-text);
+            border-color: rgba(251, 191, 36, 0.2);
+        }
+
+        .editorial-tag.tag-catchphrase {
+            background: var(--pastel-neutral-bg);
+            color: var(--pastel-neutral-text);
+            border-color: var(--border-color);
+            font-family: var(--font-telugu);
+        }
+
+        /* Minimal Audio Waveform Indicator */
+        .waveform-container {
             display: flex;
             align-items: center;
             gap: 3px;
-            height: 26px;
-            padding: 0 0.5rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
+            height: 20px;
+            padding: 0.4rem 0.6rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-surface-hover);
         }
 
         .waveform-bar {
-            width: 3px;
+            width: 2px;
             height: 6px;
-            background: var(--text-muted);
-            border-radius: 2px;
-            transition: height 0.15s ease, background-color 0.15s ease;
+            background: var(--text-secondary);
+            border-radius: 1px;
+            transition: height 0.15s ease;
         }
 
-        .voice-visualizer-box.playing .waveform-bar {
-            background: var(--accent);
+        .waveform-container.playing .waveform-bar {
             animation: waveBounce 0.8s infinite ease-in-out alternate;
+            background: var(--pastel-green-text);
         }
-
-        .voice-visualizer-box.playing .waveform-bar:nth-child(1) { animation-delay: 0.0s; }
-        .voice-visualizer-box.playing .waveform-bar:nth-child(2) { animation-delay: 0.2s; }
-        .voice-visualizer-box.playing .waveform-bar:nth-child(3) { animation-delay: 0.4s; }
-        .voice-visualizer-box.playing .waveform-bar:nth-child(4) { animation-delay: 0.1s; }
-        .voice-visualizer-box.playing .waveform-bar:nth-child(5) { animation-delay: 0.3s; }
+        .waveform-container.playing .waveform-bar:nth-child(2) { animation-delay: 0.15s; }
+        .waveform-container.playing .waveform-bar:nth-child(3) { animation-delay: 0.30s; }
+        .waveform-container.playing .waveform-bar:nth-child(4) { animation-delay: 0.45s; }
+        .waveform-container.playing .waveform-bar:nth-child(5) { animation-delay: 0.60s; }
 
         @keyframes waveBounce {
             0% { height: 4px; }
-            100% { height: 20px; }
+            100% { height: 16px; }
         }
 
         /* ==========================================================================
-           5. Chat Feed & Messenger Style Bubbles
+           5. Document-Style Chat Stream
            ========================================================================== */
-        .chat-feed {
+        .chat-feed-container {
             display: flex;
             flex-direction: column;
-            gap: 1.1rem;
-            min-height: 380px;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
         }
 
-        .chat-message-row {
+        .chat-turn-row {
             display: flex;
-            gap: 0.75rem;
-            max-width: 82%;
-            animation: messageFadeUp 0.25s var(--ease-spring);
+            flex-direction: column;
+            gap: 0.35rem;
+            max-width: 85%;
         }
 
-        @keyframes messageFadeUp {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .chat-message-row.user-row {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-
-        .chat-message-row.agent-row {
+        .chat-turn-row.agent-turn {
             align-self: flex-start;
         }
 
-        .message-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            background: var(--bg-card-hover);
-            border: 1px solid var(--border-subtle);
+        .chat-turn-row.user-turn {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+
+        .turn-meta {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .agent-row .message-avatar {
-            background: var(--accent-gradient);
-            color: #FFFFFF;
-            font-family: var(--font-telugu);
-            box-shadow: 0 2px 10px var(--accent-glow);
-        }
-
-        .message-bubble-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-        }
-
-        .message-sender-name {
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--text-muted);
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
             font-family: var(--font-mono);
-            padding: 0 0.4rem;
+            padding: 0 0.2rem;
         }
 
-        .user-row .message-sender-name {
-            text-align: right;
-        }
-
-        .message-bubble {
-            padding: 0.85rem 1.15rem;
-            border-radius: 18px;
+        .turn-bubble {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.9rem 1.15rem;
             font-size: 0.95rem;
-            line-height: 1.55;
-            word-break: break-word;
-            position: relative;
+            line-height: 1.6;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-subtle);
         }
 
-        .user-row .message-bubble {
+        .chat-turn-row.user-turn .turn-bubble {
             background: var(--bubble-user-bg);
-            color: var(--bubble-user-text);
-            border-bottom-right-radius: 4px;
-            box-shadow: 0 2px 12px var(--accent-glow);
+            border-color: var(--border-color);
+        }
+
+        .turn-bubble-telugu {
             font-family: var(--font-telugu);
+            font-size: 1.02rem;
+            line-height: 1.7;
         }
 
-        .agent-row .message-bubble {
-            background: var(--bubble-agent-bg);
-            border: 1px solid var(--bubble-agent-border);
-            color: var(--bubble-agent-text);
-            border-bottom-left-radius: 4px;
-            box-shadow: var(--card-shadow), var(--border-refract);
-            font-family: var(--font-telugu);
-        }
-
-        /* Inline Audio Messenger Wave Player */
-        .inline-audio-player {
-            display: flex;
-            align-items: center;
-            gap: 0.65rem;
-            margin-top: 0.55rem;
-            padding: 0.5rem 0.75rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            width: fit-content;
-            min-width: 240px;
-        }
-
-        .audio-play-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--accent-gradient);
-            border: none;
-            color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform var(--transition-fast);
-            box-shadow: 0 2px 8px var(--accent-glow);
-            flex-shrink: 0;
-        }
-
-        .audio-play-btn:hover {
-            transform: scale(1.06);
-        }
-
-        .audio-play-btn:active {
-            transform: scale(0.94);
-        }
-
-        .audio-scrubber {
-            flex: 1;
-            height: 4px;
-            background: var(--border-medium);
-            border-radius: 9999px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .audio-scrubber-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--accent);
-            border-radius: 9999px;
-            transition: width 0.1s linear;
-        }
-
-        .audio-speed-tag {
-            font-size: 0.72rem;
-            font-family: var(--font-mono);
-            color: var(--text-muted);
-            background: var(--bg-card-hover);
-            padding: 0.15rem 0.4rem;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        /* Tool Execution Badge */
-        .tool-badge {
+        /* Utilitarian Inline Audio Bar */
+        .inline-audio-strip {
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
-            font-size: 0.72rem;
-            font-family: var(--font-mono);
-            color: #10B981;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            padding: 0.2rem 0.55rem;
-            border-radius: 6px;
-            margin-top: 0.4rem;
+            gap: 0.6rem;
+            margin-top: 0.65rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: var(--radius-sm);
+            background: var(--bg-surface-hover);
+            border: 1px solid var(--border-color);
+            width: fit-content;
         }
 
-        /* Typing Wave Indicator */
-        .typing-bubble {
+        .btn-play-audio {
+            width: 22px;
+            height: 22px;
+            border-radius: var(--radius-sm);
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity var(--transition-fast);
+        }
+        .btn-play-audio:hover { opacity: 0.85; }
+
+        .audio-progress-rail {
+            width: 110px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .audio-progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--text-primary);
+            border-radius: 2px;
+        }
+
+        .audio-speed-btn {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0 0.2rem;
+        }
+        .audio-speed-btn:hover { color: var(--text-primary); }
+
+        /* Typing Dots */
+        .typing-pill {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 0.75rem 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            border-bottom-left-radius: 4px;
+            padding: 0.6rem 0.9rem;
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
         }
-
         .typing-dot {
-            width: 6px;
-            height: 6px;
+            width: 4px;
+            height: 4px;
             border-radius: 50%;
-            background: var(--accent);
-            animation: dotWave 1.4s infinite ease-in-out both;
+            background: var(--text-secondary);
+            animation: typingBounce 1.2s infinite ease-in-out;
         }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes dotWave {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.35; }
-            40% { transform: scale(1); opacity: 1; }
-        }
-
-        /* Empty state for chat */
-        .empty-state {
-            margin-top: 2rem;
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+            40% { transform: translateY(-4px); opacity: 1; }
         }
 
         /* Suggestion Prompt Chips */
-        .prompt-chips-tray {
+        .prompt-chips-container {
             display: flex;
             gap: 0.5rem;
-            overflow-x: auto;
-            padding: 0.4rem 0;
-            scrollbar-width: none;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
         }
 
-        .prompt-chips-tray::-webkit-scrollbar {
-            display: none;
-        }
-
-        .prompt-chip {
-            background: var(--bg-card);
-            border: 1px solid var(--border-medium);
-            border-radius: 9999px;
-            padding: 0.45rem 0.95rem;
-            font-size: 0.82rem;
+        .chip-button {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 0.35rem 0.75rem;
             font-family: var(--font-telugu);
+            font-size: 0.82rem;
             color: var(--text-secondary);
-            white-space: nowrap;
             cursor: pointer;
             transition: all var(--transition-fast);
-            box-shadow: var(--border-refract);
         }
 
-        .prompt-chip:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--accent);
-            color: var(--accent);
-            transform: translateY(-1px);
-        }
-
-        .prompt-chip:active {
-            transform: scale(0.97);
+        .chip-button:hover {
+            background: var(--bg-surface-hover);
+            color: var(--text-primary);
+            border-color: var(--border-strong);
         }
 
         /* ==========================================================================
-           6. Floating Messenger Dock 2.0 (Bottom Input Bar)
+           6. Bottom Messenger Dock (Utilitarian Floating Bar)
            ========================================================================== */
-        .floating-dock-container {
+        .bottom-dock-wrapper {
             position: fixed;
             bottom: 1.25rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 2rem);
-            max-width: 780px;
+            left: 0;
+            right: 0;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 1.25rem;
             z-index: 50;
         }
 
-        .floating-input-dock {
-            background: var(--dock-bg);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid var(--dock-border);
-            border-radius: 20px;
-            padding: 0.5rem 0.65rem;
+        .dock-bar {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            box-shadow: var(--dock-shadow), var(--border-refract);
-            transition: border-color var(--transition-fast);
-        }
-
-        .floating-input-dock:focus-within {
-            border-color: var(--border-highlight);
+            background: var(--dock-bg);
+            border: 1px solid var(--dock-border);
+            border-radius: var(--radius-md);
+            padding: 0.4rem 0.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
         .dock-input {
@@ -942,498 +657,204 @@
             background: transparent;
             border: none;
             outline: none;
+            font-family: var(--font-sans);
+            font-size: 0.92rem;
             color: var(--text-primary);
-            font-family: var(--font-telugu);
-            font-size: 0.96rem;
             padding: 0.4rem 0.6rem;
         }
-
         .dock-input::placeholder {
             color: var(--text-muted);
-            font-family: var(--font-body);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
         }
 
-        .btn-dock-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+        .btn-dock-action {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
             color: var(--text-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all var(--transition-fast);
-            flex-shrink: 0;
         }
 
-        .btn-dock-icon:hover {
-            background: var(--bg-card-hover);
+        .btn-dock-action:hover {
             color: var(--text-primary);
-            border-color: var(--border-medium);
+            border-color: var(--border-strong);
         }
 
-        .btn-dock-icon:active {
-            transform: scale(0.92);
-        }
-
-        .btn-dock-icon.listening {
+        .btn-dock-action.listening {
             background: rgba(239, 68, 68, 0.15);
             border-color: #EF4444;
             color: #EF4444;
-            animation: micPulse 1.5s infinite;
-        }
-
-        @keyframes micPulse {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
         .btn-dock-send {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--accent-gradient);
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
             border: none;
-            color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all var(--transition-fast);
-            box-shadow: 0 2px 10px var(--accent-glow);
-            flex-shrink: 0;
+            transition: opacity var(--transition-fast);
         }
-
-        .btn-dock-send:hover {
-            background: var(--accent-gradient-hover);
-            transform: scale(1.06);
-        }
-
-        .btn-dock-send:active {
-            transform: scale(0.92);
-        }
+        .btn-dock-send:hover { opacity: 0.88; }
+        .btn-dock-send:active { transform: scale(0.96); }
 
         /* ==========================================================================
-           7. Premium Persona Studio Modal & Drawer
+           7. Minimalist Studio Modal (2 Focused Tabs)
            ========================================================================== */
-        .modal-backdrop {
+        .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(14px);
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
             z-index: 100;
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
-            animation: modalFadeIn 0.2s ease-out;
+            padding: 1.25rem;
         }
+        .modal-overlay.active { display: flex; }
 
-        .modal-backdrop.active {
-            display: flex;
-        }
-
-        @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-box {
-            background: var(--modal-bg);
-            border: 1px solid var(--border-medium);
-            border-radius: 24px;
-            max-width: 680px;
+        .modal-sheet {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
             width: 100%;
-            max-height: 88vh;
+            max-width: 600px;
+            max-height: 85vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), var(--border-refract);
-            animation: modalScale 0.25s var(--ease-spring);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
         }
 
-        @keyframes modalScale {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-head {
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid var(--border-subtle);
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1.1rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .modal-title-group {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
+        .modal-heading {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
         }
 
-        .modal-title {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.02em;
-        }
-
-        .btn-modal-close {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .btn-modal-close:hover {
-            background: var(--bg-card-hover);
-            color: var(--text-primary);
-        }
-
-        /* Segmented Tabs */
-        .segmented-tabs {
-            display: flex;
-            background: var(--bg-elevated);
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 0.35rem 1.25rem;
-            gap: 0.4rem;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-
-        .segmented-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tab-btn {
+        .btn-close {
             background: transparent;
             border: none;
-            padding: 0.5rem 0.85rem;
-            border-radius: 10px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            font-family: var(--font-body);
             color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            white-space: nowrap;
-        }
-
-        .tab-btn:hover {
-            color: var(--text-primary);
-            background: var(--bg-card-hover);
-        }
-
-        .tab-btn.active {
-            color: #FFFFFF;
-            background: var(--accent-gradient);
-            box-shadow: 0 2px 8px var(--accent-glow);
-        }
-
-        .modal-content-body {
-            padding: 1.4rem 1.5rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.15rem;
-        }
-
-        /* Presets Grid */
-        .presets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 0.85rem;
-        }
-
-        .preset-item-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 1rem;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-            box-shadow: var(--border-refract);
-        }
-
-        .preset-item-card:hover {
-            border-color: var(--accent);
-            background: var(--bg-card-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px var(--accent-subtle);
-        }
-
-        .preset-item-header {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .preset-item-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: var(--accent-subtle);
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.2rem;
         }
+        .btn-close:hover { color: var(--text-primary); }
 
-        .preset-item-name {
-            font-family: var(--font-display);
-            font-size: 0.98rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .preset-item-desc {
-            font-size: 0.78rem;
-            color: var(--text-secondary);
-            line-height: 1.4;
-        }
-
-        /* Form Controls */
-        .form-row-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.85rem;
-        }
-
-        @media (max-width: 640px) {
-            .form-row-2 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .form-group {
+        .modal-tabs-bar {
             display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-canvas);
         }
 
-        .form-label {
-            font-size: 0.76rem;
-            font-weight: 600;
-            font-family: var(--font-mono);
+        .modal-tab-btn {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 500;
             color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-        }
-
-        .form-input, .form-select, .form-textarea {
-            width: 100%;
-            background: var(--bg-card);
-            border: 1px solid var(--border-medium);
-            border-radius: 10px;
-            padding: 0.65rem 0.85rem;
-            font-family: var(--font-telugu);
-            font-size: 0.88rem;
-            color: var(--text-primary);
-            outline: none;
-            transition: all var(--transition-fast);
-        }
-
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-subtle);
-        }
-
-        .upload-drop-zone {
-            background: var(--bg-card);
-            border: 2px dashed var(--border-medium);
-            border-radius: 16px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
             cursor: pointer;
             transition: all var(--transition-fast);
-            text-align: center;
+        }
+        .modal-tab-btn.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--text-primary);
+            background: var(--bg-surface);
         }
 
-        .upload-drop-zone:hover {
-            border-color: var(--accent);
-            background: var(--accent-subtle);
-        }
-
-        .upload-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-        }
-
-        /* Multi-Audio File Queue */
-        .voice-multi-queue {
+        .modal-body {
+            padding: 1.25rem;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-            max-height: 230px;
-            overflow-y: auto;
-            padding: 0.25rem 0.25rem 0.25rem 0;
+            gap: 1.25rem;
         }
 
-        .voice-queue-header {
+        /* Preset Cards Grid */
+        .preset-bento-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        .preset-bento-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            padding: 0 4px;
-        }
-
-        .voice-queue-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            padding: 0.55rem 0.75rem;
+            cursor: pointer;
             transition: all var(--transition-fast);
         }
-
-        .voice-queue-item:hover {
-            border-color: var(--accent);
-            background: var(--accent-subtle);
+        .preset-bento-card:hover {
+            border-color: var(--border-strong);
+            background: var(--bg-surface-hover);
+        }
+        .preset-bento-card.selected {
+            border-color: var(--text-primary);
+            background: var(--bg-surface-active);
         }
 
-        .voice-queue-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
-            background: var(--accent-subtle);
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .voice-queue-info {
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .voice-queue-name {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .voice-queue-size {
-            font-size: 0.72rem;
-            color: var(--text-muted);
-        }
-
-        .voice-queue-audio {
-            height: 28px;
-            max-width: 140px;
-        }
-
-        .voice-queue-remove {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
+        /* Upload Dropzone */
+        .minimal-dropzone {
+            border: 1px dashed var(--border-strong);
+            border-radius: var(--radius-md);
+            padding: 2rem 1.25rem;
+            text-align: center;
             cursor: pointer;
-            padding: 4px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.15s ease;
+            background: var(--bg-canvas);
+            transition: all var(--transition-fast);
+        }
+        .minimal-dropzone:hover {
+            background: var(--bg-surface-hover);
+            border-color: var(--text-primary);
         }
 
-        .voice-queue-remove:hover {
-            color: #EF4444;
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .pill-icon-svg {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 4px;
-            vertical-align: middle;
-            color: var(--accent);
-        }
-
-        .tab-icon-svg {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 6px;
-            vertical-align: middle;
-        }
-
-        .preset-card-icon-box {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: var(--accent-subtle);
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            border: 1px solid var(--border-subtle);
-        }
-
-        .modal-foot {
-            padding: 1rem 1.5rem;
-            border-top: 1px solid var(--border-subtle);
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 0.75rem;
-            background: var(--bg-elevated);
-        }
-
-        /* Toast notifications */
-        .toast-banner {
+        /* Toast Banner */
+        .toast-strip {
             position: fixed;
-            top: 1.25rem;
+            top: 1rem;
             left: 50%;
             transform: translateX(-50%) translateY(-20px);
-            background: var(--accent-gradient);
-            color: #FFFFFF;
-            padding: 0.65rem 1.25rem;
-            border-radius: 9999px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+            padding: 0.45rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.82rem;
+            font-weight: 500;
+            font-family: var(--font-sans);
             z-index: 120;
-            box-shadow: 0 10px 30px var(--accent-glow);
             opacity: 0;
             pointer-events: none;
-            transition: all 0.25s var(--ease-bounce);
+            transition: all var(--transition-normal);
         }
-
-        .toast-banner.show {
+        .toast-strip.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
@@ -1441,447 +862,214 @@
 </head>
 <body>
     <a href="#chatFeed" class="skip-link">Skip to conversation</a>
-    <div class="ambient-mesh"></div>
-    <div class="grain-overlay"></div>
 
-    <!-- Top Sticky Header -->
-    <header>
-        <div class="header-left">
-            <a class="brand-logo" href="/" title="Bandhu AI">
-                <div class="brand-icon-box"><img src="/static/bandhu-logo.png" alt="Bandhu Logo"></div>
-                <div class="brand-titles">
-                    <span class="brand-name">Bandhu <span class="brand-name-badge">బంధు</span></span>
-                    <span class="brand-sub">Universal Voice Companion</span>
-                </div>
+    <div class="app-layout">
+        <!-- Top Navigation -->
+        <header>
+            <a class="brand-block" href="/" title="Bandhu">
+                <div class="brand-logo-mark">B</div>
+                <div class="brand-title">Bandhu <span class="brand-script-tag">బంధు</span></div>
             </a>
-        </div>
 
-        <div class="header-center">
-            <div class="status-pill">
-                <div class="status-dot-active"></div>
-                <span id="headerEngineTag">Gemini 3.7 Flash • Authentic Voice Active</span>
-            </div>
-        </div>
+            <div class="header-meta">
+                <div class="status-badge">
+                    <div class="status-dot"></div>
+                    <span>IndicF5 GPU · Ready</span>
+                </div>
 
-        <div class="header-right">
-            <button class="btn-nav btn-nav-primary" onclick="openStudioModal('presets')" title="Manage or Create Loved One Persona">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                <span>Persona Studio</span>
-            </button>
+                <button class="btn-minimal" onclick="triggerProactiveCheckin()" title="Trigger Background Health Check-in">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    <span>Check-in</span>
+                </button>
 
-            <button class="btn-nav" onclick="triggerProactiveCheckin()" title="Trigger Background Health Check-in">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
-                </svg>
-                <span>Check-in</span>
-            </button>
+                <button class="btn-minimal btn-minimal-solid" onclick="openStudioModal('presets')" title="Loved One Studio & Ingestion">
+                    <span>Studio</span>
+                </button>
 
-            <!-- Light / Dark Theme Toggle Switch -->
-            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle dark and light themes">
-                <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-                <svg id="themeIconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main>
-        <!-- Quick Switcher Bar -->
-        <div class="persona-bar">
-            <div class="persona-quick-tabs" id="quickPersonaTabs">
-                <!-- Dynamically loaded -->
-            </div>
-            <div class="persona-bar-actions">
-                <button class="btn-nav" style="padding: 0.3rem 0.65rem; font-size: 0.78rem;" onclick="openStudioModal('chat')" title="Upload WhatsApp Chat">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    <span>Ingest Chat</span>
+                <button class="btn-minimal" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                    <svg id="themeIconSun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg id="themeIconMoon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                 </button>
             </div>
+        </header>
+
+        <!-- Bento Switcher & Active Persona Spotlight -->
+        <div class="bento-section">
+            <!-- Persona Segmented Switcher -->
+            <div class="persona-segmented-bar" id="personaSegmentedBar">
+                <button class="persona-tab-button active" id="tabPappa" onclick="selectPersonaDirect('pappa')">
+                    <span class="persona-initial-badge">ప</span>
+                    <span>పప్పా (Pappa · Hanumakonda)</span>
+                </button>
+                <button class="persona-tab-button" id="tabGrandma" onclick="selectPersonaDirect('grandma_chittoor')">
+                    <span class="persona-initial-badge">అ</span>
+                    <span>అమ్మమ్మ (Grandma · Chittoor)</span>
+                </button>
+            </div>
+
+            <!-- Spotlight Card -->
+            <div class="persona-spotlight-card">
+                <div class="persona-info-group">
+                    <div class="persona-title-row">
+                        <span class="persona-name-display" id="spotlightName">పప్పా (Pappa)</span>
+                        <span class="persona-rel-badge" id="spotlightRelationship">Father · తెలంగాణ</span>
+                    </div>
+                    <div class="persona-tags-row">
+                        <span class="editorial-tag tag-dialect" id="spotlightDialect">Hanumakonda Telangana</span>
+                        <span class="editorial-tag tag-tone" id="spotlightTone">Paternal & Protective</span>
+                        <span class="editorial-tag tag-catchphrase" id="spotlightCatchphrase">నానమ్మ, డాడీ, బేటా, బంగారం</span>
+                    </div>
+                </div>
+
+                <!-- Waveform Audio Ready Indicator -->
+                <div class="waveform-container" id="waveformIndicator" title="IndicF5 Voice Synthesizer Ready">
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                </div>
+            </div>
         </div>
 
-        <!-- Active Persona Spotlight Card -->
-        <div class="active-persona-banner" id="activePersonaCard">
-            <div class="active-persona-left">
-                <div class="active-persona-avatar-frame">
-                    <div class="active-persona-avatar-circle" id="bannerAvatar"><img src="/static/bandhu-logo.png" alt="Persona" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div>
-                    <div class="active-persona-badge-online"></div>
-                </div>
-                <div class="active-persona-meta">
-                    <div class="active-persona-title-row">
-                        <span class="active-persona-name" id="bannerName">అమ్మమ్మ (Grandma)</span>
-                        <span class="active-persona-rel-tag" id="bannerRelationship">Grandmother</span>
-                    </div>
-                    <div class="active-persona-tags-row">
-                        <span class="persona-tag-pill" id="bannerDialect">
-                            <svg class="pill-icon-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                            <span id="bannerDialectText">Chittoor Rayalaseema</span>
-                        </span>
-                        <span class="persona-tag-pill" id="bannerTone">
-                            <svg class="pill-icon-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                            <span id="bannerToneText">Maternal & Warm</span>
-                        </span>
-                        <span class="persona-tag-pill" id="bannerCatchphrases">
-                            <svg class="pill-icon-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
-                            <span id="bannerCatchphrasesText">తింటివా, నాయనా, చల్లగా ఉండాలి</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="active-persona-right">
-                <!-- Real-time Voice Audio Visualizer -->
-                <div class="voice-visualizer-box" id="voiceWaveVisualizer" title="Authentic Voice Cloner Ready">
-                    <div class="waveform-bar"></div>
-                    <div class="waveform-bar"></div>
-                    <div class="waveform-bar"></div>
-                    <div class="waveform-bar"></div>
-                    <div class="waveform-bar"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Chat Conversation Stream -->
-        <div class="chat-feed" id="chatFeed">
-            <!-- Empty state (shown when no messages yet) -->
-            <div class="empty-state" id="emptyState" style="display:none; flex-direction:column; align-items:center; justify-content:center; gap:1.25rem; padding:3.5rem 1rem; text-align:center;">
-                <div style="width:80px; height:80px; border-radius:24px; background:var(--bg-card); border:2px solid var(--accent-subtle); display:flex; align-items:center; justify-content:center; box-shadow:0 8px 30px var(--accent-glow); padding:8px;">
-                    <img src="/static/bandhu-logo.png" alt="Bandhu Logo" style="width:100%; height:100%; object-fit:contain;">
-                </div>
-                <div>
-                    <div style="font-family:var(--font-display); font-size:1.35rem; font-weight:700; color:var(--text-primary); margin-bottom:0.45rem;">Welcome to Bandhu <span style="font-family:var(--font-telugu); font-size:1.1rem; color:var(--accent);">బంధు</span></div>
-                    <div style="font-size:0.9rem; color:var(--text-secondary); line-height:1.6; max-width:440px;">Talk freely in your loved one's authentic voice, regional dialect, and maternal warmth.</div>
-                </div>
-            </div>
+        <!-- Document-Style Chat Stream -->
+        <div class="chat-feed-container" id="chatFeed">
             <!-- Initial Greeting -->
-            <div class="chat-message-row agent-row">
-                <div class="message-avatar" id="greetingAvatar"><img src="/static/bandhu-logo.png" alt="Bandhu" style="width:100%;height:100%;object-fit:contain;border-radius:8px;padding:1px;"></div>
-                <div class="message-bubble-wrap">
-                    <div class="message-sender-name" id="greetingSender">అమ్మమ్మ (Bandhu)</div>
-                    <div class="message-bubble">
-                        కన్నా లేచినావా? టిఫిన్ తింటివా లేదా నాయనా? ఆరోగ్యం ఎలా ఉంది?
-                    </div>
+            <div class="chat-turn-row agent-turn" id="initialGreetingRow">
+                <div class="turn-meta" id="initialGreetingMeta">పప్పా · Father</div>
+                <div class="turn-bubble turn-bubble-telugu" id="initialGreetingText">
+                    నానమ్మ లేచినవా? అన్నం తిన్నావా లేదా? ఏం చేస్తున్నావ్ బేటా?
                 </div>
             </div>
         </div>
 
-        <!-- Quick Persona-Tailored Suggestion Chips -->
-        <div class="prompt-chips-tray" id="promptChipsTray">
-            <!-- Dynamically populated -->
+        <!-- Suggestion Chips -->
+        <div class="prompt-chips-container" id="promptChips">
+            <!-- Populated dynamically -->
         </div>
-    </main>
+    </div>
 
-    <!-- Floating Messenger Dock 2.0 (Bottom Input Bar) -->
-    <div class="floating-dock-container">
-        <div class="floating-input-dock">
-            <button class="btn-dock-icon" id="micBtn" onclick="toggleSpeechRecognition()" title="Click to speak (Telugu / English)">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                    <line x1="12" y1="19" x2="12" y2="23"></line>
-                    <line x1="8" y1="23" x2="16" y2="23"></line>
-                </svg>
+    <!-- Floating Utilitarian Messenger Dock -->
+    <div class="bottom-dock-wrapper">
+        <div class="dock-bar">
+            <button class="btn-dock-action" id="micBtn" onclick="toggleSpeechRecognition()" title="Voice input (Telugu / English)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
             </button>
 
-            <input type="text" id="chatTextInput" class="dock-input" placeholder="Type a message or speak..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+            <input type="text" id="chatTextInput" class="dock-input" placeholder="Type a message or speak in Telugu..." onkeypress="if(event.key==='Enter') sendChatMessage()">
 
-            <button class="btn-dock-send" id="sendBtn" onclick="sendChatMessage()" title="Send Message">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
+            <button class="btn-dock-send" id="sendBtn" onclick="sendChatMessage()" title="Send message">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
         </div>
     </div>
 
-    <!-- Persona Studio Modal / Drawer -->
-    <div class="modal-backdrop" id="studioModal">
-        <div class="modal-box">
-            <div class="modal-head">
-                <div class="modal-title-group">
-                    <div class="brand-icon-box" style="width:28px; height:28px;"><img src="/static/bandhu-logo.png" alt="Bandhu" style="width:100%; height:100%; object-fit:contain;"></div>
-                    <div class="modal-title">Persona Studio</div>
-                </div>
-                <button class="btn-modal-close" onclick="closeStudioModal()">✕</button>
+    <!-- Minimalist Studio Modal -->
+    <div class="modal-overlay" id="studioModal">
+        <div class="modal-sheet">
+            <div class="modal-header">
+                <div class="modal-heading">Loved One Studio & Ingestion</div>
+                <button class="btn-close" onclick="closeStudioModal()">✕</button>
             </div>
 
-            <div class="segmented-tabs">
-                <button class="tab-btn active" id="tabNavPresets" onclick="switchModalTab('presets')">
-                    <svg class="tab-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    <span>Loved One Presets</span>
-                </button>
-                <button class="tab-btn" id="tabNavCustom" onclick="switchModalTab('custom')">
-                    <svg class="tab-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                    <span>Custom Character</span>
-                </button>
-                <button class="tab-btn" id="tabNavChat" onclick="switchModalTab('chat')">
-                    <svg class="tab-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    <span>WhatsApp Ingestion</span>
-                </button>
-                <button class="tab-btn" id="tabNavVoice" onclick="switchModalTab('voice')">
-                    <svg class="tab-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-                    <span>Multi-Voice Cloning</span>
-                </button>
+            <div class="modal-tabs-bar">
+                <button class="modal-tab-btn active" id="modalTabPresets" onclick="switchModalTab('presets')">Profiles</button>
+                <button class="modal-tab-btn" id="modalTabIngest" onclick="switchModalTab('ingest')">WhatsApp & Audio Ingest</button>
             </div>
 
-            <div class="modal-content-body">
-                <!-- Tab 1: Presets -->
-                <div id="tabContentPresets" style="display:flex; flex-direction:column; gap:1rem;">
-                    <p style="font-size:0.85rem; color:var(--text-secondary);">Select a pre-configured companion or tailor your loved one's authentic voice:</p>
-                    
-                    <div class="presets-grid">
-                        <div class="preset-item-card" onclick="selectPresetPersona('grandma')">
-                            <div class="preset-item-header">
-                                <div class="preset-card-icon-box">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                                </div>
-                                <div class="preset-item-name">అమ్మమ్మ (Grandma)</div>
-                            </div>
-                            <div class="preset-item-desc">Chittoor Rayalaseema • Authentic timbre voice cloning, traditional maternal care, health & wellbeing.</div>
+            <div class="modal-body">
+                <!-- Tab 1: Profiles -->
+                <div id="tabBodyPresets" style="display:flex; flex-direction:column; gap:0.75rem;">
+                    <div class="preset-bento-card" onclick="selectPersonaDirect('pappa'); closeStudioModal();">
+                        <div>
+                            <div style="font-weight:600; font-family:var(--font-telugu);">పప్పా (Pappa)</div>
+                            <div style="font-size:0.8rem; color:var(--text-secondary);">Telangana (Hanumakonda) · CapCut Studio Mastered Voice · 0.80 Pacing</div>
                         </div>
+                        <span class="editorial-tag tag-dialect">Active</span>
+                    </div>
 
-                        <div class="preset-item-card" onclick="selectPresetPersona('pappa')">
-                            <div class="preset-item-header">
-                                <div class="preset-card-icon-box">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                                </div>
-                                <div class="preset-item-name">పప్పా (Pappa)</div>
-                            </div>
-                            <div class="preset-item-desc">Telangana (Hanumakonda) • Grounded paternal encouragement, career reassurance, affectionate support.</div>
+                    <div class="preset-bento-card" onclick="selectPersonaDirect('grandma_chittoor'); closeStudioModal();">
+                        <div>
+                            <div style="font-weight:600; font-family:var(--font-telugu);">అమ్మమ్మ (Grandma)</div>
+                            <div style="font-size:0.8rem; color:var(--text-secondary);">Chittoor Rayalaseema · Timbre Cloned · Maternal Care</div>
                         </div>
+                        <span class="editorial-tag tag-catchphrase">Chittoor</span>
                     </div>
                 </div>
 
-                <!-- Tab 2: Custom Persona Builder -->
-                <div id="tabContentCustom" style="display:none; flex-direction:column; gap:1rem;">
-                    <div class="form-row-2">
-                        <div class="form-group">
-                            <label class="form-label">Loved One / Persona Name</label>
-                            <input type="text" id="custName" class="form-input" placeholder="e.g. అమ్మ, Rahul, Suresh, Dad">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Relationship</label>
-                            <select id="custRelationship" class="form-select">
-                                <option value="Best Friend">Best Friend (మిత్రుడు / దోస్త్)</option>
-                                <option value="Mother">Mother (అమ్మ)</option>
-                                <option value="Father">Father (నాన్న)</option>
-                                <option value="Grandmother">Grandmother (అమ్మమ్మ / నానమ్మ)</option>
-                                <option value="Grandfather">Grandfather (తాతయ్య)</option>
-                                <option value="Mentor">Mentor / Guide</option>
-                                <option value="Sibling">Sibling (అన్న / అక్క / తమ్ముడు)</option>
-                            </select>
-                        </div>
-                    </div>
+                <!-- Tab 2: Ingest -->
+                <div id="tabBodyIngest" style="display:none; flex-direction:column; gap:1rem;">
+                    <p style="font-size:0.82rem; color:var(--text-secondary);">Upload WhatsApp chat export (.txt) or audio recordings (.wav / .opus) to train and clone new speech characteristics:</p>
 
-                    <div class="form-row-2">
-                        <div class="form-group">
-                            <label class="form-label">Language</label>
-                            <input type="text" id="custLanguage" class="form-input" value="Telugu">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Dialect / Regional Accent</label>
-                            <input type="text" id="custDialect" class="form-input" placeholder="e.g. Rayalaseema, Telangana, Coastal, Bangalore Telugu">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Frequently Used Words / Catchphrases</label>
-                        <input type="text" id="custCatchphrases" class="form-input" placeholder="e.g. బా, నాయనా, మామా, రా, ఏరా, scene ledu, bindas">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Pet Names / How they call you</label>
-                        <input type="text" id="custPetNames" class="form-input" placeholder="e.g. బంగారం, కన్నా, బావా, డ్యూడ్, తల్లీ, బచ్చా">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Personality Tone & Vibe</label>
-                        <input type="text" id="custTone" class="form-input" placeholder="e.g. Deeply loving & caring, or Sarcastic, funny & energetic">
-                    </div>
-                </div>
-
-                <!-- Tab 3: WhatsApp Chat Ingest -->
-                <div id="tabContentChat" style="display:none; flex-direction:column; gap:1rem;">
-                    <p style="font-size:0.85rem; color:var(--text-secondary);">
-                        Upload a WhatsApp chat export (.txt) with your loved one. Bandhu uses Gemini to analyze their messages and extract their authentic dialect, vocabulary, pet names, and personality:
-                    </p>
-
-                    <div class="upload-drop-zone" onclick="document.getElementById('fileWhatsAppInput').click()">
-                        <input type="file" id="fileWhatsAppInput" accept=".txt" style="display:none;" onchange="handleWhatsAppFile(event)">
-                        <div class="upload-icon">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                            </svg>
-                        </div>
-                        <div style="font-weight:600; font-size:0.95rem;">Upload WhatsApp Export (.txt)</div>
-                        <div style="font-size:0.78rem; color:var(--text-muted);" id="waFileNameLabel">Click to browse or drag file here</div>
-                    </div>
-
-                    <div class="form-row-2">
-                        <div class="form-group">
-                            <label class="form-label">Sender's Exact Name in Chat</label>
-                            <input type="text" id="inputTargetSpeaker" class="form-input" placeholder="e.g. Pappa, Dad, Mom, Rahul, అమ్మమ్మ">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Relationship with You</label>
-                            <select id="waRelationship" class="form-select">
-                                <option value="Father">Father (నాన్న / Pappa)</option>
-                                <option value="Mother">Mother (అమ్మ / Mummy)</option>
-                                <option value="Best Friend">Best Friend (మిత్రుడు / దోస్త్)</option>
-                                <option value="Grandmother">Grandmother (అమ్మమ్మ / నానమ్మ)</option>
-                                <option value="Grandfather">Grandfather (తాతయ్య)</option>
-                                <option value="Sibling">Sibling (అన్న / అక్క / తమ్ముడు)</option>
-                                <option value="Mentor">Mentor / Guide</option>
-                                <option value="Loved One">Loved One</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row-2">
-                        <div class="form-group">
-                            <label class="form-label">Language</label>
-                            <input type="text" id="waLanguage" class="form-input" value="Telugu">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Dialect / City (Optional)</label>
-                            <input type="text" id="waDialect" class="form-input" placeholder="e.g. Hyderabad, Rayalaseema, Colloquial">
-                        </div>
-                    </div>
-
-                    <!-- Live Extraction Result Preview Card -->
-                    <div id="waExtractionResult" style="display:none; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:12px; padding:1rem; flex-direction:column; gap:0.5rem;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-weight:600; font-size:0.9rem; color:var(--accent); display:flex; align-items:center; gap:6px;" id="waResName">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                Extracted Personality
-                            </span>
-                            <span class="banner-badge" id="waResRel">Family</span>
-                        </div>
-                        <div style="font-size:0.8rem; color:var(--text-secondary);" id="waResTone">Tone: Loving & authentic</div>
-                        <div style="font-size:0.78rem; color:var(--text-muted);" id="waResPhrases">Phrases: ...</div>
-                    </div>
-
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <button class="btn-nav" onclick="loadSampleGrandmaChat()">Load Sample Grandma Chat</button>
-                        <button class="btn-nav btn-nav-primary" id="btnExtractChat" onclick="submitWhatsAppIngest()">Extract Personality</button>
-                    </div>
-                </div>
-
-                <!-- Tab 4: Voice Note Sample (Multi-File Ingestion Engine) -->
-                <div id="tabContentVoice" style="display:none; flex-direction:column; gap:1rem;">
-                    <p style="font-size:0.85rem; color:var(--text-secondary);">
-                        Upload one or multiple audio clips (.wav, .mp3, .m4a, .aac) of your loved one's authentic voice. Bandhu constructs a high-fidelity acoustic timbre embedding profile across all clips:
-                    </p>
-
-                    <div class="upload-drop-zone" onclick="document.getElementById('fileVoiceInput').click()">
-                        <input type="file" id="fileVoiceInput" accept=".wav,.mp3,.m4a,.ogg,.aac,.opus" multiple style="display:none;" onchange="handleVoiceFiles(event)">
-                        <div class="upload-icon">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                                <line x1="12" y1="19" x2="12" y2="22"></line>
-                                <path d="M8 22h8"></path>
-                            </svg>
-                        </div>
-                        <div style="font-weight:600; font-size:0.95rem;">Upload Voice Samples (Select Multiple Files)</div>
-                        <div style="font-size:0.78rem; color:var(--text-muted);" id="voiceFileNameLabel">Click to browse or drag & drop one or more audio files</div>
-                    </div>
-
-                    <!-- Multi-Audio File Queue Display -->
-                    <div id="voiceMultiQueue" class="voice-multi-queue" style="display:none;">
-                        <div class="voice-queue-header">
-                            <span id="voiceQueueStats">0 clips loaded</span>
-                            <button type="button" onclick="clearVoiceQueue()" style="background:none; border:none; color:var(--accent); font-size:0.75rem; font-weight:600; cursor:pointer;">Clear All</button>
-                        </div>
-                        <div id="voiceQueueList" style="display:flex; flex-direction:column; gap:0.4rem;"></div>
-                    </div>
-
-                    <div class="form-row-2">
-                        <div class="form-group">
-                            <label class="form-label">Attach Voice To Persona</label>
-                            <select id="voiceTargetPersonaSelect" class="form-select" onchange="onVoicePersonaChange()">
-                                <option value="grandma_chittoor">అమ్మమ్మ (Grandma)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Voice Sample Label / Name</label>
-                            <input type="text" id="inputVoiceName" class="form-input" placeholder="e.g. Pappa's Voice">
-                        </div>
+                    <div class="minimal-dropzone" onclick="document.getElementById('fileUploadInput').click()">
+                        <input type="file" id="fileUploadInput" accept=".txt,.wav,.mp3,.opus,.m4a" style="display:none;" onchange="handleFileUpload(event)">
+                        <div style="font-weight:600; font-size:0.9rem;" id="uploadFileLabel">Click to select WhatsApp (.txt) or Audio (.wav/.opus)</div>
+                        <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.25rem;">Automatic dialect extraction & FAISS voice indexing</div>
                     </div>
 
                     <div style="display:flex; justify-content:flex-end;">
-                        <button class="btn-nav btn-nav-primary" id="btnCloneVoice" onclick="submitVoiceUpload()">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
-                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                            </svg>
-                            <span>Clone & Activate Voice</span>
-                        </button>
+                        <button class="btn-minimal btn-minimal-solid" onclick="submitIngestion()">Process & Ingest</button>
                     </div>
                 </div>
-            </div>
-
-            <div class="modal-foot">
-                <button class="btn-nav" onclick="closeStudioModal()">Cancel</button>
-                <button class="btn-nav btn-nav-primary" id="btnModalSave" onclick="handleModalSaveAction()">Save & Activate</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notification Banner -->
-    <div class="toast-banner" id="toastNotification">Action Completed</div>
+    <!-- Toast Notification -->
+    <div class="toast-strip" id="toastNotification">Action completed</div>
 
     <!-- Hidden Audio Player -->
     <audio id="globalAudioPlayer" style="display:none;"></audio>
 
-    <!-- ==========================================================================
-         8. Core Client Logic & API Integration
-         ========================================================================== -->
+    <!-- Client Script -->
     <script>
-        // Global State
-        let allPersonas = [];
-        let currentPersona = {
-            persona_id: "grandma_chittoor",
-            name: "అమ్మమ్మ (Grandma)",
-            relationship: "Grandmother",
-            language: "Telugu",
-            dialect_region: "Rayalaseema / Chittoor",
-            tone: "Warm, deeply maternal, authentic",
-            frequent_catchphrases: ["బా", "నాయనా", "తింటివా"],
-            pet_names: ["కన్నా", "తల్లీ", "నాయనా"],
-            key_topics: ["ఆరోగ్యం (Health)", "కుటుంబ బాగోగులు (Family Wellbeing)"]
+        // Personas State
+        const PERSONAS = {
+            'pappa': {
+                persona_id: 'pappa',
+                name: 'పప్పా (Pappa)',
+                relationship: 'Father',
+                dialect_region: 'Hanumakonda Telangana',
+                tone: 'Paternal & Protective',
+                catchphrases: 'నానమ్మ, డాడీ, బేటా, బంగారం',
+                greeting: 'నానమ్మ లేచినవా? అన్నం తిన్నావా లేదా? ఏం చేస్తున్నావ్ బేటా?',
+                chips: [
+                    'పప్పా ఈరోజు చాలా టెన్షన్‌గా ఉంది',
+                    'ఈరోజు నా ఇంటర్వ్యూ ఉంది పప్పా',
+                    'పప్పా ఏం చేస్తున్నారు? అన్నం తిన్నారా?',
+                    'పప్పా ఒకసారి కాల్ చేయండి'
+                ]
+            },
+            'grandma_chittoor': {
+                persona_id: 'grandma_chittoor',
+                name: 'అమ్మమ్మ (Grandma)',
+                relationship: 'Grandmother',
+                dialect_region: 'Chittoor Rayalaseema',
+                tone: 'Maternal & Warm',
+                catchphrases: 'కన్నా, నాయనా, తింటివా, బా',
+                greeting: 'కన్నా లేచినావా? టిఫిన్ తింటివా లేదా నాయనా? ఆరోగ్యం ఎలా ఉంది?',
+                chips: [
+                    'అమ్మమ్మ, చాలా ఆకలిగా ఉంది ఏం తిందాం?',
+                    'ఈరోజు మన ఇంట్లో ఏం వండారు?',
+                    'మీ ఆరోగ్యం ఎలా ఉంది అమ్మమ్మ?',
+                    'ఒంట్లో కొంచెం నీరసంగా ఉంది నాయనా'
+                ]
+            }
         };
 
-        let recognition = null;
+        let currentPersona = PERSONAS['pappa'];
         let isListening = false;
-        let selectedWhatsAppFile = null;
-        let selectedVoiceFile = null;
+        let recognition = null;
+        let selectedFile = null;
+        let currentPlayingControlId = null;
 
-        // Initialize on load
-        window.addEventListener('DOMContentLoaded', async () => {
+        window.addEventListener('DOMContentLoaded', () => {
             initTheme();
-            await loadPersonas();
             setupSpeechRecognition();
+            selectPersonaDirect('pappa');
         });
 
-        // ---------------- THEME TOGGLE (Dark/Light) ----------------
+        // Theme Toggle
         function initTheme() {
             const saved = localStorage.getItem('bandhu_theme') || 'dark';
             applyTheme(saved);
@@ -1896,149 +1084,76 @@
 
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
-            const sunIcon = document.getElementById('themeIconSun');
-            const moonIcon = document.getElementById('themeIconMoon');
+            const sun = document.getElementById('themeIconSun');
+            const moon = document.getElementById('themeIconMoon');
             if (theme === 'dark') {
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
+                sun.style.display = 'none';
+                moon.style.display = 'block';
             } else {
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
+                sun.style.display = 'block';
+                moon.style.display = 'none';
             }
         }
 
-        // ---------------- PERSONA MANAGEMENT ----------------
-        async function loadPersonas() {
-            try {
-                const res = await fetch('/api/personas');
-                const data = await res.json();
-                if (data.personas && data.personas.length > 0) {
-                    allPersonas = data.personas;
-                    const active = allPersonas.find(p => p.persona_id === currentPersona.persona_id) || allPersonas[0];
-                    renderPersonaTabs();
-                    setActivePersona(active);
-                }
-            } catch (err) {
-                console.error("Error loading personas:", err);
-            }
+        // Persona Switching
+        function selectPersonaDirect(personaId) {
+            const target = PERSONAS[personaId] || PERSONAS['pappa'];
+            currentPersona = target;
+
+            // Update segmented buttons
+            document.getElementById('tabPappa').classList.toggle('active', personaId === 'pappa');
+            document.getElementById('tabGrandma').classList.toggle('active', personaId === 'grandma_chittoor');
+
+            // Update Spotlight
+            document.getElementById('spotlightName').innerText = target.name;
+            document.getElementById('spotlightRelationship').innerText = `${target.relationship} · ${personaId === 'pappa' ? 'తెలంగాణ' : 'రాయలసీమ'}`;
+            document.getElementById('spotlightDialect').innerText = target.dialect_region;
+            document.getElementById('spotlightTone').innerText = target.tone;
+            document.getElementById('spotlightCatchphrase').innerText = target.catchphrases;
+
+            // Reset Chat Feed for isolation
+            const feed = document.getElementById('chatFeed');
+            feed.innerHTML = `
+                <div class="chat-turn-row agent-turn">
+                    <div class="turn-meta">${target.name} · ${target.relationship}</div>
+                    <div class="turn-bubble turn-bubble-telugu">${target.greeting}</div>
+                </div>
+            `;
+
+            // Update chips
+            renderChips(target.chips);
+            showToast(`Switched to ${target.name}`);
         }
 
-        function renderPersonaTabs() {
-            const container = document.getElementById('quickPersonaTabs');
-            if (container) {
-                container.innerHTML = allPersonas.map(p => {
-                    const isActive = p.persona_id === currentPersona.persona_id;
-                    const letter = (p.name || 'B').charAt(0);
-                    return `
-                        <button class="persona-pill-tab ${isActive ? 'active' : ''}" onclick="switchActivePersona('${p.persona_id}')">
-                            <span class="persona-pill-avatar">${letter}</span>
-                            <span>${p.name}</span>
-                        </button>
-                    `;
-                }).join('');
-            }
-
-            const vSelect = document.getElementById('voiceTargetPersonaSelect');
-            if (vSelect) {
-                vSelect.innerHTML = allPersonas.map(p => `<option value="${p.persona_id}" ${p.persona_id === currentPersona.persona_id ? 'selected' : ''}>${p.name} (${p.relationship || 'Loved One'})</option>`).join('');
-            }
+        function renderChips(chips) {
+            const container = document.getElementById('promptChips');
+            container.innerHTML = chips.map(c => `
+                <button class="chip-button" onclick="fillAndSend('${escapeHtml(c)}')">${c}</button>
+            `).join('');
         }
 
-        function switchActivePersona(personaId) {
-            const target = allPersonas.find(p => p.persona_id === personaId);
-            if (target) {
-                setActivePersona(target);
-                renderPersonaTabs();
-                showToast(`Switched to ${target.name}`);
-            }
-        }
-
-        function setActivePersona(persona) {
-            currentPersona = persona;
-
-            // Update Banner Text
-            document.getElementById('bannerName').innerText = persona.name;
-            document.getElementById('bannerRelationship').innerText = persona.relationship || 'Companion';
-            const dText = document.getElementById('bannerDialectText');
-            if (dText) dText.innerText = persona.dialect_region || persona.language || 'Colloquial';
-            const tText = document.getElementById('bannerToneText');
-            if (tText) tText.innerText = (persona.tone || 'Warm').split(',')[0];
-            
-            const catchphrases = persona.frequent_catchphrases && persona.frequent_catchphrases.length > 0 
-                ? persona.frequent_catchphrases.slice(0, 3).join(', ') 
-                : 'తింటివా, నాయనా, చల్లగా ఉండాలి';
-            const cText = document.getElementById('bannerCatchphrasesText');
-            if (cText) cText.innerText = catchphrases;
-
-            if (persona.persona_id === 'grandma_chittoor' || !persona.avatar_url) {
-                document.getElementById('bannerAvatar').innerHTML = '<img src="/static/bandhu-logo.png" alt="Bandhu" style="width:100%;height:100%;object-fit:contain;border-radius:12px;padding:2px;">';
-                document.getElementById('greetingAvatar').innerHTML = '<img src="/static/bandhu-logo.png" alt="Bandhu" style="width:100%;height:100%;object-fit:contain;border-radius:8px;padding:1px;">';
-            } else {
-                const letter = (persona.name || 'B').charAt(0);
-                document.getElementById('bannerAvatar').innerText = letter;
-                document.getElementById('greetingAvatar').innerText = letter;
-            }
-            document.getElementById('greetingSender').innerText = persona.name;
-
-            updateQuickPrompts(persona);
-        }
-
-        function updateQuickPrompts(persona) {
-            const tray = document.getElementById('promptChipsTray');
-            const rel = (persona.relationship || '').toLowerCase();
-            const name = (persona.name || '').toLowerCase();
-            
-            let chips = [];
-            if (rel.includes('dad') || rel.includes('father') || name.includes('పప్పా') || name.includes('pappa')) {
-                chips = [
-                    "పప్పా ఈరోజు ఆఫీసులో కొంచెం టెన్షన్‌గా ఉంది",
-                    "మీ ఆరోగ్యం ఎట్లుంది పప్పా?",
-                    "భవిష్యత్తు గురించి మీ సలహా కావాలి పప్పా",
-                    "ఊర్లో అందరూ మంచిగున్నారా పప్పా?"
-                ];
-            } else if (rel.includes('friend') || rel.includes('buddy') || rel.includes('దోస్త్')) {
-                chips = [
-                    "ఈరోజు ఆఫీసులో చాలా అలసిపోయాను మామా",
-                    "మన కాలేజీ సరదా జ్ఞాపకం ఏదైనా చెప్పు",
-                    "ఈ వీకెండ్ ఏం ప్లాన్ చేద్దాం రా?",
-                    "నాకు కొంచెం మంచి సలహా ఇవ్వు బ్రో"
-                ];
-            } else {
-                chips = [
-                    "అమ్మమ్మ, చాలా ఆకలిగా ఉంది ఏం తిందాం?",
-                    "ఈరోజు మన ఇంట్లో ఏం వండారు?",
-                    "మీ ఆరోగ్యం ఎలా ఉంది అమ్మమ్మ?",
-                    "ఒంట్లో కొంచెం నీరసంగా ఉంది నాయనా"
-                ];
-            }
-
-            tray.innerHTML = chips.map(c => `<div class="prompt-chip" onclick="fillAndSendPrompt('${escapeHtml(c)}')">${c}</div>`).join('');
-        }
-
-        function fillAndSendPrompt(text) {
+        function fillAndSend(text) {
             document.getElementById('chatTextInput').value = text;
             sendChatMessage();
         }
 
-        // ---------------- CONVERSATION FLOW & AUDIO SYNTHESIS ----------------
+        // Chat Flow
         async function sendChatMessage() {
             const input = document.getElementById('chatTextInput');
-            const message = input.value.trim();
-            if (!message) return;
+            const msg = input.value.trim();
+            if (!msg) return;
 
-            // Render User Bubble
-            appendMessageBubble('user', 'You', message);
+            appendBubble('user', 'You', msg);
             input.value = '';
 
-            // Render Typing Animation
-            const typingElemId = appendTypingIndicator();
+            const typingId = appendTyping();
 
             try {
                 const res = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        message: message,
+                        message: msg,
                         speaker_name: 'You',
                         persona_id: currentPersona.persona_id,
                         generate_audio: true
@@ -2046,207 +1161,141 @@
                 });
 
                 const data = await res.json();
-                removeTypingIndicator(typingElemId);
+                removeTyping(typingId);
 
                 if (data && data.reply_text) {
-                    appendMessageBubble('agent', data.persona_name || currentPersona.name, data.reply_text, data.audio_url, data.tools_executed);
-                    
-                    // Auto-play audio if generated
+                    appendBubble('agent', data.persona_name || currentPersona.name, data.reply_text, data.audio_url);
                     if (data.audio_url) {
-                        playVoiceAudio(data.audio_url);
+                        playVoice(data.audio_url);
                     }
-                } else if (data && data.detail) {
-                    appendMessageBubble('agent', currentPersona.name, `గమనిక: ${data.detail}`);
                 } else {
-                    appendMessageBubble('agent', currentPersona.name, "సరే నాయనా, నీ మాటలు విన్నాను. ఇంకేం విశేషాలు?");
+                    appendBubble('agent', currentPersona.name, 'సరే నాయనా, నీ మాటలు విన్నాను. ఇంకేం విశేషాలు?');
                 }
             } catch (err) {
-                console.error("Chat error:", err);
-                removeTypingIndicator(typingElemId);
-                appendMessageBubble('agent', currentPersona.name, "నాయనా, సర్వర్ తో కనెక్షన్ కొద్దిగా ఇబ్బందిగా ఉంది. దయచేసి మళ్లీ ప్రయత్నించు.");
-            } finally {
-                removeTypingIndicator(typingElemId);
+                removeTyping(typingId);
+                appendBubble('agent', currentPersona.name, 'నాయనా, సర్వర్ తో కనెక్షన్ కొద్దిగా ఇబ్బందిగా ఉంది. దయచేసి మళ్లీ ప్రయత్నించు.');
             }
         }
 
-        function appendMessageBubble(role, sender, text, audioUrl = null, tools = []) {
+        function appendBubble(role, sender, text, audioUrl = null) {
             const feed = document.getElementById('chatFeed');
             const row = document.createElement('div');
-            row.className = `chat-message-row ${role === 'user' ? 'user-row' : 'agent-row'}`;
-
-            const avatarLetter = (sender || 'B').charAt(0);
-            
-            let toolsHtml = '';
-            if (tools && Array.isArray(tools) && tools.length > 0) {
-                toolsHtml = tools.map(t => {
-                    let toolName = 'Action';
-                    if (typeof t === 'string') {
-                        toolName = t;
-                    } else if (t && typeof t === 'object') {
-                        toolName = t.name || (t.tool_name || 'Action');
-                        if (t.args && typeof t.args === 'object' && Object.keys(t.args).length > 0) {
-                            const firstVal = Object.values(t.args)[0];
-                            if (typeof firstVal === 'string') {
-                                toolName += `: ${firstVal.slice(0, 20)}`;
-                            }
-                        }
-                    }
-                    return `<div class="tool-badge">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                        ${escapeHtml(toolName)}
-                    </div>`;
-                }).join('');
-            }
+            row.className = `chat-turn-row ${role === 'user' ? 'user-turn' : 'agent-turn'}`;
 
             let audioHtml = '';
             if (audioUrl) {
-                const playerUniqueId = `audio_ctrl_${Math.random().toString(36).substr(2, 9)}`;
+                const ctrlId = `aud_${Math.random().toString(36).substr(2, 8)}`;
                 audioHtml = `
-                    <div class="inline-audio-player" id="${playerUniqueId}">
-                        <button class="audio-play-btn" onclick="playVoiceAudio('${audioUrl}', '${playerUniqueId}')" title="Play Voice Audio">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <div class="inline-audio-strip" id="${ctrlId}">
+                        <button class="btn-play-audio" onclick="playVoice('${audioUrl}', '${ctrlId}')" title="Play speech">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                         </button>
-                        <div class="audio-scrubber" onclick="seekAudioTrack(event, '${playerUniqueId}')">
-                            <div class="audio-scrubber-fill" id="${playerUniqueId}_fill"></div>
+                        <div class="audio-progress-rail" onclick="seekAudio(event, '${ctrlId}')">
+                            <div class="audio-progress-fill" id="${ctrlId}_fill"></div>
                         </div>
-                        <span class="audio-speed-tag" onclick="togglePlaybackSpeed(this)">1.0x</span>
+                        <button class="audio-speed-btn" onclick="toggleSpeed(this)">0.8x</button>
                     </div>
                 `;
             }
 
-            const avatarContent = role === 'agent' 
-                ? (currentPersona.persona_id === 'grandma_chittoor' || !currentPersona.avatar_url
-                    ? '<img src="/static/bandhu-logo.png" alt="Bandhu" style="width:100%;height:100%;object-fit:contain;padding:1px;border-radius:8px;">'
-                    : avatarLetter)
-                : avatarLetter;
-
             row.innerHTML = `
-                <div class="message-avatar">${avatarContent}</div>
-                <div class="message-bubble-wrap">
-                    <div class="message-sender-name">${escapeHtml(sender)}</div>
-                    <div class="message-bubble">${escapeHtml(text)}</div>
-                    ${audioHtml}
-                    ${toolsHtml}
-                </div>
+                <div class="turn-meta">${escapeHtml(sender)}</div>
+                <div class="turn-bubble turn-bubble-telugu">${escapeHtml(text)}</div>
+                ${audioHtml}
             `;
 
             feed.appendChild(row);
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
-        function appendTypingIndicator() {
+        function appendTyping() {
             const feed = document.getElementById('chatFeed');
-            const typingId = `typing_${Date.now()}`;
+            const id = `type_${Date.now()}`;
             const row = document.createElement('div');
-            row.id = typingId;
-            row.className = 'chat-message-row agent-row';
-            const avatarContent = (currentPersona.persona_id === 'grandma_chittoor' || !currentPersona.avatar_url)
-                ? '<img src="/static/bandhu-logo.png" alt="Bandhu" style="width:100%;height:100%;object-fit:contain;padding:1px;border-radius:8px;">'
-                : (currentPersona.name || 'B').charAt(0);
+            row.id = id;
+            row.className = 'chat-turn-row agent-turn';
             row.innerHTML = `
-                <div class="message-avatar">${avatarContent}</div>
-                <div class="message-bubble-wrap">
-                    <div class="typing-bubble">
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                    </div>
+                <div class="turn-meta">${currentPersona.name}</div>
+                <div class="typing-pill">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
                 </div>
             `;
             feed.appendChild(row);
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            return typingId;
+            return id;
         }
 
-        function removeTypingIndicator(id) {
-            if (!id) return;
+        function removeTyping(id) {
             const el = document.getElementById(id);
             if (el) el.remove();
         }
 
-        // ---------------- AUDIO PLAYBACK ENGINE ----------------
-        let currentPlayingPlayerId = null;
-
-        function playVoiceAudio(audioUrl, controlId = null) {
+        // Audio Playback
+        function playVoice(url, ctrlId = null) {
             const player = document.getElementById('globalAudioPlayer');
-            const visualizer = document.getElementById('voiceWaveVisualizer');
+            const wave = document.getElementById('waveformIndicator');
             if (!player) return;
 
-            try {
-                player.pause();
-                player.src = audioUrl;
-                player.load();
-                const playPromise = player.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        if (visualizer) visualizer.classList.add('playing');
-                        currentPlayingPlayerId = controlId;
-                    }).catch(e => {
-                        console.log("Audio autoplay note:", e);
-                        currentPlayingPlayerId = controlId;
-                    });
-                }
-            } catch (err) {
-                console.log("Audio play error:", err);
-            }
+            player.src = url;
+            player.playbackRate = 0.85;
+            player.play().then(() => {
+                if (wave) wave.classList.add('playing');
+                currentPlayingControlId = ctrlId;
+            }).catch(e => console.log('Autoplay note:', e));
 
             player.ontimeupdate = () => {
-                if (currentPlayingPlayerId) {
-                    const fill = document.getElementById(`${currentPlayingPlayerId}_fill`);
-                    if (fill && player.duration && !isNaN(player.duration)) {
-                        const pct = (player.currentTime / player.duration) * 100;
-                        fill.style.width = `${pct}%`;
+                if (currentPlayingControlId) {
+                    const fill = document.getElementById(`${currentPlayingControlId}_fill`);
+                    if (fill && player.duration) {
+                        fill.style.width = `${(player.currentTime / player.duration) * 100}%`;
                     }
                 }
             };
 
             player.onended = () => {
-                if (visualizer) visualizer.classList.remove('playing');
-                if (currentPlayingPlayerId) {
-                    const fill = document.getElementById(`${currentPlayingPlayerId}_fill`);
+                if (wave) wave.classList.remove('playing');
+                if (currentPlayingControlId) {
+                    const fill = document.getElementById(`${currentPlayingControlId}_fill`);
                     if (fill) fill.style.width = '0%';
                 }
             };
         }
 
-        function seekAudioTrack(event, controlId) {
+        function seekAudio(e, ctrlId) {
             const player = document.getElementById('globalAudioPlayer');
             if (!player || !player.duration) return;
-            const rect = event.currentTarget.getBoundingClientRect();
-            const clickPos = (event.clientX - rect.left) / rect.width;
-            player.currentTime = clickPos * player.duration;
-            const fill = document.getElementById(`${controlId}_fill`);
-            if (fill) fill.style.width = `${clickPos * 100}%`;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const pct = (e.clientX - rect.left) / rect.width;
+            player.currentTime = pct * player.duration;
+            const fill = document.getElementById(`${ctrlId}_fill`);
+            if (fill) fill.style.width = `${pct * 100}%`;
         }
 
-        function togglePlaybackSpeed(tagEl) {
+        function toggleSpeed(btn) {
             const player = document.getElementById('globalAudioPlayer');
-            const current = player.playbackRate || 1.0;
-            let next = 1.0;
-            if (current === 1.0) next = 1.25;
-            else if (current === 1.25) next = 1.5;
-            else next = 1.0;
+            let next = 0.8;
+            if (player.playbackRate === 0.8) next = 1.0;
+            else if (player.playbackRate === 1.0) next = 1.25;
+            else next = 0.8;
 
             player.playbackRate = next;
-            tagEl.innerText = `${next}x`;
+            btn.innerText = `${next}x`;
         }
 
-        // ---------------- SPEECH RECOGNITION (STT) ----------------
+        // Speech Recognition
         function setupSpeechRecognition() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                console.log("Speech recognition not supported in this browser.");
-                return;
-            }
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) return;
 
-            recognition = new SpeechRecognition();
+            recognition = new SR();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = 'te-IN'; // Default Telugu, seamlessly handles Telugu & English
+            recognition.lang = 'te-IN';
 
-            recognition.onresult = (event) => {
-                const text = event.results[0][0].transcript;
-                document.getElementById('chatTextInput').value = text;
+            recognition.onresult = (e) => {
+                document.getElementById('chatTextInput').value = e.results[0][0].transcript;
                 sendChatMessage();
             };
 
@@ -2255,8 +1304,7 @@
                 document.getElementById('micBtn').classList.remove('listening');
             };
 
-            recognition.onerror = (err) => {
-                console.error("STT Error:", err);
+            recognition.onerror = () => {
                 isListening = false;
                 document.getElementById('micBtn').classList.remove('listening');
             };
@@ -2264,45 +1312,38 @@
 
         function toggleSpeechRecognition() {
             if (!recognition) {
-                showToast("Microphone not supported on this browser.");
+                showToast('Speech recognition not available');
                 return;
             }
-
-            const micBtn = document.getElementById('micBtn');
+            const btn = document.getElementById('micBtn');
             if (isListening) {
                 recognition.stop();
                 isListening = false;
-                micBtn.classList.remove('listening');
+                btn.classList.remove('listening');
             } else {
-                try {
-                    recognition.start();
-                    isListening = true;
-                    micBtn.classList.add('listening');
-                    showToast("Listening... Speak in Telugu or English");
-                } catch (e) {
-                    console.log("Recognition start error:", e);
-                }
+                recognition.start();
+                isListening = true;
+                btn.classList.add('listening');
+                showToast('Listening in Telugu / English...');
             }
         }
 
-        // ---------------- PROACTIVE CHECK-IN RUNNER ----------------
+        // Autonomous Proactive Check-in
         async function triggerProactiveCheckin() {
-            showToast("Executing autonomous health check-in...");
+            showToast('Triggering proactive check-in...');
             try {
                 const res = await fetch('/api/cron/checkin', { method: 'POST' });
                 const data = await res.json();
                 if (data.checkin_prompt) {
-                    appendMessageBubble('agent', currentPersona.name, data.checkin_prompt);
+                    appendBubble('agent', currentPersona.name, data.checkin_prompt);
                 }
-                showToast("Autonomous check-in completed.");
+                showToast('Check-in received');
             } catch (err) {
-                showToast("Check-in triggered.");
+                showToast('Check-in triggered');
             }
         }
 
-        // ---------------- STUDIO MODAL & TABS ----------------
-        let activeModalTab = 'presets';
-
+        // Modal Handlers
         function openStudioModal(tab = 'presets') {
             document.getElementById('studioModal').classList.add('active');
             switchModalTab(tab);
@@ -2313,377 +1354,54 @@
         }
 
         function switchModalTab(tab) {
-            activeModalTab = tab;
-            const tabs = ['presets', 'custom', 'chat', 'voice'];
-            tabs.forEach(t => {
-                const navBtn = document.getElementById(`tabNav${t.charAt(0).toUpperCase() + t.slice(1)}`);
-                const content = document.getElementById(`tabContent${t.charAt(0).toUpperCase() + t.slice(1)}`);
-                if (navBtn && content) {
-                    if (t === tab) {
-                        navBtn.classList.add('active');
-                        content.style.display = 'flex';
-                    } else {
-                        navBtn.classList.remove('active');
-                        content.style.display = 'none';
-                    }
-                }
-            });
+            document.getElementById('modalTabPresets').classList.toggle('active', tab === 'presets');
+            document.getElementById('modalTabIngest').classList.toggle('active', tab === 'ingest');
+            document.getElementById('tabBodyPresets').style.display = tab === 'presets' ? 'flex' : 'none';
+            document.getElementById('tabBodyIngest').style.display = tab === 'ingest' ? 'flex' : 'none';
+        }
 
-            if (tab === 'voice') {
-                const vSelect = document.getElementById('voiceTargetPersonaSelect');
-                if (vSelect && currentPersona) {
-                    vSelect.value = currentPersona.persona_id;
-                }
-                onVoicePersonaChange();
-            }
-
-            // Update main action button text based on active tab
-            const saveBtn = document.getElementById('btnModalSave');
-            if (saveBtn) {
-                if (tab === 'presets') saveBtn.innerText = 'Select Preset';
-                else if (tab === 'custom') saveBtn.innerText = 'Save & Activate';
-                else if (tab === 'chat') saveBtn.innerText = 'Extract & Activate';
-                else if (tab === 'voice') saveBtn.innerText = 'Clone & Activate';
+        function handleFileUpload(e) {
+            if (e.target.files && e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+                document.getElementById('uploadFileLabel').innerText = `Selected: ${selectedFile.name}`;
             }
         }
 
-        function onVoicePersonaChange() {
-            const select = document.getElementById('voiceTargetPersonaSelect');
-            if (!select) return;
-            const targetId = select.value;
-            const target = allPersonas.find(p => p.persona_id === targetId) || currentPersona;
-            const nameInput = document.getElementById('inputVoiceName');
-            if (nameInput && target) {
-                nameInput.placeholder = `e.g. ${target.name}'s Voice`;
+        async function submitIngestion() {
+            if (!selectedFile) {
+                showToast('Please select a file to ingest');
+                return;
             }
-        }
 
-        function handleModalSaveAction() {
-            if (activeModalTab === 'custom') {
-                saveCustomPersona();
-            } else if (activeModalTab === 'chat') {
-                submitWhatsAppIngest();
-            } else if (activeModalTab === 'voice') {
-                submitVoiceUpload();
-            } else {
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            showToast('Ingesting and processing file...');
+            try {
+                const isText = selectedFile.name.endsWith('.txt');
+                const url = isText ? '/api/upload-chat' : '/api/persona/upload-audio';
+                if (!isText) formData.append('speaker_name', currentPersona.name);
+
+                const res = await fetch(url, { method: 'POST', body: formData });
+                const data = await res.json();
+                showToast(data.message || 'Ingestion completed');
                 closeStudioModal();
-            }
-        }
-
-        function selectPresetPersona(presetKey) {
-            let pData = null;
-            if (presetKey === 'grandma') {
-                pData = {
-                    persona_id: "grandma_chittoor",
-                    name: "అమ్మమ్మ (Grandma)",
-                    relationship: "Grandmother",
-                    language: "Telugu",
-                    dialect_region: "Rayalaseema / Chittoor",
-                    tone: "Loving, traditional, maternal Rayalaseema dialect",
-                    frequent_catchphrases: ["నాయనా", "తింటివా", "స్వామి దయతో చల్లగా ఉండాలి", "బా"],
-                    pet_names: ["కన్నా", "తల్లీ", "నాయనా", "బంగారుతల్లీ"],
-                    key_topics: ["ఆరోగ్యం (Health)", "భోజనం (Meals)", "యోగక్షేమాలు (Wellbeing)"],
-                    voice_profile_id: "grandma_chittoor"
-                };
-            } else if (presetKey === 'pappa' || presetKey === 'father') {
-                pData = {
-                    persona_id: "pappa",
-                    name: "పప్పా (Pappa)",
-                    relationship: "Father",
-                    language: "Telugu",
-                    dialect_region: "Telangana / Hanumakonda",
-                    tone: "Warm, supportive, grounded paternal encouragement, Hanumakonda dialect",
-                    frequent_catchphrases: ["మంచిగైతది", "టెన్షన్ తీస్కోకు", "మంచిగున్న", "నడుస్తంది"],
-                    pet_names: ["బిడ్డా", "బేటా", "నానా", "బాబు", "చిన్నా"],
-                    key_topics: ["కెరీర్ & ఉద్యోగం", "ఆరోగ్యం", "కుటుంబ యోగక్షేమాలు"],
-                    voice_profile_id: "pappa"
-                };
-            }
-
-            if (pData) {
-                savePersonaPayload(pData);
-            }
-        }
-
-        async function saveCustomPersona() {
-            const name = document.getElementById('custName').value.trim();
-            if (!name) {
-                showToast("Please enter a name for your persona");
-                return;
-            }
-
-            const catchphrasesStr = document.getElementById('custCatchphrases').value;
-            const petNamesStr = document.getElementById('custPetNames').value;
-
-            const pData = {
-                name: name,
-                relationship: document.getElementById('custRelationship').value,
-                language: document.getElementById('custLanguage').value || "Telugu",
-                dialect_region: document.getElementById('custDialect').value || "Colloquial",
-                tone: document.getElementById('custTone').value || "Warm, authentic",
-                frequent_catchphrases: catchphrasesStr ? catchphrasesStr.split(',').map(s => s.trim()) : [],
-                pet_names: petNamesStr ? petNamesStr.split(',').map(s => s.trim()) : []
-            };
-
-            await savePersonaPayload(pData);
-        }
-
-        async function savePersonaPayload(payload) {
-            try {
-                showToast(`Saving ${payload.name}...`);
-                const res = await fetch('/api/persona/save', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-                if (data.status === 'success') {
-                    closeStudioModal();
-                    await loadPersonas();
-                    if (data.persona) {
-                        setActivePersona(data.persona);
-                    }
-                    showToast(`Activated ${payload.name}!`);
-                }
             } catch (err) {
-                showToast("Failed to save persona.");
+                showToast('Ingestion failed');
             }
         }
 
-        // ---------------- WHATSAPP & MULTI-VOICE FILE INGESTION ----------------
-        function handleWhatsAppFile(event) {
-            const file = event.target.files[0];
-            if (file) {
-                selectedWhatsAppFile = file;
-                document.getElementById('waFileNameLabel').innerText = `Selected: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-                showToast("WhatsApp export loaded! Click 'Extract Personality'.");
-            }
-        }
-
-        function loadSampleGrandmaChat() {
-            document.getElementById('inputTargetSpeaker').value = "అమ్మమ్మ";
-            document.getElementById('waRelationship').value = "Grandmother";
-            document.getElementById('waLanguage').value = "Telugu";
-            document.getElementById('waDialect').value = "Rayalaseema / Chittoor";
-            showToast("Grandma sample loaded! Click 'Extract Personality'.");
-        }
-
-        async function submitWhatsAppIngest() {
-            const speaker = document.getElementById('inputTargetSpeaker').value.trim() || "Pappa";
-            const rel = document.getElementById('waRelationship').value || "Father";
-            const lang = document.getElementById('waLanguage').value || "Telugu";
-            const dialect = document.getElementById('waDialect').value || "Colloquial";
-
-            const btnExtract = document.getElementById('btnExtractChat');
-            const btnSave = document.getElementById('btnModalSave');
-            if (btnExtract) { btnExtract.disabled = true; btnExtract.innerText = 'Analyzing...'; }
-            if (btnSave) { btnSave.disabled = true; btnSave.innerText = 'Extracting...'; }
-
-            const formData = new FormData();
-            formData.append('target_speaker', speaker);
-            formData.append('relationship', rel);
-            formData.append('language', lang);
-            formData.append('dialect', dialect);
-
-            if (selectedWhatsAppFile) {
-                formData.append('file', selectedWhatsAppFile);
-            } else {
-                formData.append('chat_text', `[10/08/24, 08:30:15] ${speaker}: నాన్నా, లేచినావా? టిఫిన్ తింటివా లేదా?
-[10/08/24, 08:33:10] ${speaker}: ఆరోగ్యం జాగ్రత్తగా చూసుకో. సమయానికి భోజనం చెయ్యి.
-[10/08/24, 14:15:22] ${speaker}: పని ఎలా జరుగుతోంది? ఆఫీసులో ఎలాంటి ఇబ్బంది లేదు కదా?
-[10/08/24, 14:19:05] ${speaker}: ధైర్యంగా ఉండు నాయనా, అంతా మంచే జరుగుతుంది.`);
-            }
-
-            showToast("Analyzing messages with Gemini linguistic extractor...");
-            try {
-                const res = await fetch('/api/persona/upload-chat', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await res.json();
-                
-                if (data.status === 'success' && data.persona) {
-                    const p = data.persona;
-                    // Show extracted preview in modal
-                    const resCard = document.getElementById('waExtractionResult');
-                    if (resCard) {
-                        resCard.style.display = 'flex';
-                        const nameEl = document.getElementById('waResName');
-                        if (nameEl) nameEl.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Extracted: ${escapeHtml(p.name)}`;
-                        document.getElementById('waResRel').innerText = p.relationship || rel;
-                        document.getElementById('waResTone').innerText = `Tone: ${p.tone || 'Warm & authentic'}`;
-                        const phrases = (p.frequent_catchphrases || []).slice(0, 4).join(', ');
-                        document.getElementById('waResPhrases').innerText = `Phrases: ${phrases || 'Authentic vocabulary'}`;
-                    }
-
-                    // Reload personas & activate newly extracted person
-                    await loadPersonas();
-                    setActivePersona(p);
-                    closeStudioModal();
-                    
-                    // Welcome bubble in chat
-                    appendMessageBubble('agent', p.name, `నమస్కారం! నేను ${p.name}. నీతో మాట్లాడటం చాలా ఆనందంగా ఉంది.`);
-                    showToast(`Extracted & Activated ${p.name}!`);
-                } else {
-                    showToast(data.detail || "Chat parsing completed.");
-                }
-            } catch (err) {
-                console.error("Chat analysis error:", err);
-                showToast("Chat analysis encountered an error.");
-            } finally {
-                if (btnExtract) { btnExtract.disabled = false; btnExtract.innerText = 'Extract Personality'; }
-                if (btnSave) { btnSave.disabled = false; btnSave.innerText = 'Extract & Activate'; }
-            }
-        }
-
-        // Multi-Audio Upload Engine
-        let selectedVoiceFiles = [];
-
-        function handleVoiceFiles(event) {
-            const incoming = Array.from(event.target.files || []);
-            if (!incoming || incoming.length === 0) return;
-
-            incoming.forEach(f => {
-                if (!selectedVoiceFiles.some(existing => existing.name === f.name && existing.size === f.size)) {
-                    selectedVoiceFiles.push(f);
-                }
-            });
-
-            renderVoiceQueue();
-            showToast(`${incoming.length} audio file(s) added!`);
-        }
-
-        function renderVoiceQueue() {
-            const queueEl = document.getElementById('voiceMultiQueue');
-            const listEl = document.getElementById('voiceQueueList');
-            const statsEl = document.getElementById('voiceQueueStats');
-            const labelEl = document.getElementById('voiceFileNameLabel');
-
-            if (!selectedVoiceFiles || selectedVoiceFiles.length === 0) {
-                if (queueEl) queueEl.style.display = 'none';
-                if (labelEl) labelEl.innerText = "Click to browse or drag & drop one or more audio files";
-                return;
-            }
-
-            if (queueEl) queueEl.style.display = 'flex';
-            
-            const totalBytes = selectedVoiceFiles.reduce((acc, f) => acc + f.size, 0);
-            const totalKB = (totalBytes / 1024).toFixed(1);
-            if (statsEl) statsEl.innerText = `${selectedVoiceFiles.length} clip(s) selected • ${totalKB} KB total`;
-            if (labelEl) labelEl.innerText = `${selectedVoiceFiles.length} file(s) selected (${totalKB} KB)`;
-
-            if (listEl) {
-                listEl.innerHTML = selectedVoiceFiles.map((file, idx) => {
-                    const blobUrl = URL.createObjectURL(file);
-                    const sizeKB = (file.size / 1024).toFixed(1);
-                    return `
-                        <div class="voice-queue-item">
-                            <div class="voice-queue-icon">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 18V5l12-2v13"></path>
-                                    <circle cx="6" cy="18" r="3"></circle>
-                                    <circle cx="18" cy="16" r="3"></circle>
-                                </svg>
-                            </div>
-                            <div class="voice-queue-info">
-                                <div class="voice-queue-name" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</div>
-                                <div class="voice-queue-size">${sizeKB} KB</div>
-                            </div>
-                            <audio class="voice-queue-audio" controls src="${blobUrl}"></audio>
-                            <button type="button" class="voice-queue-remove" onclick="removeVoiceFile(${idx})" title="Remove file">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                                </svg>
-                            </button>
-                        </div>
-                    `;
-                }).join('');
-            }
-        }
-
-        function removeVoiceFile(index) {
-            selectedVoiceFiles.splice(index, 1);
-            renderVoiceQueue();
-        }
-
-        function clearVoiceQueue() {
-            selectedVoiceFiles = [];
-            const input = document.getElementById('fileVoiceInput');
-            if (input) input.value = '';
-            renderVoiceQueue();
-            showToast("Voice queue cleared.");
-        }
-
-        async function submitVoiceUpload() {
-            if (!selectedVoiceFiles || selectedVoiceFiles.length === 0) {
-                showToast("Please select one or more voice audio files first (.wav, .mp3, .m4a).");
-                return;
-            }
-
-            const targetSelect = document.getElementById('voiceTargetPersonaSelect');
-            const targetPersonaId = targetSelect && targetSelect.value ? targetSelect.value : (currentPersona.persona_id || 'grandma_chittoor');
-            const targetPersona = allPersonas.find(p => p.persona_id === targetPersonaId) || currentPersona;
-            const voiceName = document.getElementById('inputVoiceName').value.trim() || `${targetPersona.name}'s Voice`;
-
-            const btnClone = document.getElementById('btnCloneVoice');
-            const btnSave = document.getElementById('btnModalSave');
-            if (btnClone) { btnClone.disabled = true; btnClone.innerText = 'Cloning...'; }
-            if (btnSave) { btnSave.disabled = true; btnSave.innerText = 'Cloning...'; }
-
-            const formData = new FormData();
-            selectedVoiceFiles.forEach(f => {
-                formData.append('files', f);
-            });
-            formData.append('voice_id', targetPersonaId);
-            formData.append('name', voiceName);
-            formData.append('transcript', 'నమస్కారం');
-
-            showToast(`Extracting vocal timbre for ${targetPersona.name}...`);
-            try {
-                const res = await fetch('/api/persona/upload-audio', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await res.json();
-                if (data.status === 'success') {
-                    await loadPersonas();
-                    const freshlyLoaded = allPersonas.find(p => p.persona_id === targetPersonaId) || targetPersona;
-                    setActivePersona(freshlyLoaded);
-                    renderPersonaTabs();
-                    closeStudioModal();
-                    clearVoiceQueue();
-                    showToast(`Voice cloned & attached to ${freshlyLoaded.name}!`);
-                } else {
-                    showToast("Voice upload failed.");
-                }
-            } catch (e) {
-                console.error("Voice upload error:", e);
-                showToast("Voice upload encountered an error.");
-            } finally {
-                if (btnClone) { btnClone.disabled = false; btnClone.innerText = 'Clone & Activate Voice'; }
-                if (btnSave) { btnSave.disabled = false; btnSave.innerText = 'Clone & Activate'; }
-            }
-        }
-
-        // ---------------- UTILS ----------------
         function showToast(msg) {
             const toast = document.getElementById('toastNotification');
             toast.innerText = msg;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3200);
+            setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            if (typeof text !== 'string') {
-                try {
-                    text = text.name || JSON.stringify(text);
-                } catch (e) {
-                    text = String(text);
-                }
-            }
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[m]));
         }
     </script>
 </body>

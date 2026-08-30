@@ -65,7 +65,7 @@
     "reference_audio_path": "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\pappa_multi_973bf8_0.wav",
     "reference_transcript": "నమస్కారం",
     "language_code": "te",
-    "gender": "female",
+    "gender": "male",
     "sample_rate": 24000,
     "reference_audio_paths": [
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\pappa_multi_973bf8_0.wav",
@@ -75,10 +75,10 @@
   "custom_persona": {
     "voice_id": "custom_persona",
     "name": "అమ్మమ్మ's Voice",
-    "reference_audio_path": "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_56f253_0.opus",
-    "reference_transcript": "నమస్కారం",
+    "reference_audio_path": "data/reference_audio/pappa_capcut_mastered_24k.wav",
+    "reference_transcript": "హాయ్ డాడీ హౌ ఆర్ యు విష్ యు మెనీ మోర్ హ్యాపీ రిటర్న్స్ ఆఫ్ ది డే బేటా",
     "language_code": "te",
-    "gender": "female",
+    "gender": "male",
     "sample_rate": 24000,
     "reference_audio_paths": [
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_56f253_0.opus",
@@ -88,15 +88,16 @@
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_39185f_4.opus",
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_57531d_5.opus",
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_9451da_6.opus"
-    ]
+    ],
+    "speaking_rate": 0.8
   },
   "father": {
     "voice_id": "father",
     "name": "Pappa Voice",
-    "reference_audio_path": "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_56f253_0.opus",
-    "reference_transcript": "నమస్కారం",
+    "reference_audio_path": "data/reference_audio/pappa_capcut_mastered_24k.wav",
+    "reference_transcript": "హాయ్ డాడీ హౌ ఆర్ యు విష్ యు మెనీ మోర్ హ్యాపీ రిటర్న్స్ ఆఫ్ ది డే బేటా",
     "language_code": "te",
-    "gender": "female",
+    "gender": "male",
     "sample_rate": 24000,
     "reference_audio_paths": [
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_56f253_0.opus",
@@ -106,15 +107,16 @@
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_39185f_4.opus",
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_57531d_5.opus",
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_9451da_6.opus"
-    ]
+    ],
+    "speaking_rate": 0.8
   },
   "pappa": {
     "voice_id": "pappa",
     "name": "Pappa Voice",
-    "reference_audio_path": "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_56f253_0.opus",
-    "reference_transcript": "నమస్కారం",
+    "reference_audio_path": "data/reference_audio/pappa_capcut_mastered_24k.wav",
+    "reference_transcript": "హాయ్ డాడీ హౌ ఆర్ యు విష్ యు మెనీ మోర్ హ్యాపీ రిటర్న్స్ ఆఫ్ ది డే బేటా",
     "language_code": "te",
-    "gender": "female",
+    "gender": "male",
     "sample_rate": 24000,
     "reference_audio_paths": [
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_56f253_0.opus",
@@ -124,6 +126,7 @@
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_39185f_4.opus",
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_57531d_5.opus",
       "C:\\Users\\msree\\Downloads\\Claude\\bandhu-agentic-cloud\\data\\reference_audio\\custom_persona_9451da_6.opus"
-    ]
+    ],
+    "speaking_rate": 0.8
   }
 }

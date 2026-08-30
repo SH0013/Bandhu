@@ -28,9 +28,11 @@ class VoiceProfile:
 
 
 class VoiceProfileManager:
-    """Manages voice registration and reference audio storage."""
+    """Manages voice registration and reference audio storage with per-persona folder isolation."""
 
     def __init__(self, storage_dir: Path | str | None = None) -> None:
+        self.personas_dir = settings.data_dir / "personas"
+        self.personas_dir.mkdir(parents=True, exist_ok=True)
         self.storage_dir = Path(storage_dir) if storage_dir else settings.data_dir / "reference_audio"
         self.storage_dir.mkdir(parents=True, exist_ok=True)
         self.index_file = self.storage_dir / "voice_profiles_index.json"
@@ -38,56 +40,60 @@ class VoiceProfileManager:
         self._load_index()
 
     def _load_index(self) -> None:
-        """Load registered voice profiles index or register default grandma clips."""
+        """Load registered voice profiles from per-persona folders and legacy index."""
+        # 1. Scan dedicated per-persona folders (e.g. data/personas/pappa/voice_profile.json)
+        if self.personas_dir.exists():
+            for pdir in self.personas_dir.iterdir():
+                if pdir.is_dir():
+                    vprof_file = pdir / "voice_profile.json"
+                    if vprof_file.exists():
+                        try:
+                            vdata = json.loads(vprof_file.read_text(encoding="utf-8"))
+                            vid = vdata.get("voice_id") or pdir.name
+                            ref_path = vdata.get("reference_audio_path", "")
+                            if ref_path and not Path(ref_path).is_absolute():
+                                ref_path = str(settings.project_root / ref_path)
+                                vdata["reference_audio_path"] = ref_path
+                            self.profiles[vid] = VoiceProfile(
+                                voice_id=vid,
+                                name=vdata.get("name", vid),
+                                reference_audio_path=ref_path,
+                                reference_transcript=vdata.get("reference_transcript", ""),
+                                language_code=vdata.get("language_code", "te"),
+                                gender=vdata.get("gender", "male" if "pappa" in vid else "female"),
+                                sample_rate=vdata.get("sample_rate", 24000),
+                            )
+                            # Register alias if applicable
+                            if vid == "pappa":
+                                self.profiles["father"] = self.profiles[vid]
+                            elif vid in ("grandma", "grandma_chittoor"):
+                                self.profiles["grandma"] = self.profiles[vid]
+                                self.profiles["grandma_chittoor"] = self.profiles[vid]
+                        except Exception as exc:
+                            print(f"[Warning] Failed to load voice profile from {vprof_file}: {exc}")
+
+        # 2. Legacy fallback index if exists
         if self.index_file.exists():
             try:
                 data = json.loads(self.index_file.read_text(encoding="utf-8"))
                 for vid, vdata in data.items():
-                    # Resolve relative paths against project root
-                    raw_path = vdata.get("reference_audio_path", "")
-                    if raw_path and not Path(raw_path).is_absolute():
-                        resolved = settings.project_root / raw_path
-                        if resolved.exists():
-                            vdata["reference_audio_path"] = str(resolved)
-                    self.profiles[vid] = VoiceProfile(**vdata)
+                    if vid not in self.profiles:
+                        raw_path = vdata.get("reference_audio_path", "")
+                        if raw_path and not Path(raw_path).is_absolute():
+                            resolved = settings.project_root / raw_path
+                            if resolved.exists():
+                                vdata["reference_audio_path"] = str(resolved)
+                        self.profiles[vid] = VoiceProfile(
+                            voice_id=vid,
+                            name=vdata.get("name", vid),
+                            reference_audio_path=vdata.get("reference_audio_path", ""),
+                            reference_transcript=vdata.get("reference_transcript", ""),
+                            language_code=vdata.get("language_code", "te"),
+                            gender=vdata.get("gender", "female"),
+                            sample_rate=vdata.get("sample_rate", 24000),
+                        )
             except Exception as exc:
                 print(f"[Warning] Failed to read voice index: {exc}")
-
-        # Ensure flagship Telugu Grandma reference clips are registered
-        best_clip = self.storage_dir / "grandma_clip_0024.wav"
-        if not best_clip.exists():
-            best_clip = self.storage_dir / "grandma_clip_0021.wav"
-
-        if "grandma_chittoor" not in self.profiles:
-            self.register_voice(
-                voice_id="grandma_chittoor",
-                name="అమ్మమ్మ (Chittoor Telugu Grandma)",
-                reference_audio_path=str(best_clip),
-                reference_transcript="నేనేం చెయ్యాలనుకోలేదు నేను ఇంట్లో ఇంట్లోనే దిగాల అనుకున్నా",
-                language_code="te",
-                gender="female",
-            )
-
-        # Register alternate reference candidates if present
-        ref_candidates = [
-            ("grandma_chittoor_clip21", "grandma_clip_0021.wav", "ఆ పేరుతో ఇల్లు గడ్డి చేసుకున్నారంటే ఇంకా అంగడంతా యూరిని తినోడేది"),
-            ("grandma_chittoor_clip24", "grandma_clip_0024.wav", "నేనేం చెయ్యాలనుకోలేదు నేను ఇంట్లో ఇంట్లోనే దిగాల అనుకున్నా"),
-            ("grandma_chittoor_clip29", "grandma_clip_0029.wav", "అటనే అనుకుంటాను నాకెందుకు మడితే"),
-            ("grandma_chittoor_clip79", "grandma_clip_0079.wav", "గేమ్ ఉండ విశేష అవు ఉంటాయికి ఇవే విశేష అవు"),
-            ("grandma_chittoor_clip82", "grandma_clip_0082.wav", "గీతకు మర్ది కొడుకు"),
-        ]
-
-        for vid, fname, transcript in ref_candidates:
-            cpath = self.storage_dir / fname
-            if cpath.exists() and vid not in self.profiles:
-                self.register_voice(
-                    voice_id=vid,
-                    name=f"అమ్మమ్మ ({fname})",
-                    reference_audio_path=str(cpath),
-                    reference_transcript=transcript,
-                    language_code="te",
-                    gender="female",
-                )
 
     def _save_index(self) -> None:
         """Persist index to disk."""
@@ -104,7 +110,12 @@ class VoiceProfileManager:
         gender: str = "female",
         reference_audio_paths: list[str] | None = None,
     ) -> VoiceProfile:
-        """Register or update a voice profile with one or more reference audio clips."""
+        """Register or update a voice profile with one or more reference audio clips in a dedicated folder."""
+        # Create persona-specific folder
+        p_folder = self.personas_dir / voice_id
+        p_folder.mkdir(parents=True, exist_ok=True)
+        (p_folder / "reference_audio").mkdir(parents=True, exist_ok=True)
+
         all_paths = list(reference_audio_paths or [])
         if reference_audio_path and reference_audio_path not in all_paths:
             all_paths.insert(0, reference_audio_path)
@@ -119,12 +130,38 @@ class VoiceProfileManager:
             reference_audio_paths=all_paths,
         )
         self.profiles[voice_id] = profile
+
+        # Save per-persona profile
+        (p_folder / "voice_profile.json").write_text(
+            json.dumps(profile.to_dict(), indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+
         self._save_index()
         return profile
 
     def get_voice(self, voice_id: str) -> VoiceProfile | None:
-        """Retrieve voice profile by ID."""
-        return self.profiles.get(voice_id) or self.profiles.get("grandma_chittoor")
+        """Retrieve voice profile by ID with strict persona routing."""
+        vid_lower = (voice_id or "").lower()
+
+        # Direct match
+        if voice_id in self.profiles:
+            return self.profiles[voice_id]
+
+        # Pappa routing
+        if any(w in vid_lower for w in ("pappa", "father", "dad", "పప్పా", "నాన్న")):
+            return self.profiles.get("pappa") or self.profiles.get("father")
+
+        # Grandma routing
+        if any(w in vid_lower for w in ("grandma", "amamma", "అమ్మమ్మ", "grandmother")):
+            return self.profiles.get("grandma_chittoor") or self.profiles.get("grandma")
+
+        # Generic lookup
+        for key, prof in self.profiles.items():
+            if key.lower() == vid_lower or vid_lower in key.lower():
+                return prof
+
+        return None
 
     def list_voices(self) -> list[VoiceProfile]:
         """List all available voice profiles."""

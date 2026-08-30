@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import math
+import tempfile
 from pathlib import Path
 from typing import Literal
 import numpy as np
@@ -42,6 +43,12 @@ class AdaptiveVoiceSynthesizer:
                 self._indicf5_cloner = IndicF5VoiceCloner()
                 self.active_engine = "indicf5_gpu"
                 print(f"[TTS] IndicF5 GPU Zero-Shot Voice Cloner activated (device: {self._indicf5_cloner.device}).")
+                # Pre-warm: load the model into GPU VRAM now so first request is fast
+                try:
+                    self._indicf5_cloner._load_model()
+                    print("[TTS] IndicF5 model pre-warmed into GPU VRAM.")
+                except Exception as warmup_exc:
+                    print(f"[TTS] IndicF5 model pre-warm note: {warmup_exc}")
             else:
                 self._indicf5_cloner = None
                 self.active_engine = "neural_tts"
@@ -55,31 +62,14 @@ class AdaptiveVoiceSynthesizer:
             self.active_engine = "neural_tts"
             print(f"[TTS] IndicF5 init note: {exc}")
 
-        # 2. Initialize Grandma FAISS Timbre Converter
-        try:
-            from bandhu.voice_clone.timbre_converter import GrandmaTimbreConverter
-            candidates = [
-                Path(__file__).resolve().parent.parent.parent.parent / "data",
-                Path(__file__).resolve().parent.parent.parent / "data",
-                Path("/app/data"),
-                Path("./data"),
-            ]
-            idx_path = None
-            prof_path = None
-            for cand in candidates:
-                if (cand / "grandma_voice.index").exists():
-                    idx_path = cand / "grandma_voice.index"
-                    prof_path = cand / "grandma_voice_profile.json"
-                    break
+        self._timbre_converters: dict[str, Any] = {}
 
-            if idx_path and idx_path.exists():
-                self._grandma_timbre_converter = GrandmaTimbreConverter(
-                    index_path=idx_path,
-                    profile_path=prof_path,
-                )
-                print(f"[TTS] Authentic Grandma FAISS Timbre Converter activated from {idx_path}.")
+        # 2. Pre-load available FAISS Timbre Converters
+        try:
+            self.get_timbre_converter("grandma_chittoor", speaker_name="Grandma", gender="female")
+            self.get_timbre_converter("pappa", speaker_name="Pappa", gender="male")
         except Exception as exc:
-            print(f"[TTS] Timbre converter init note: {exc}")
+            print(f"[TTS] Preload timbre converters note: {exc}")
 
         # 3. Probe for Google Cloud TTS if configured
         if settings.tts_mode in ("auto", "gcp_tts"):
@@ -95,6 +85,67 @@ class AdaptiveVoiceSynthesizer:
             self.active_engine = "neural_tts"
             print("[TTS] Neural Indic TTS Engine activated (Real-time Natural Voice Synthesis).")
 
+    def get_timbre_converter(self, voice_id: str, speaker_name: str = "", gender: str = "female") -> Any | None:
+        """Dynamically load or retrieve cached FAISS Timbre Converter for any persona."""
+        if voice_id in self._timbre_converters:
+            return self._timbre_converters[voice_id]
+
+        try:
+            from bandhu.voice_clone.timbre_converter import GrandmaTimbreConverter
+            candidates = [
+                Path(__file__).resolve().parent.parent.parent.parent / "data",
+                Path(__file__).resolve().parent.parent.parent / "data",
+                Path("/app/data"),
+                Path("./data"),
+            ]
+            possible_prefixes = [
+                f"{voice_id}_voice",
+                f"{voice_id}",
+                "grandma_voice" if "grandma" in voice_id or "అమ్మమ్మ" in speaker_name else "",
+                "pappa_voice" if any(w in (voice_id + speaker_name).lower() for w in ("pappa", "father", "dad", "పప్పా")) else "",
+            ]
+
+            for cand in candidates:
+                # Check dedicated persona directory first
+                p_idx = cand / "personas" / voice_id / "voice.index"
+                p_prof = cand / "personas" / voice_id / "voice_profile_features.json"
+                if p_idx.exists():
+                    is_male = "male" in gender or any(w in (voice_id + speaker_name).lower() for w in ("pappa", "father", "dad", "male", "nanna", "తాతయ్య", "మిత్రుడు", "రాహుల్", "బాబు"))
+                    speaker_type = "pappa" if is_male else "grandma"
+                    conv = GrandmaTimbreConverter(
+                        index_path=p_idx,
+                        profile_path=p_prof if p_prof.exists() else None,
+                        speaker_type=speaker_type,
+                    )
+                    self._timbre_converters[voice_id] = conv
+                    print(f"[TTS] Activated FAISS Timbre Converter for '{voice_id}' ({speaker_type}) from {p_idx}.")
+                    return conv
+
+                for prefix in possible_prefixes:
+                    if not prefix:
+                        continue
+                    idx_file = cand / f"{prefix}.index"
+                    prof_file = cand / f"{prefix}_profile.json"
+                    if idx_file.exists():
+                        is_male = "male" in gender or any(w in (voice_id + speaker_name).lower() for w in ("pappa", "father", "dad", "male", "nanna", "తాతయ్య", "మిత్రుడు", "రాహుల్", "బాబు"))
+                        speaker_type = "pappa" if is_male else "grandma"
+                        conv = GrandmaTimbreConverter(
+                            index_path=idx_file,
+                            profile_path=prof_file if prof_file.exists() else None,
+                            speaker_type=speaker_type,
+                        )
+                        self._timbre_converters[voice_id] = conv
+                        print(f"[TTS] Activated FAISS Timbre Converter for '{voice_id}' ({speaker_type}) from {idx_file}.")
+                        return conv
+        except Exception as exc:
+            print(f"[TTS] Timbre converter lookup error for '{voice_id}': {exc}")
+
+        return None
+
+    def register_timbre_converter(self, voice_id: str, converter: Any) -> None:
+        """Register or update an in-memory timbre converter for a persona."""
+        self._timbre_converters[voice_id] = converter
+
     async def synthesize(
         self,
         text: str,
@@ -108,21 +159,25 @@ class AdaptiveVoiceSynthesizer:
         """
         voice_profile = self.voice_manager.get_voice(voice_id)
 
-        # 1. IndicF5 GPU Zero-Shot Cloner (activated when TTS_MODE=indicf5)
-        if getattr(settings, "tts_mode", "auto") == "indicf5" and self._indicf5_cloner is not None:
+        # 1. IndicF5 GPU Zero-Shot Voice Cloner (Highest fidelity, clones directly from reference audio on GPU)
+        has_ref_audio = voice_profile and voice_profile.reference_audio_path and Path(voice_profile.reference_audio_path).exists()
+        if self._indicf5_cloner is not None and has_ref_audio:
             try:
                 import asyncio
                 audio_bytes = await asyncio.wait_for(
                     self._synthesize_indicf5(text, voice_profile, output_file),
-                    timeout=5.0,
+                    timeout=55.0,
                 )
                 if output_file:
                     Path(output_file).write_bytes(audio_bytes)
-                return audio_bytes, f"indicf5_{self._indicf5_cloner.device}"
+                engine_name = "indicf5_gpu" if self._indicf5_cloner.device == "cuda" else "indicf5_cpu"
+                return audio_bytes, engine_name
             except Exception as exc:
-                pass
+                import traceback
+                print(f"[TTS] IndicF5 GPU zero-shot error: {exc}")
+                traceback.print_exc()
 
-        # 2. Real-Time Neural Indic TTS + Authentic FAISS Timbre Converter
+        # 2. Real-Time Neural Indic TTS + Dynamic FAISS Timbre Converter
         try:
             audio_bytes = await self._synthesize_neural_tts(text, voice_profile)
             if output_file:
@@ -139,39 +194,49 @@ class AdaptiveVoiceSynthesizer:
                     Path(output_file).write_bytes(audio_bytes)
                 return audio_bytes, "gcp_neural_tts"
             except Exception as exc:
-                print(f"[Warning] GCP TTS failed ({exc}), falling back to Synthetic.")
+                print(f"[Warning] GCP TTS synthesis failed ({exc}), falling back.")
 
-        # 4. Guaranteed synthetic fallback
-        audio_bytes = self._synthesize_synthetic(text)
+        # 4. Fallback: Edge TTS with base profile
+        fallback_bytes = await self._synthesize_neural_tts(text, voice_profile)
         if output_file:
-            Path(output_file).write_bytes(audio_bytes)
-        return audio_bytes, "synthetic_adaptive"
+            Path(output_file).write_bytes(fallback_bytes)
+        return fallback_bytes, "neural_tts_fallback"
 
     async def _synthesize_indicf5(
-        self, text: str, voice: VoiceProfile | None, output_file: str | Path | None
+        self,
+        text: str,
+        voice: VoiceProfile | None,
+        output_file: str | Path | None = None,
     ) -> bytes:
-        """Synthesize with IndicF5 zero-shot voice cloning on GPU/CPU."""
-        # Resolve reference audio and transcript from voice profile
-        ref_audio: Path | None = None
-        ref_text: str | None = None
+        """Synthesize using IndicF5 Zero-Shot Voice Cloner on GPU."""
+        if self._indicf5_cloner is None:
+            raise RuntimeError("IndicF5 Voice Cloner not available")
 
-        if voice and voice.reference_audio_path:
-            ref_path = Path(voice.reference_audio_path)
-            if ref_path.exists():
-                ref_audio = ref_path
-                ref_text = voice.reference_transcript or None
+        out_path = Path(output_file) if output_file else Path(tempfile.mktemp(suffix=".wav"))
 
-        # Use a temp output path if output_file not given
-        import uuid
-        out_path = Path(output_file) if output_file else (
-            settings.data_dir / "output_audio" / f"indicf5_{uuid.uuid4().hex[:8]}.wav"
-        )
+        ref_audio = None
+        ref_text = None
+        if voice:
+            if voice.reference_audio_path:
+                ref_audio = Path(voice.reference_audio_path)
+            ref_text = voice.reference_transcript or None
+
+        print(f"[TTS] IndicF5 synthesizing: ref_audio={ref_audio}, ref_text_len={len(ref_text) if ref_text else 0}, text_len={len(text)}")
+
+        # Set speaking speed: 0.80 for calm, unhurried, warm paternal / grandmother cadence
+        speaking_speed = 0.80
+        if voice and hasattr(voice, "speaking_rate") and voice.speaking_rate:
+            try:
+                speaking_speed = float(voice.speaking_rate)
+            except Exception:
+                speaking_speed = 0.80
 
         result_path = await self._indicf5_cloner.synthesize(
             text=text,
             output_path=out_path,
             ref_audio=ref_audio,
             ref_text=ref_text,
+            speed=speaking_speed,
         )
 
         return result_path.read_bytes()
@@ -182,12 +247,15 @@ class AdaptiveVoiceSynthesizer:
 
         # Determine best neural voice model based on persona
         lang = voice.language_code if voice else "te"
-        gender = voice.gender if voice else "female"
+        gender = (voice.gender or "female").lower() if voice else "female"
         voice_name = (voice.name or "").lower() if voice else ""
-        is_grandma = "grandma" in voice_name or "అమ్మమ్మ" in voice_name or (voice and voice.voice_id == "grandma_chittoor")
+        voice_id = voice.voice_id if voice else "default"
+        is_grandma = "grandma" in voice_name or "అమ్మమ్మ" in voice_name or voice_id == "grandma_chittoor"
+        is_pappa = any(w in voice_name for w in ("pappa", "father", "dad", "పప్పా", "నాన్న")) or voice_id in ("pappa", "father")
+        is_male = "male" in gender or is_pappa or any(w in voice_name for w in ("friend", "rahul", "nanna", "తాతయ్య", "మిత్రుడు", "రాహుల్", "బాబు"))
 
         # Map to appropriate regional neural voice
-        if "male" in gender or any(w in voice_name for w in ("pappa", "father", "dad", "friend", "rahul", "nanna", "తాతయ్య", "మిత్రుడు", "రాహుల్", "పప్పా", "నాన్న")):
+        if is_male:
             chosen_voice = "te-IN-MohanNeural"
         elif "hi" in lang:
             chosen_voice = "hi-IN-SwaraNeural"
@@ -196,12 +264,15 @@ class AdaptiveVoiceSynthesizer:
         else:
             chosen_voice = "te-IN-ShrutiNeural"
 
-        # Adaptive pitch & speed tuning for authentic maternal resonance
+        # Adaptive pitch & speed tuning for authentic resonance
         pitch = "+0Hz"
         rate = "+0%"
         if is_grandma:
             pitch = "-3Hz"
             rate = "-8%"  # Gentle, calm, deliberate grandmother cadence
+        elif is_pappa or is_male:
+            pitch = "-2Hz"
+            rate = "+0%"  # Natural grounded paternal/male cadence
         elif "friend" in voice_name or "రాహుల్" in voice_name:
             pitch = "+2Hz"
             rate = "+5%"   # Energetic, casual friend cadence
@@ -217,16 +288,17 @@ class AdaptiveVoiceSynthesizer:
 
         raw_audio_bytes = bytes(audio_buffer)
 
-        # Apply Authentic Grandma Timbre Conversion if Grandma persona
-        if is_grandma and self._grandma_timbre_converter:
+        # Look up and apply authentic persona FAISS timbre conversion
+        timbre_conv = self.get_timbre_converter(voice_id, speaker_name=voice_name, gender=gender)
+        if timbre_conv:
             try:
-                converted = self._grandma_timbre_converter.convert_audio_bytes(
+                converted = timbre_conv.convert_audio_bytes(
                     raw_audio_bytes,
                     index_weight=0.85,
                 )
                 return converted
             except Exception as exc:
-                print(f"[Warning] Grandma timbre transfer skipped ({exc}), using raw neural voice.")
+                print(f"[Warning] Timbre transfer for '{voice_id}' skipped ({exc}), using raw neural voice.")
 
         return raw_audio_bytes
 

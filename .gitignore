@@ -29,17 +29,30 @@ htmlcov/
 Thumbs.db
 .DS_Store
 
-# Local data (keep structure, ignore runtime data)
+# Local data & audio artifacts (keep structure, ignore runtime binaries/audios)
 data/bandhu_store.db
-data/output_audio/*.wav
-data/output_audio/*.mp3
-data/grandma_voice.index
-data/grandma_voice_profile.json
+data/output_audio/
+data/audio_output/
+data/test_audio/
+data/training_dataset/
+*.index
+*.wav
+*.mp3
+*.opus
+*.m4a
+*.ogg
+!data/reference_audio/
 data/dataset_index.json
 data/metadata.csv
-data/training_dataset/
-data/reference_audio/*.wav
-data/test_audio/
+
+# Chat text exports and persona audio (protect personal data & binary weights)
+data/**/chat_exports/
+data/**/reference_audio/
+data/**/*.txt
+!data/sample_chats/*.txt
+data/personas/*.txt
+data/personas/**/chat_exports/
+data/personas/**/reference_audio/
 
 # Claude/Anthropic local config
 .claude/
