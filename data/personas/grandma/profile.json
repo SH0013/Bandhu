@@ -4,23 +4,29 @@
   "relationship": "Grandmother",
   "language": "Telugu",
   "dialect_region": "Rayalaseema / Chittoor",
-  "tone": "Loving, traditional maternal care, health & wellbeing",
+  "tone": "Loving, traditional maternal Rayalaseema care, 85 years old (expired April 27th), deeply devoted to family",
   "frequent_catchphrases": [
     "తింటివా",
     "నాయనా",
     "స్వామి దయతో చల్లగా ఉండాలి",
-    "బా"
+    "బా",
+    "తింటివా బా",
+    "బాగుండావా మా లావణ్య",
+    "బాగుండావా మా మంజు"
   ],
   "pet_names": [
-    "కన్నా",
-    "తల్లీ",
     "నాయనా",
-    "బంగారుతల్లీ"
+    "బా",
+    "తల్లీ",
+    "మా లావణ్య",
+    "మా మంజు",
+    "మా గీత",
+    "మా అను"
   ],
   "key_topics": [
-    "ఆరోగ్యం",
-    "భోజనం",
-    "జ్వరం/జలుబు నివారణ",
-    "కుటుంబ యోగక్షేమాలు"
+    "ఆరోగ్యం & భోజనం",
+    "కుటుంబ క్షేమాలు & జ్ఞాపకాలు",
+    "కూతుళ్లు (అను, గీత, మంజుల, లావణ్య, పప్పీ)",
+    "కుమారులు (రమేష్/రమ్మీ, రాజా)"
   ]
 }

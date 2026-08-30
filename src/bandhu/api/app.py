@@ -73,9 +73,9 @@ def _seed_personas() -> None:
         language="Telugu",
         dialect_region="Rayalaseema / Chittoor",
         tone="Loving, traditional, maternal Rayalaseema dialect",
-        frequent_catchphrases=["నాయనా", "తింటివా", "స్వామి దయతో చల్లగా ఉండాలి", "బా"],
-        pet_names=["కన్నా", "తల్లీ", "నాయనా", "బంగారుతల్లీ"],
-        key_topics=["ఆరోగ్యం (Health)", "భోజనం (Meals)", "యోగక్షేమాలు (Wellbeing)"],
+        frequent_catchphrases=["నాయనా", "తింటివా", "స్వామి దయతో చల్లగా ఉండాలి", "బా", "తింటివా బా", "బాగుండావా మా లావణ్య", "బాగుండావా మా మంజు"],
+        pet_names=["నాయనా", "బా", "తల్లీ", "మా లావణ్య", "మా మంజు", "మా గీత", "మా అను"],
+        key_topics=["ఆరోగ్యం (Health)", "భోజనం (Meals)", "యోగక్షేమాలు (Wellbeing)", "కుటుంబ జ్ఞాపకాలు"],
         voice_profile_id="grandma_chittoor",
         custom_system_prompt=CHITTOOR_GRANDMA_SYSTEM_PROMPT,
     )
@@ -205,7 +205,7 @@ async def chat_endpoint(request: ChatRequest) -> dict[str, Any]:
     except Exception as top_exc:
         # Fail gracefully with fallback response
         fallback_reply = (
-            f"సరే {request.speaker_name or 'కన్నా'}, నీ మాటలు విన్నాను. "
+            f"సరే {request.speaker_name or 'నాయనా'}, నీ మాటలు విన్నాను. "
             f"మన ఇంట్లో విశేషాలు చెప్పు నాయనా."
         )
         return {
@@ -265,22 +265,20 @@ async def list_personas_endpoint() -> dict[str, Any]:
     """List registered personas with Grandma (Rayalaseema) and Pappa (Hanumakonda) pre-seeded."""
     from bandhu.agent.prompts import CHITTOOR_GRANDMA_SYSTEM_PROMPT, HANUMAKONDA_PAPPA_SYSTEM_PROMPT
 
-    grandma = memory_store.get_persona("grandma_chittoor")
-    if not grandma:
-        grandma = PersonaProfile(
-            persona_id="grandma_chittoor",
-            name="అమ్మమ్మ (Grandma)",
-            relationship="Grandmother",
-            language="Telugu",
-            dialect_region="Rayalaseema / Chittoor",
-            tone="Loving, traditional, maternal Rayalaseema dialect",
-            frequent_catchphrases=["నాయనా", "తింటివా", "స్వామి దయతో చల్లగా ఉండాలి", "బా"],
-            pet_names=["కన్నా", "తల్లీ", "నాయనా", "బంగారుతల్లీ"],
-            key_topics=["ఆరోగ్యం (Health)", "భోజనం (Meals)", "యోగక్షేమాలు (Wellbeing)"],
-            voice_profile_id="grandma_chittoor",
-            custom_system_prompt=CHITTOOR_GRANDMA_SYSTEM_PROMPT,
-        )
-        memory_store.save_persona(grandma)
+    grandma = PersonaProfile(
+        persona_id="grandma_chittoor",
+        name="అమ్మమ్మ (Grandma)",
+        relationship="Grandmother",
+        language="Telugu",
+        dialect_region="Rayalaseema / Chittoor",
+        tone="Loving, traditional, maternal Rayalaseema dialect",
+        frequent_catchphrases=["నాయనా", "తింటివా", "స్వామి దయతో చల్లగా ఉండాలి", "బా", "తింటివా బా", "బాగుండావా మా లావణ్య", "బాగుండావా మా మంజు"],
+        pet_names=["నాయనా", "బా", "తల్లీ", "మా లావణ్య", "మా మంజు", "మా గీత", "మా అను"],
+        key_topics=["ఆరోగ్యం (Health)", "భోజనం (Meals)", "యోగక్షేమాలు (Wellbeing)", "కుటుంబ జ్ఞాపకాలు"],
+        voice_profile_id="grandma_chittoor",
+        custom_system_prompt=CHITTOOR_GRANDMA_SYSTEM_PROMPT,
+    )
+    memory_store.save_persona(grandma)
 
     pappa = memory_store.get_persona("pappa")
     # Always update Pappa with the authentic chat-derived prompt & pet names
@@ -466,7 +464,7 @@ async def proactive_checkin_cron() -> dict[str, Any]:
     print("[Cron] Background Proactive Check-in Triggered...")
     active_persona = gemini_agent.persona
     # Execute health inquiry turn
-    checkin_prompt = "కన్నా ఈరోజు నీ ఒంట్లో ఎలా ఉంది? వేళకు భోజనం చేసి మాత్రలు వేసుకుంటివా లేదా?"
+    checkin_prompt = "నాయనా ఈరోజు నీ ఒంట్లో ఎలా ఉంది? వేళకు భోజనం చేసి మాత్రలు వేసుకుంటివా లేదా బా?"
     res = await gemini_agent.reply(checkin_prompt, speaker_name="System Scheduler")
 
     return {
