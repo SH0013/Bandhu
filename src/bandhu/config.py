@@ -34,7 +34,7 @@ class AppSettings:
         )
     )
     gemini_model: str = field(
-        default_factory=lambda: os.getenv("GEMINI_MODEL", "gemini-3.7-flash")
+        default_factory=lambda: os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
     )
     gemini_fallback_model: str = field(
         default_factory=lambda: os.getenv("GEMINI_FALLBACK_MODEL", "gemini-3.5-flash-lite")
@@ -60,7 +60,27 @@ class AppSettings:
         default_factory=lambda: os.getenv("USE_SQLITE_FALLBACK", "true").lower() == "true"
     )
 
-    # WhatsApp & Twilio Integration
+    # WhatsApp & Caregiver Notification
+    # ─────────────────────────────────────────────────────────────────
+    # Three free / freemium channels, in order of preference:
+    #   1. Telegram Bot API       — completely free, 30 msg/sec
+    #   2. Meta WhatsApp Cloud    — 1,000 convos/month free, then ~$0.0042/conv
+    #   3. Google Cloud Tasks     — durable delay queue (not a notification channel)
+    #
+    # Twilio is intentionally NOT supported — it costs ~$0.012/msg + phone rental,
+    # which is unsustainable for a personal companion product. If you need Twilio,
+    # you can re-add it as a fourth channel; but for the hackathon, the three above
+    # cover the demo, the judges, and realistic personal use at zero cost.
+
+    # Telegram (PRIMARY, RECOMMENDED)
+    telegram_bot_token: str = field(
+        default_factory=lambda: os.getenv("TELEGRAM_BOT_TOKEN", "")
+    )
+    caregiver_telegram_chat_id: str = field(
+        default_factory=lambda: os.getenv("CAREGIVER_TELEGRAM_CHAT_ID", "")
+    )
+
+    # Meta WhatsApp Cloud API (free tier, no Twilio middleman)
     whatsapp_phone_number_id: str = field(
         default_factory=lambda: os.getenv("WHATSAPP_PHONE_NUMBER_ID", "")
     )
@@ -70,6 +90,17 @@ class AppSettings:
     whatsapp_verify_token: str = field(
         default_factory=lambda: os.getenv("WHATSAPP_VERIFY_TOKEN", "bandhu_secure_verify_token_2026")
     )
+
+    # Caregiver phone (used by WhatsApp Cloud + SMS fallback)
+    caregiver_phone_number: str = field(
+        default_factory=lambda: os.getenv("CAREGIVER_PHONE_NUMBER", "+91-XXXX-XXXXXX")
+    )
+    caregiver_email: str = field(
+        default_factory=lambda: os.getenv("CAREGIVER_EMAIL", "caregiver@bandhu.local")
+    )
+
+    # Legacy Twilio config (kept for backward compatibility, but NOT recommended).
+    # Leaving these blank disables the Twilio path entirely.
     twilio_account_sid: str = field(
         default_factory=lambda: os.getenv("TWILIO_ACCOUNT_SID", "")
     )
@@ -77,15 +108,7 @@ class AppSettings:
         default_factory=lambda: os.getenv("TWILIO_AUTH_TOKEN", "")
     )
     twilio_whatsapp_number: str = field(
-        default_factory=lambda: os.getenv("TWILIO_WHATSAPP_NUMBER", "whatsapp:+14155238886")
-    )
-
-    # Caregiver Emergency Notification
-    caregiver_phone_number: str = field(
-        default_factory=lambda: os.getenv("CAREGIVER_PHONE_NUMBER", "+919876543210")
-    )
-    caregiver_email: str = field(
-        default_factory=lambda: os.getenv("CAREGIVER_EMAIL", "caregiver@bandhu.local")
+        default_factory=lambda: os.getenv("TWILIO_WHATSAPP_NUMBER", "")
     )
 
     # Audio & TTS Settings

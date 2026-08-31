@@ -382,7 +382,7 @@ class IndicF5VoiceCloner:
         output_path: Path,
         ref_audio: Path | None = None,
         ref_text: str | None = None,
-        speed: float | None = 0.80,
+        speed: float | None = 1.0,
     ) -> Path:
         """Blocking IndicF5 synthesis with adjustable pacing."""
         if not text or not text.strip():
@@ -421,7 +421,7 @@ class IndicF5VoiceCloner:
         output_path: Path,
         ref_audio: Path | None = None,
         ref_text: str | None = None,
-        speed: float | None = 0.80,
+        speed: float | None = 1.0,
     ) -> Path:
         """Synthesize Telugu speech in the target speaker's voice with IndicF5.
 

@@ -6,7 +6,7 @@ import io
 import math
 import tempfile
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 import numpy as np
 
 from bandhu.audio.processor import AudioProcessor
@@ -35,20 +35,14 @@ class AdaptiveVoiceSynthesizer:
 
     def _initialize_engines(self) -> None:
         """Probe for IndicF5 GPU, Neural TTS, Google Cloud TTS, and Grandma Timbre Converter."""
-        # 1. Try to initialize IndicF5 GPU zero-shot cloner (best quality)
+        # 1. Try to initialize IndicF5 zero-shot cloner (works on CUDA GPU & CPU)
         try:
             from bandhu.audio.indicf5_cloner import IndicF5VoiceCloner, cuda_is_usable
 
-            if cuda_is_usable():
-                self._indicf5_cloner = IndicF5VoiceCloner()
-                self.active_engine = "indicf5_gpu"
-                print(f"[TTS] IndicF5 GPU Zero-Shot Voice Cloner activated (device: {self._indicf5_cloner.device}).")
-                # IndicF5 is ready on GPU; model will load on first zero-shot inference
-                pass
-            else:
-                self._indicf5_cloner = None
-                self.active_engine = "neural_tts"
-                print("[TTS] IndicF5 GPU cloner disabled on CPU. High-speed Real-Time Neural Indic Engine active.")
+            dev = "cuda" if cuda_is_usable() else "cpu"
+            self._indicf5_cloner = IndicF5VoiceCloner(device=dev)
+            self.active_engine = f"indicf5_{dev}"
+            print(f"[TTS] IndicF5 Zero-Shot Voice Cloner activated (device: {dev}).")
         except ImportError as exc:
             self._indicf5_cloner = None
             self.active_engine = "neural_tts"
@@ -221,13 +215,13 @@ class AdaptiveVoiceSynthesizer:
 
         print(f"[TTS] IndicF5 synthesizing: ref_audio={ref_audio}, ref_text_len={len(ref_text) if ref_text else 0}, text_len={len(text)}")
 
-        # Set speaking speed: 0.80 for calm, unhurried, warm paternal / grandmother cadence
-        speaking_speed = 0.80
+        # Set speaking speed: 1.0 for calm, unhurried, warm paternal / grandmother cadence
+        speaking_speed = 1.0
         if voice and hasattr(voice, "speaking_rate") and voice.speaking_rate:
             try:
                 speaking_speed = float(voice.speaking_rate)
             except Exception:
-                speaking_speed = 0.80
+                speaking_speed = 1.0
 
         result_path = await self._indicf5_cloner.synthesize(
             text=text,

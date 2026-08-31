@@ -59,3 +59,18 @@ data/personas/**/reference_audio/
 
 # Byte-compiled
 *.pyc
+
+# Local Agents & Scratchpads
+.agents/
+.claude-flow/
+.swarm/
+.mcp.json
+PRIVATE_DO_NOT_PUSH.md
+CLAUDE.md
+DEVPOST_REVIEW_REPORT.md
+DEVPOST_FINAL_SUBMISSION_REPORT.md
+_*.py
+_*.ps1
+*.bat
+verify.ps1
+verify_changes.py

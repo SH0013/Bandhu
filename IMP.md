@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Bandhu is an agentic, multi-modal Telugu conversational AI platform built on the official Google GenAI SDK (gemini-3.5-flash-lite & gemini-3.7-flash), real-time neural speech synthesis, and zero-shot voice timbre cloning. It preserves authentic familial relationships, regional nuances, and exact acoustic identities.
+Bandhu is an agentic, multi-modal Telugu conversational AI platform built on the official Google GenAI SDK (gemini-3.7-flash), real-time neural speech synthesis, and zero-shot voice timbre cloning. It preserves authentic familial relationships, regional nuances, and exact acoustic identities.
 
 ---
 
@@ -79,7 +79,7 @@ Bandhu is an agentic, multi-modal Telugu conversational AI platform built on the
   - Replaced bulky tabs with an asymmetric, crisp Bento switcher (`1px solid #EAEAEA` borders, 8px radii).
   - Streamlined the Persona Studio modal into 2 high-utility tabs: **Loved One Profiles** & **Direct WhatsApp/Voice Ingest**.
   - Document-style chat stream with clean inline audio players and speed toggles (`0.8x`, `1.0x`, `1.25x`).
-- **Test Suite**: Verified with pytest — **26/26 tests passing (100%)**.
+- **Test Suite**: Verified with pytest — **28/28 tests passing (100%)**.
 
 ---
 
@@ -110,9 +110,9 @@ bandhu-agentic-cloud/
 │       └── timbre_converter.py # Spectral envelope shaping, EQ & pitch transfer
 ├── data/
 │   ├── grandma_voice.index     # Grandma FAISS timbre index (24,177 vectors)
-│   ├── pappa_voice.index       # Pappa FAISS timbre index (9,911 vectors)
+│   ├── pappa_voice.index       # Pappa FAISS timbre index (1,742 vectors)
 │   └── reference_audio/        # Reference audio recordings (.wav / .opus)
-└── tests/                      # Pytest comprehensive test suite (26 passing tests)
+└── tests/                      # Pytest comprehensive test suite (28 passing tests)
 `
 
 ---

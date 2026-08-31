@@ -24,7 +24,13 @@ faiss-cpu>=1.8.0
 torch>=2.2.0
 torchaudio>=2.2.0
 transformers>=4.40.0
+huggingface-hub>=1.5.0
 safetensors>=0.4.0
+vocos>=0.1.0
+jieba>=0.42.1
+torchdiffeq>=0.2.3
+x-transformers>=1.30.0
+ema-pytorch>=0.4.0
 
 # WhatsApp Integration (optional, used for caregiver alerts)
 twilio>=9.0.0

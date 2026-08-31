@@ -5,8 +5,13 @@ from __future__ import annotations
 import asyncio
 import io
 import json
+import logging
+import os
 import sys
 import uuid
+
+import httpx
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +22,14 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from bandhu.agent.gemini_agent import BandhuGeminiAgent
+from bandhu.api.chat_channels import (
+    OutboundMessage,
+    maybe_handle_command,
+    parse_telegram_update,
+    parse_twilio_form,
+    parse_whatsapp_payload,
+    send_message,
+)
 from bandhu.audio.stt import SpeechRecognizer
 from bandhu.audio.tts import AdaptiveVoiceSynthesizer
 from bandhu.audio.voice_manager import VoiceProfileManager
@@ -73,8 +86,8 @@ def _seed_personas() -> None:
         language="Telugu",
         dialect_region="Rayalaseema / Chittoor",
         tone="Loving, traditional, maternal Rayalaseema dialect",
-        frequent_catchphrases=["నాయనా", "తింటివా", "స్వామి దయతో చల్లగా ఉండాలి", "బా", "తింటివా బా", "బాగుండావా మా లావణ్య", "బాగుండావా మా లాస్య", "బాగుండావా మా రూప", "బాగుండావా మా మంజు"],
-        pet_names=["నాయనా", "బా", "తల్లీ", "మా లావణ్య", "మా లాస్య", "మా రూప", "మా మంజు", "మా గీత", "మా అను"],
+        frequent_catchphrases=["నాయనా", "తింటివా", "స్వామి దయతో చల్లగా ఉండాలి", "బాగుండావా మా Demo Lakshmi", "బాగుండావా మా Demo Priya", "బాగుండావా మా Demo Anjali", "బాగుండావా మా Demo Sita"],
+        pet_names=["నాయనా", "తల్లీ", "మా Demo Lakshmi", "మా Demo Priya", "మా Demo Anjali", "మా Demo Sita", "మా Demo Radha", "మా Demo Devi"],
         key_topics=["ఆరోగ్యం (Health)", "భోజనం (Meals)", "యోగక్షేమాలు (Wellbeing)", "కుటుంబ జ్ఞాపకాలు", "కూతుళ్లు & మనవరాళ్లు"],
         voice_profile_id="grandma_chittoor",
         custom_system_prompt=CHITTOOR_GRANDMA_SYSTEM_PROMPT,
@@ -201,6 +214,7 @@ async def chat_endpoint(request: ChatRequest) -> dict[str, Any]:
             "persona_id": agent_res.persona_id,
             "persona_name": gemini_agent.persona.name,
             "model": agent_res.model,
+            "thought_stream": agent_res.thought_stream,
         }
     except Exception as top_exc:
         # Fail gracefully with fallback response
@@ -215,6 +229,7 @@ async def chat_endpoint(request: ChatRequest) -> dict[str, Any]:
             "persona_id": request.persona_id,
             "persona_name": gemini_agent.persona.name,
             "model": "fallback",
+            "thought_stream": None,
         }
 
 
@@ -272,8 +287,8 @@ async def list_personas_endpoint() -> dict[str, Any]:
         language="Telugu",
         dialect_region="Rayalaseema / Chittoor",
         tone="Loving, traditional, maternal Rayalaseema dialect",
-        frequent_catchphrases=["నాయనా", "తింటివా", "స్వామి దయతో చల్లగా ఉండాలి", "బా", "తింటివా బా", "బాగుండావా మా లావణ్య", "బాగుండావా మా లాస్య", "బాగుండావా మా రూప", "బాగుండావా మా మంజు"],
-        pet_names=["నాయనా", "బా", "తల్లీ", "మా లావణ్య", "మా లాస్య", "మా రూప", "మా మంజు", "మా గీత", "మా అను"],
+        frequent_catchphrases=["నాయనా", "తింటివా", "స్వామి దయతో చల్లగా ఉండాలి", "బాగుండావా మా Demo Lakshmi", "బాగుండావా మా Demo Priya", "బాగుండావా మా Demo Anjali", "బాగుండావా మా Demo Sita"],
+        pet_names=["నాయనా", "తల్లీ", "మా Demo Lakshmi", "మా Demo Priya", "మా Demo Anjali", "మా Demo Sita", "మా Demo Radha", "మా Demo Devi"],
         key_topics=["ఆరోగ్యం (Health)", "భోజనం (Meals)", "యోగక్షేమాలు (Wellbeing)", "కుటుంబ జ్ఞాపకాలు", "కూతుళ్లు & మనవరాళ్లు"],
         voice_profile_id="grandma_chittoor",
         custom_system_prompt=CHITTOOR_GRANDMA_SYSTEM_PROMPT,
@@ -475,6 +490,77 @@ async def proactive_checkin_cron() -> dict[str, Any]:
     }
 
 
+# Hardcoded system trigger for the daily Cloud Scheduler job. Intentionally not
+# user-configurable: this endpoint accepts no message body.
+SCHEDULED_CHECKIN_TRIGGER = "proactive morning check-in"
+# Accepted persona keys -> seeded persona_id in the MemoryStore
+SCHEDULED_CHECKIN_PERSONAS = {
+    "pappa": "pappa",
+    "grandma": "grandma_chittoor",
+}
+
+
+@app.post("/internal/scheduled-checkin")
+async def scheduled_checkin(persona: str = "pappa") -> dict[str, Any]:
+    """Agent-initiated daily check-in fired by Cloud Scheduler (no user request, no message body)."""
+    if persona not in SCHEDULED_CHECKIN_PERSONAS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"persona must be one of {sorted(SCHEDULED_CHECKIN_PERSONAS)}",
+        )
+    resolved_id = SCHEDULED_CHECKIN_PERSONAS[persona]
+
+    triggered_at = datetime.now(timezone.utc)
+    print(
+        f"[SCHEDULED-CHECKIN] {triggered_at.isoformat()} persona={resolved_id} "
+        f"trigger='{SCHEDULED_CHECKIN_TRIGGER}' initiator=cloud-scheduler "
+        f"user_request=none request_body=none",
+        flush=True,
+    )
+
+    previous_persona = gemini_agent.persona
+    target_persona = memory_store.get_persona(resolved_id) or previous_persona
+    if target_persona.persona_id != previous_persona.persona_id:
+        gemini_agent.set_persona(target_persona)
+
+    try:
+        res = await gemini_agent.reply(
+            SCHEDULED_CHECKIN_TRIGGER,
+            speaker_name="System Scheduler",
+        )
+    finally:
+        if target_persona.persona_id != previous_persona.persona_id:
+            gemini_agent.set_persona(previous_persona)
+
+    record = memory_store.store_memory(
+        persona_id=target_persona.persona_id,
+        category="proactive_checkin",
+        topic=f"Scheduled check-in {triggered_at.date().isoformat()}",
+        details=res.reply_text,
+        importance=3,
+    )
+
+    completed_at = datetime.now(timezone.utc)
+    print(
+        f"[SCHEDULED-CHECKIN] {completed_at.isoformat()} persona={target_persona.persona_id} "
+        f"memory_id={record.id} stored_in=bandhu_memories "
+        f"initiator=cloud-scheduler user_request=none",
+        flush=True,
+    )
+
+    return {
+        "status": "executed",
+        "initiator": "cloud-scheduler",
+        "user_initiated": False,
+        "trigger": SCHEDULED_CHECKIN_TRIGGER,
+        "persona_id": target_persona.persona_id,
+        "triggered_at": triggered_at.isoformat(),
+        "reply_text": res.reply_text,
+        "memory_id": record.id,
+        "tools_executed": res.tools_executed,
+    }
+
+
 @app.post("/api/webhook/dispatch-caregiver")
 async def dispatch_caregiver_alert(request: Request) -> dict[str, Any]:
     """Receive and process caregiver emergency alert dispatched via Cloud Tasks."""
@@ -513,7 +599,16 @@ async def dispatch_caregiver_alert(request: Request) -> dict[str, Any]:
 
 @app.api_route("/api/webhook/whatsapp", methods=["GET", "POST"])
 async def whatsapp_webhook(request: Request) -> Response:
-    """WhatsApp incoming webhook handler supporting Meta Cloud API and Twilio."""
+    """WhatsApp incoming webhook handler supporting Meta Cloud API and Twilio.
+
+    GET:  Meta webhook verification handshake.
+    POST: Receive a message, run it through the agent, and reply on the
+          same channel.
+
+    For Meta Cloud API, the reply is sent via an async POST to the
+    Graph API (see `send_whatsapp_cloud_message` in chat_channels.py).
+    For Twilio, the reply is returned as TwiML XML (legacy).
+    """
     # 1. Meta Webhook Verification (GET)
     if request.method == "GET":
         mode = request.query_params.get("hub.mode")
@@ -527,49 +622,240 @@ async def whatsapp_webhook(request: Request) -> Response:
     body_bytes = await request.body()
     body_str = body_bytes.decode("utf-8", errors="replace")
 
-    user_text = ""
-    speaker = "WhatsApp User"
-
-    # Check if Twilio Form format
-    if "Body=" in body_str:
-        import urllib.parse
-        form_data = urllib.parse.parse_qs(body_str)
-        user_text = form_data.get("Body", [""])[0]
-        speaker = form_data.get("From", ["WhatsApp User"])[0]
+    # Detect Twilio form-encoded vs Meta JSON
+    is_twilio = "Body=" in body_str and body_str.lstrip().startswith("Body=")
+    inbound_messages: list = []
+    if is_twilio:
+        m = parse_twilio_form(body_str)
+        if m:
+            inbound_messages.append(m)
     else:
-        # Meta JSON format
         try:
             payload = json.loads(body_str)
-            entries = payload.get("entry", [])
-            if entries:
-                changes = entries[0].get("changes", [])
-                if changes:
-                    messages = changes[0].get("value", {}).get("messages", [])
-                    if messages:
-                        msg = messages[0]
-                        user_text = msg.get("text", {}).get("body", "")
+            inbound_messages = parse_whatsapp_payload(payload)
         except Exception:
-            user_text = body_str
+            # Fallback: treat the whole body as the user text
+            inbound_messages = []  # ignore; we won't synthesize a message
 
-    if not user_text:
-        user_text = "అమ్మమ్మ ఎలా ఉన్నారు?"
+    if not inbound_messages:
+        # Acknowledge with 200 so Meta doesn't retry, but log it
+        return Response(content="no text message", media_type="text/plain", status_code=200)
 
-    # Execute Agent reply
-    agent_res = await gemini_agent.reply(user_text, speaker_name=speaker)
+    # Process each message; collect TwiML for Twilio, async-send for Meta
+    twiml_responses: list[str] = []
+    for msg in inbound_messages:
+        reply_text = await _run_inbound(msg)
+        if is_twilio:
+            # Escape user-content into TwiML safely
+            safe = (
+                reply_text.replace("&", "&amp;")
+                           .replace("<", "&lt;")
+                           .replace(">", "&gt;")
+            )
+            twiml_responses.append(
+                f"<Message><Body>{safe}</Body></Message>"
+            )
+        else:
+            # Meta Cloud API: send reply via the Graph API
+            await send_message(OutboundMessage(
+                channel="whatsapp",
+                recipient=msg.user_id,
+                text=reply_text,
+            ))
 
-    # Synthesize Audio
-    audio_id = f"wa_voice_{uuid.uuid4().hex[:8]}.wav"
-    out_path = audio_output_dir / audio_id
-    await voice_synthesizer.synthesize(text=agent_res.reply_text, output_file=out_path)
+    if is_twilio:
+        twiml = (
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            f"<Response>{''.join(twiml_responses)}</Response>"
+        )
+        return Response(content=twiml, media_type="application/xml")
 
-    # Return Twilio TwiML / JSON
-    twiml_response = f"""<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-    <Message>
-        <Body>{agent_res.reply_text}</Body>
-    </Message>
-</Response>"""
-    return Response(content=twiml_response, media_type="application/xml")
+    # Meta path: 200 OK with empty body (Meta doesn't read it)
+    return Response(content="ok", media_type="text/plain", status_code=200)
+
+
+@app.get("/api/telegram/bot-info")
+async def telegram_bot_info() -> dict[str, Any]:
+    """Return the bot's username (if configured) so the UI can link to it."""
+    if not settings.telegram_bot_token:
+        return {"ok": False, "error": "TELEGRAM_BOT_TOKEN not configured"}
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            resp = await client.get(
+                f"https://api.telegram.org/bot{settings.telegram_bot_token}/getMe"
+            )
+        if resp.status_code == 200:
+            data = resp.json()
+            if data.get("ok"):
+                result = data.get("result", {})
+                return {"ok": True, "username": result.get("username", ""), "first_name": result.get("first_name", "")}
+        return {"ok": False, "error": "telegram_api_error"}
+    except Exception as exc:
+        return {"ok": False, "error": str(exc)}
+
+
+# ────────────────────────────────────────────────────────────────────
+# Telegram bot webhook
+# ────────────────────────────────────────────────────────────────────
+
+@app.post("/api/webhook/telegram")
+async def telegram_webhook(request: Request) -> dict[str, Any]:
+    """Telegram Bot API webhook with voice note dispatch, persona tracking, and button menu."""
+    bot_token = settings.telegram_bot_token or os.getenv("TELEGRAM_BOT_TOKEN", "")
+    if not bot_token:
+        return {"ok": False, "error": "TELEGRAM_BOT_TOKEN not configured"}
+
+    try:
+        payload = await request.json()
+    except Exception:
+        return {"ok": False, "error": "invalid JSON body"}
+
+    msg = parse_telegram_update(payload)
+    if msg is None:
+        return {"ok": True, "ignored": True}
+
+    from bandhu.api.chat_channels import (
+        download_telegram_file,
+        get_user_session,
+        maybe_handle_command,
+        send_telegram_chat_action,
+        send_telegram_message,
+        send_telegram_voice,
+    )
+
+    session = get_user_session(msg.user_id)
+    cmd_reply = maybe_handle_command(msg.text, gemini_agent, user_id=msg.user_id)
+    if cmd_reply is not None:
+        await send_telegram_message(msg.user_id, cmd_reply)
+        return {"ok": True, "channel": "telegram", "command": True}
+
+    # Ensure agent is set to this user's active persona
+    p_id = session.get("persona_id", "grandma_chittoor")
+    profile = memory_store.get_persona(p_id)
+    if profile:
+        gemini_agent.set_persona(profile)
+
+    # 1. Download inbound voice memo if present
+    inbound_audio_bytes = None
+    if msg.voice_file_id:
+        await send_telegram_chat_action(msg.user_id, "record_voice")
+        inbound_audio_bytes = await download_telegram_file(msg.voice_file_id)
+
+    # 2. Execute Conversational Turn with Gemini (multimodal voice reasoning enabled)
+    agent_res = await gemini_agent.reply(
+        msg.text,
+        speaker_name=msg.user_name or "Family Member",
+        audio_bytes=inbound_audio_bytes,
+        audio_mime_type=msg.voice_mime_type or "audio/ogg",
+    )
+    reply_text = agent_res.reply_text or "…"
+
+    # 3. Formatted Persona Header Badge
+    p_label = "👵 అమ్మమ్మ (Grandma · Chittoor)" if p_id == "grandma_chittoor" else "👨 పప్పా (Pappa · Telangana)"
+    mode = session.get("output_mode", "combined")
+    formatted_text = f"{p_label}\n────────────────────\n{reply_text}"
+
+    # 4. Audio Voice Note Synthesis & Dispatch (if user spoke with voice OR mode is combined/voice_only)
+    if msg.voice_file_id or mode in ("combined", "voice_only"):
+        try:
+            await send_telegram_chat_action(msg.user_id, "record_voice")
+            v_id = profile.voice_profile_id if profile else "grandma_chittoor"
+            audio_bytes, engine_used = await voice_synthesizer.synthesize(reply_text, voice_id=v_id)
+            caption = formatted_text if mode == "voice_only" else ""
+            await send_telegram_voice(msg.user_id, audio_bytes, caption=caption)
+        except Exception as exc:
+            import logging
+            logging.getLogger("bandhu.telegram").warning("Voice synthesis note failed: %s", exc)
+
+    # 5. Text Dispatch (for Combined or Text Only modes)
+    if mode in ("combined", "text_only"):
+        await send_telegram_message(msg.user_id, formatted_text)
+
+    return {"ok": True, "channel": "telegram", "persona": p_id, "mode": mode}
+
+
+# ────────────────────────────────────────────────────────────────────
+# Shared inbound-message handler
+# ────────────────────────────────────────────────────────────────────
+
+async def _run_inbound(msg) -> str:
+    """Common agent invocation for any chat channel.
+
+    Handles slash commands, runs the agent, and returns the reply text.
+    Per-channel formatting/quoting is the caller's responsibility.
+    """
+    cmd_reply = maybe_handle_command(msg.text, gemini_agent, user_id=msg.user_id)
+    if cmd_reply is not None:
+        return cmd_reply
+    agent_res = await gemini_agent.reply(msg.text, speaker_name=msg.user_name or "Chat User")
+    return agent_res.reply_text or "…"
+
+
+# ────────────────────────────────────────────────────────────────────
+# Optional: trigger an outbound message to a chat user
+# (used for proactive check-ins, /api/cron/checkin, etc.)
+# ────────────────────────────────────────────────────────────────────
+
+class ProactiveChatRequest(BaseModel):
+    channel: str = Field(..., description="'telegram' or 'whatsapp'")
+    recipient: str = Field(..., description="Telegram chat_id or E.164 phone number")
+    persona_id: str = Field(default="grandma_chittoor", description="Persona to use")
+    prompt: str = Field(
+        default="కన్నా ఈరోజు నీ ఒంట్లో ఎలా ఉంది? వేళకు భోజనం చేసి మాత్రలు వేసుకుంటివా లేదా?",
+        description="System-side message to send to the agent",
+    )
+
+
+@app.post("/api/chat/proactive")
+async def proactive_chat(req: ProactiveChatRequest) -> dict[str, Any]:
+    """Send a server-initiated message to a chat user.
+
+    Useful for the scheduled check-in flow: instead of /api/cron/checkin
+    logging to a DB, you can call this to actually ping the user on
+    their chat channel.
+    """
+    if req.channel not in ("telegram", "whatsapp"):
+        raise HTTPException(status_code=400, detail="channel must be 'telegram' or 'whatsapp'")
+    if req.persona_id and req.persona_id != gemini_agent.persona.persona_id:
+        profile = memory_store.get_persona(req.persona_id)
+        if profile:
+            gemini_agent.set_persona(profile)
+    agent_res = await gemini_agent.reply(req.prompt, speaker_name="Bandhu (proactive)")
+    dispatch = await send_message(OutboundMessage(
+        channel=req.channel,
+        recipient=req.recipient,
+        text=agent_res.reply_text or "…",
+    ))
+    return {
+        "status": "sent",
+        "channel": req.channel,
+        "recipient": req.recipient,
+        "dispatch": dispatch,
+        "reply_chars": len(agent_res.reply_text or ""),
+    }
+
+
+# ────────────────────────────────────────────────────────────────────
+# Conversation history per (channel, user)
+# ────────────────────────────────────────────────────────────────────
+
+@app.get("/api/conversations/{channel}/{user_id}")
+async def get_conversation(channel: str, user_id: str) -> dict[str, Any]:
+    """Return the in-memory conversation history for a specific chat user.
+
+    The agent keeps per-turn history in `gemini_agent.history`, which is
+    currently a single list (not partitioned per user). For multi-user
+    production use this would be a separate dict; for the hackathon
+    demo this returns the shared history plus a marker.
+    """
+    history = list(getattr(gemini_agent, "history", []) or [])
+    return {
+        "channel": channel,
+        "user_id": user_id,
+        "turn_count": len(history),
+        "history": history[-20:],  # last 20 turns
+        "note": "history is shared across all users in the current process; see chat_channels.parse_* for per-user wiring",
+    }
 
 
 @app.get("/api/audio/{filename}")
@@ -588,3 +874,133 @@ async def serve_dashboard() -> HTMLResponse:
     if index_file.exists():
         return HTMLResponse(content=index_file.read_text(encoding="utf-8"))
     return HTMLResponse(content="<h1>Bandhu Agent Platform is Running</h1>")
+
+
+# ────────────────────────────────────────────────────────────────────
+# Telegram long polling (runs when TELEGRAM_POLLING=true in .env)
+# ────────────────────────────────────────────────────────────────────
+
+_telegram_offset = 0
+
+
+@app.on_event("startup")
+async def _start_telegram_polling_if_enabled() -> None:
+    """Register commands and optionally start Telegram long polling."""
+    import os
+    from bandhu.api.chat_channels import register_telegram_commands
+    try:
+        await register_telegram_commands()
+    except Exception:
+        pass
+
+    polling_enabled = os.getenv("TELEGRAM_POLLING", "false").lower() == "true"
+    if not polling_enabled or not settings.telegram_bot_token:
+        return
+    import asyncio
+    task = asyncio.create_task(_telegram_long_poll_loop())
+    task.set_name("telegram-polling")
+    logger = logging.getLogger("bandhu.telegram_poll")
+    logger.info("Telegram long polling started (webhook disabled)")
+
+
+async def _telegram_long_poll_loop() -> None:
+    """Long-poll Telegram Bot API for incoming messages (runs on local GPU)."""
+    import asyncio
+    import logging
+    import os
+    import httpx
+
+    token = settings.telegram_bot_token or os.getenv("TELEGRAM_BOT_TOKEN", "")
+    if not token:
+        return
+
+    logger = logging.getLogger("bandhu.telegram_poll")
+
+    # Step 1: Delete any active webhook first to prevent 409 Conflict
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            del_resp = await client.post(f"https://api.telegram.org/bot{token}/deleteWebhook", json={"drop_pending_updates": False})
+            logger.info("Telegram deleteWebhook result: %s", del_resp.text[:100])
+    except Exception as e:
+        logger.warning("Could not delete Telegram webhook before polling: %s", e)
+
+    url = f"https://api.telegram.org/bot{token}/getUpdates"
+    offset = 0
+
+    while True:
+        try:
+            async with httpx.AsyncClient(timeout=35.0) as client:
+                resp = await client.get(url, params={"offset": offset, "timeout": 20, "allowed_updates": ["message"]})
+                if resp.status_code != 200:
+                    logger.warning("Telegram getUpdates failed: %s %s", resp.status_code, resp.text[:200])
+                    await asyncio.sleep(4)
+                    continue
+                data = resp.json()
+                if not data.get("ok"):
+                    logger.warning("Telegram getUpdates not ok: %s", data)
+                    await asyncio.sleep(4)
+                    continue
+
+                for update in data.get("result", []):
+                    offset = update.get("update_id", offset) + 1
+                    msg = parse_telegram_update(update)
+                    if msg is None:
+                        continue
+
+                    from bandhu.api.chat_channels import (
+                        download_telegram_file,
+                        get_user_session,
+                        maybe_handle_command,
+                        send_telegram_chat_action,
+                        send_telegram_message,
+                        send_telegram_voice,
+                    )
+
+                    session = get_user_session(msg.user_id)
+                    cmd_reply = maybe_handle_command(msg.text, gemini_agent, user_id=msg.user_id)
+                    if cmd_reply is not None:
+                        await send_telegram_message(msg.user_id, cmd_reply)
+                        continue
+
+                    p_id = session.get("persona_id", "grandma_chittoor")
+                    profile = memory_store.get_persona(p_id)
+                    if profile:
+                        gemini_agent.set_persona(profile)
+
+                    inbound_audio_bytes = None
+                    if msg.voice_file_id:
+                        await send_telegram_chat_action(msg.user_id, "record_voice")
+                        inbound_audio_bytes = await download_telegram_file(msg.voice_file_id)
+
+                    await send_telegram_chat_action(msg.user_id, "typing")
+
+                    output_mode = session.get("output_mode", "combined")
+                    should_gen_audio = msg.voice_file_id or output_mode in ("combined", "voice_only")
+
+                    agent_res = await gemini_agent.reply(
+                        msg.text,
+                        speaker_name=msg.user_name or "Family Member",
+                        audio_bytes=inbound_audio_bytes,
+                        audio_mime_type=msg.voice_mime_type or "audio/ogg",
+                    )
+                    reply_text = agent_res.reply_text or "…"
+
+                    p_badge = "👵 అమ్మమ్మ (Grandma · Chittoor)" if p_id == "grandma_chittoor" else "👨 పప్పా (Pappa · Telangana)"
+                    formatted_text = f"{p_badge}\n━━━━━━━━━━━━━━━━━━━━━\n{reply_text}"
+
+                    if output_mode != "voice_only":
+                        await send_telegram_message(msg.user_id, formatted_text)
+
+                    if should_gen_audio:
+                        await send_telegram_chat_action(msg.user_id, "record_voice")
+                        try:
+                            v_id = profile.voice_profile_id if profile else "grandma_chittoor"
+                            audio_bytes, engine_used = await voice_synthesizer.synthesize(reply_text, voice_id=v_id)
+                            caption = formatted_text if output_mode == "voice_only" else ""
+                            await send_telegram_voice(msg.user_id, audio_bytes, caption=caption)
+                        except Exception as exc:
+                            logger.warning("Local voice synthesis failed: %s", exc)
+
+        except Exception as exc:
+            logger.error("Telegram polling error: %s", exc)
+            await asyncio.sleep(3)

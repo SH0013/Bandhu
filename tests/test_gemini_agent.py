@@ -56,3 +56,14 @@ async def test_agent_dynamic_persona_switch(agent: BandhuGeminiAgent) -> None:
     response = await agent.reply("హలో అమ్మ, ఎలా ఉన్నావు?", speaker_name="Sai")
     assert len(response.reply_text) > 0
     assert response.persona_id == "mother_telugu"
+    assert response.thought_stream is not None
+    assert "Gemini 3.7 Flash" in response.thought_stream
+
+
+@pytest.mark.asyncio
+async def test_agent_thought_stream(agent: BandhuGeminiAgent) -> None:
+    response = await agent.reply("నాకు కాస్త తలనొప్పిగా ఉంది", speaker_name="TestUser")
+    assert response.thought_stream is not None
+    assert len(response.thought_stream) > 10
+    assert "Reasoning Chain" in response.thought_stream
+

@@ -245,23 +245,75 @@ class AgentToolsRegistry:
         }
 
     def _dispatch_caregiver_alert(self, alert_payload: str) -> str:
-        """Dispatch caregiver alert via Twilio WhatsApp or Google Cloud Tasks."""
+        """Dispatch caregiver alert via Telegram (free), WhatsApp Cloud API (free tier), or GCP Cloud Tasks.
+
+        Order of preference (all free / freemium):
+          1. Telegram Bot API — completely free, no per-message cost, 30 msg/sec limit.
+          2. Meta WhatsApp Cloud API (direct) — 1,000 service conversations/month free.
+          3. Google Cloud Tasks — durable delay queue for retry; not a notification channel.
+
+        Falls through silently if no channel is configured (returns "not_dispatched").
+        """
         result = "not_dispatched"
 
-        if settings.twilio_account_sid and settings.twilio_auth_token and settings.twilio_whatsapp_number:
+        # ── 1) Telegram (primary, free, recommended) ──────────────────────────
+        if settings.telegram_bot_token and settings.caregiver_telegram_chat_id:
             try:
-                from twilio.rest import Client  # type: ignore[import]
-                client = Client(settings.twilio_account_sid, settings.twilio_auth_token)
-                msg = client.messages.create(
-                    body=alert_payload,
-                    from_=settings.twilio_whatsapp_number,
-                    to=settings.caregiver_phone_number,
+                import httpx  # already in requirements.txt
+                url = f"https://api.telegram.org/bot{settings.telegram_bot_token}/sendMessage"
+                # Telegram's max message length is 4096 chars; truncate safely
+                text = alert_payload if len(alert_payload) <= 4000 else alert_payload[:3990] + "\n…"
+                resp = httpx.post(
+                    url,
+                    json={
+                        "chat_id": settings.caregiver_telegram_chat_id,
+                        "text": text,
+                        "parse_mode": "HTML",
+                        "disable_web_page_preview": True,
+                    },
+                    timeout=10.0,
                 )
-                result = f"twilio:{msg.sid}"
+                if resp.status_code == 200:
+                    data = resp.json()
+                    return f"telegram:{data.get('result', {}).get('message_id', 'ok')}"
+                result = f"telegram_failed:{resp.status_code}:{resp.text[:200]}"
                 return result
             except Exception as exc:
-                result = f"twilio_failed:{exc}"
+                result = f"telegram_failed:{exc}"
+                return result  # don't fall through if Telegram is configured but failed
 
+        # ── 2) Meta WhatsApp Cloud API (direct, free tier) ────────────────────
+        if (settings.whatsapp_phone_number_id
+                and settings.whatsapp_access_token
+                and settings.caregiver_phone_number):
+            try:
+                import httpx
+                url = (
+                    f"https://graph.facebook.com/v20.0/"
+                    f"{settings.whatsapp_phone_number_id}/messages"
+                )
+                headers = {
+                    "Authorization": f"Bearer {settings.whatsapp_access_token}",
+                    "Content-Type": "application/json",
+                }
+                # Normalize "whatsapp:+91…" or "+91…" to bare "91…"
+                to = settings.caregiver_phone_number.replace("whatsapp:", "").replace("+", "").strip()
+                payload = {
+                    "messaging_product": "whatsapp",
+                    "to": to,
+                    "type": "text",
+                    "text": {"body": alert_payload[:4000]},
+                }
+                resp = httpx.post(url, headers=headers, json=payload, timeout=10.0)
+                if resp.status_code in (200, 201):
+                    return f"whatsapp_cloud:{resp.json().get('messages', [{}])[0].get('id', 'ok')}"
+                result = f"whatsapp_cloud_failed:{resp.status_code}:{resp.text[:200]}"
+                return result
+            except Exception as exc:
+                result = f"whatsapp_cloud_failed:{exc}"
+                return result
+
+        # ── 3) Google Cloud Tasks (durable retry queue) ───────────────────────
         if settings.gcp_project_id:
             try:
                 from google.cloud import tasks_v2  # type: ignore[import]

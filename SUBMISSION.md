@@ -27,13 +27,13 @@ In an increasingly isolated and fast-paced world, millions of people live thousa
 
 Furthermore, as generations age, their authentic spoken heritage—their unique humor, pet names, idioms, stories, and warmth—is lost forever.
 
-We created **Bandhu (బంధు / बंधु — meaning *'Loved One & Faithful Companion'*)** to be a warm, empathetic presence in daily life: a personalized companion and support friend powered by **Gemini 3.6/3.7 Flash** on Google Cloud that anyone can create from exported WhatsApp chats and audio clips. Bandhu speaks in their authentic voice, shares jokes and family lore, offers unconditional emotional comfort when you're stressed, and gently looks out for your well-being.
+We created **Bandhu (బంధు / बंधु — meaning *'Loved One & Faithful Companion'*)** to be a warm, empathetic presence in daily life: a personalized companion and support friend powered by **Gemini 3.7 Flash** on Google Cloud that anyone can create from exported WhatsApp chats and audio clips. Bandhu speaks in their authentic voice, shares jokes and family lore, offers unconditional emotional comfort when you're stressed, and gently looks out for your well-being.
 
 ---
 
 ## What Bandhu Does 🚀
 - **❤️ Empathetic Emotional Companionship**: A judgment-free companion and confidant you can talk to about your day, work stress, homesickness, or happiness. Bandhu responds with genuine warmth, empathy, and comfort in the exact dialect and persona of your loved one.
-- **💬 WhatsApp Chat Ingestion & Personality Cloning**: Upload an exported `.txt` chat log from WhatsApp. Bandhu uses **Google Gemini 3.6/3.7 Flash** to extract conversational personality, jokes, affection terms (`కన్నా`, `నాయనా`, `బంగారుతల్లీ`), regional catchphrases (`బా`, `జేస్తిని`), and emotional support habits into a persistent `PersonaProfile`.
+- **💬 WhatsApp Chat Ingestion & Personality Cloning**: Upload an exported `.txt` chat log from WhatsApp. Bandhu uses **Google Gemini 3.7 Flash** to extract conversational personality, jokes, affection terms (`కన్నా`, `నాయనా`, `బంగారుతల్లీ`), regional catchphrases (`బా`, `జేస్తిని`), and emotional support habits into a persistent `PersonaProfile`.
 - **🎙️ Universal Multimodal Voice Cloning**: Recreates any loved one's natural speaking voice using GPU **IndicF5 Zero-Shot diffusion**, with automatic zero-crash fallback to **Google Cloud Neural2 Text-to-Speech** (`te-IN-Standard-A`) for 100% production uptime.
 - **📖 Living Oral History & Cultural Memory Vault**: Archives family memories, childhood folklore, traditional recipes (like authentic Rayalaseema Ragi Sangati & Pepper Kashayam), and cherished advice permanently in **Google Cloud Firestore**.
 - **🌿 Proactive Caring & Well-Being Support**: Like a true companion who cares, Bandhu notices when you sound exhausted or unwell, suggests comforting home remedies, schedules gentle follow-up check-ins, and can notify family members if emergency medical distress is detected.
@@ -42,7 +42,7 @@ We created **Bandhu (బంధు / बंधु — meaning *'Loved One & Faith
 ---
 
 ## How We Built It 🛠️
-- **Official Google GenAI SDK (`google-genai`)**: Powered by **Gemini 3.6 Flash** with native typed Function Calling declarations for autonomous memory recall, proactive check-ins, and folklore archiving.
+- **Official Google GenAI SDK (`google-genai`)**: Powered by **Gemini 3.7 Flash** with native typed Function Calling declarations for autonomous memory recall, proactive check-ins, and folklore archiving.
 - **Google Cloud Run**: Serverless containerized production backend running a multi-stage Docker build with system-level audio DSP libraries (`ffmpeg`, `libsndfile`).
 - **Google Cloud Firestore**: Real-time persistent state management for cross-session episodic memories, relationship lore, and check-in schedules.
 - **Google Cloud Storage**: Secure asset storage for reference voice audio clips and synthesized speech notes.
@@ -61,7 +61,7 @@ We created **Bandhu (బంధు / बंधु — meaning *'Loved One & Faith
 
 ## Accomplishments We're Proud Of 🏆
 - **An AI that Truly Feels Human & Loving**: Delivering a companion experience that brings tears of comfort to users who miss their grandparents or loved ones.
-- **100% Passing Automated Test Suite**: 24 comprehensive unit and integration tests covering chat parsing, persona extraction, Gemini tool dispatch, Firestore persistence, and audio synthesis.
+- **100% Passing Automated Test Suite**: 28 comprehensive unit and integration tests covering chat parsing, persona extraction, Gemini tool dispatch, Firestore persistence, and audio synthesis.
 - **True Autonomous Utility (40% Criteria)**: Building an agent that actively remembers, checks in, archives family history, and takes supportive actions in the physical world.
 - **Production-Ready Google Cloud Infrastructure**: 1-click automated deployment to Google Cloud Run with complete Docker containerization.
 
@@ -83,13 +83,13 @@ We created **Bandhu (బంధు / बंधु — meaning *'Loved One & Faith
 
 ### 4. "Built With" Tags
 ```text
-google-cloud, google-genai-sdk, gemini-flash, gemini-3.6-flash, google-cloud-run, google-cloud-firestore, google-cloud-storage, google-cloud-tts, python, fastapi, docker, speech-recognition, voice-cloning, emotional-ai, companion-agent, whatsapp-api, twilio
+google-cloud, google-genai-sdk, gemini-flash, gemini-3.7-flash, google-cloud-run, google-cloud-firestore, google-cloud-storage, google-cloud-tts, python, fastapi, docker, speech-recognition, voice-cloning, emotional-ai, companion-agent, whatsapp-api, twilio
 ```
 
 ---
 
 ### 5. Google Cloud Services Checkboxes
-- [x] **Google GenAI SDK / Gemini Models (Gemini 3.6 Flash)**
+- [x] **Google GenAI SDK / Gemini Models (Gemini 3.7 Flash)**
 - [x] **Google Cloud Run**
 - [x] **Google Cloud Firestore**
 - [x] **Google Cloud Storage**
@@ -108,4 +108,4 @@ google-cloud, google-genai-sdk, gemini-flash, gemini-3.6-flash, google-cloud-run
 ### 7. Links Section
 - **GitHub Repository**: Link to your repository (`bandhu-agentic-cloud`)
 - **Demo Video URL**: Link to your 4-minute demo video (YouTube / Loom / Google Drive).
-- **Live Cloud Run URL**: `https://bandhu-agent-757381556163.us-central1.run.app`
+- **Live Cloud Run URL**: `https://bandhu-agent-e4rzky7w6q-uc.a.run.app` (Direct: `https://bandhu-agent-757381556163.us-central1.run.app`)

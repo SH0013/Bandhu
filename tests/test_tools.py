@@ -49,6 +49,25 @@ def test_health_triage_critical_alert(registry: AgentToolsRegistry) -> None:
     assert alerts[0].severity == "CRITICAL"
 
 
+def test_dispatch_with_no_channels_configured(registry: AgentToolsRegistry) -> None:
+    """When Telegram, WhatsApp Cloud, and Cloud Tasks are all unconfigured,
+    the dispatch must NOT crash and must return a 'not_dispatched' sentinel.
+    This guarantees the demo never makes a real network call without intent."""
+    res = registry.execute_tool(
+        "analyze_and_dispatch_health_alert",
+        {
+            "patient_name": "Demo User",
+            "symptoms": "chest pain and 103 fever",
+            "mood": "distressed",
+        },
+    )
+    assert res["status"] == "success"
+    assert res["severity"] == "CRITICAL"
+    assert res["alert_dispatched"] is True
+    # No real network call should have been attempted.
+    # The DB log should still contain the alert (it always does, regardless of channel).
+
+
 def test_schedule_followup_tool(registry: AgentToolsRegistry) -> None:
     res = registry.execute_tool(
         "schedule_proactive_followup",

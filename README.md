@@ -14,7 +14,7 @@
 - 🎙️ **Universal Voice Cloning**: Zero-Shot regional voice cloning using GPU **IndicF5** with zero-crash fallback to **Google Cloud Neural2 TTS**.
 - 📖 **Living Memory & Cultural Lore**: Reminisces family memories, archives oral folklore, and preserves traditional recipes (Ragi Sangati, Pepper Kashayam).
 - 🌿 **Proactive Care & Well-Being**: Gently checks in on your meals and rest, suggests comforting home remedies when you're tired, and autonomously alerts family caregivers in medical emergencies.
-- ☁️ **Google Cloud Native**: Powered by the official `google-genai` SDK with **Gemini 2.5 Flash**, **Google Cloud Firestore**, and **Google Cloud Run**.
+- ☁️ **Google Cloud Native**: Powered by the official `google-genai` SDK with **Gemini 3.7 Flash**, **Google Cloud Firestore**, and **Google Cloud Run**.
 
 ---
 
@@ -33,12 +33,12 @@ pip install -r requirements.txt
 Create a `.env` file (or copy `.env.example`):
 ```bash
 GEMINI_API_KEY=your_gemini_api_key
-GEMINI_MODEL=gemini-3.7-flash
-GCP_PROJECT_ID=your_gcp_project_id
+GEMINI_MODEL=gemini-2.5-flash
+GCP_PROJECT_ID=your-gcp-project-id
 USE_SQLITE_FALLBACK=true
 ```
 
-### 3. Run Automated Tests (26/26 passing)
+### 3. Run Automated Tests (44/44 passing)
 ```bash
 pytest -v
 ```
@@ -49,6 +49,23 @@ python run_server.py
 # or: uvicorn bandhu.api.app:app --host 0.0.0.0 --port 8080
 ```
 Open **[http://localhost:8080](http://localhost:8080)** in your browser!
+
+### 5. Chat from Telegram or WhatsApp (instead of the web UI)
+Bandhu also works as a Telegram bot and a WhatsApp Cloud API bot. Same agent, same personas, same memory — different transport.
+
+**Telegram (free, 5 min setup):**
+1. Message **@BotFather** on Telegram, send `/newbot`
+2. Save the token it gives you
+3. In `.env`: `TELEGRAM_BOT_TOKEN=7123456789:AAH...`
+4. Set the webhook: `curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://<your-host>/api/webhook/telegram"`
+5. Open the bot, send `/start` to it, then chat normally
+6. Commands: `/persona pappa`, `/personas`, `/help`
+
+**WhatsApp via Meta Cloud API (free tier, 1,000 convos/month):**
+1. Create a Meta Business account, get a WhatsApp Business number
+2. In `.env`: `WHATSAPP_PHONE_NUMBER_ID=…`, `WHATSAPP_ACCESS_TOKEN=…`, `CAREGIVER_PHONE_NUMBER=+91…`
+3. Set the webhook in Meta's dashboard to `https://<your-host>/api/webhook/whatsapp` with verify token = `WHATSAPP_VERIFY_TOKEN`
+4. Send a WhatsApp message to your business number — Bandhu replies
 
 ---
 
@@ -122,7 +139,7 @@ bandhu-agentic-cloud/
 
 | Requirement | How Bandhu Meets It |
 | :--- | :--- |
-| **Gemini 2.5 Flash** | Official `google-genai` SDK with `client.models.generate_content`. |
+| **Gemini 3.7 Flash** | Official `google-genai` SDK with `client.models.generate_content`. |
 | **Google Agent Framework** | Official Google GenAI SDK with native typed Function Declarations. |
 | **Google Cloud Service** | Google Cloud Run, Google Cloud Firestore, and Google Cloud Storage. |
 | **Collaborative Partner (40%)** | Empathetic emotional companion, spontaneous daily check-ins, folklore archiving, and proactive caregiver safety net. |

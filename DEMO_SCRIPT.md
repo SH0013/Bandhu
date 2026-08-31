@@ -51,7 +51,7 @@ gantt
 - **Narration**:  
   > *"Anyone can clone the personality of their loved one in seconds by exporting their WhatsApp chat."*
 - **Action**: Click **"Load Sample Grandma Chat"** (or upload your exported `.txt`).
-- **Highlight**: Show Gemini 3.6/3.7 Flash parsing turns, extracting catchphrases (`బా`, `తింటివా`), pet names (`కన్నా`, `నాయనా`), and maternal care directives into a structured `PersonaProfile`.
+- **Highlight**: Show Gemini 3.7 Flash parsing turns, extracting catchphrases (`బా`, `తింటివా`), pet names (`కన్నా`, `నాయనా`), and maternal care directives into a structured `PersonaProfile`.
 
 ---
 

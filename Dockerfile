@@ -8,10 +8,11 @@ ENV PYTHONUNBUFFERED=1 \
     HOST=0.0.0.0 \
     ENVIRONMENT=production
 
-# Install system audio dependencies (ffmpeg, libsndfile)
+# Install system audio dependencies (ffmpeg, libsndfile, git, curl)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     libsndfile1 \
+    git \
     curl \
     && rm -rf /var/lib/apt/lists/*
 

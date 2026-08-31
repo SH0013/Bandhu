@@ -1,12 +1,12 @@
 {
   "voice_id": "dad_telugu",
   "name": "నాన్న (Father)",
-  "reference_audio_path": "C:\\Users\\msree\\AppData\\Local\\Temp\\pytest-of-msree\\pytest-89\\test_voice_profile_registratio0\\dad.wav",
+  "reference_audio_path": "C:\\Users\\msree\\AppData\\Local\\Temp\\pytest-of-msree\\pytest-123\\test_voice_profile_registratio0\\dad.wav",
   "reference_transcript": "ఎలా ఉన్నావురా",
   "language_code": "te",
   "gender": "male",
   "sample_rate": 24000,
   "reference_audio_paths": [
-    "C:\\Users\\msree\\AppData\\Local\\Temp\\pytest-of-msree\\pytest-89\\test_voice_profile_registratio0\\dad.wav"
+    "C:\\Users\\msree\\AppData\\Local\\Temp\\pytest-of-msree\\pytest-123\\test_voice_profile_registratio0\\dad.wav"
   ]
 }

@@ -32,7 +32,7 @@ gcloud run deploy $ServiceName `
     --allow-unauthenticated `
     --memory 2Gi `
     --cpu 2 `
-    --set-env-vars "GCP_PROJECT_ID=$ProjectId,ENVIRONMENT=production,GEMINI_MODEL=gemini-3.6-flash,GEMINI_FALLBACK_MODEL=gemini-3.5-flash-lite,GEMINI_API_KEY=$($env:GEMINI_API_KEY),USE_SQLITE_FALLBACK=true"
+    --set-env-vars "GCP_PROJECT_ID=$ProjectId,ENVIRONMENT=production,GEMINI_MODEL=gemini-3.7-flash,GEMINI_FALLBACK_MODEL=gemini-3.5-flash-lite,GEMINI_API_KEY=$($env:GEMINI_API_KEY),USE_SQLITE_FALLBACK=true"
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "`n❌ Cloud Run Deployment Failed." -ForegroundColor Red

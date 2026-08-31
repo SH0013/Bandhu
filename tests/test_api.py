@@ -31,6 +31,8 @@ def test_chat_endpoint_text_and_audio() -> None:
     assert len(data["reply_text"]) > 0
     assert data["audio_url"] is not None
     assert len(data["tools_executed"]) >= 1
+    assert "thought_stream" in data
+    assert data["thought_stream"] is not None
 
 
 def test_upload_chat_endpoint() -> None:
@@ -69,6 +71,23 @@ def test_proactive_cron_checkin() -> None:
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "executed"
+
+
+def test_scheduled_checkin_is_agent_initiated() -> None:
+    # No request body is sent: the trigger is entirely server-side.
+    response = client.post("/internal/scheduled-checkin")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "executed"
+    assert data["user_initiated"] is False
+    assert data["initiator"] == "cloud-scheduler"
+    assert data["trigger"] == "proactive morning check-in"
+    assert data["memory_id"]
+
+
+def test_scheduled_checkin_rejects_unknown_persona() -> None:
+    response = client.post("/internal/scheduled-checkin", params={"persona": "stranger"})
+    assert response.status_code == 400
 
 
 def test_list_personas() -> None:
